@@ -32,7 +32,7 @@ Főmenü
     <table>
         <tr><td colspan="2"> AS A </td> <td>Játékos</td></tr>
         <tr><td colspan="2"> I WANT TO</td> <td>Segítséget kérni a játékhoz</td></tr>
-        <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> A főmenüben vagy a játékban vagyok</td></tr>
+        <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> A főmenüben vagyok</td></tr>
         <tr><td>WHEN</td> <td> Rákattintok a Súgó ikonra/gombra</td></tr>
         <tr><td>THEN</td> <td> Megnyílik a súgó felület az információkkal</td></tr>
     </table>
@@ -182,5 +182,16 @@ Játékmenet
         <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> Nyitva van a jármű infólapja, és a jármű egy megállóban van</td></tr>
         <tr><td>WHEN</td> <td> Rákattintok a "Jármű eladása" gombra</td></tr>
         <tr><td>THEN</td> <td> A jármű eltűnik a pályáról, az útvonala törlődik, és visszakapom az árának egy részét</td></tr>
+    </table>
+</details>
+
+<details>
+    <summary>Súgó megnyitása</summary>
+    <table>
+        <tr><td colspan="2"> AS A </td> <td>Játékos</td></tr>
+        <tr><td colspan="2"> I WANT TO</td> <td>Segítséget kérni a játékhoz</td></tr>
+        <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> A játékban vagyok</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok a Súgó ikonra/gombra</td></tr>
+        <tr><td>THEN</td> <td> Megnyílik a súgó felület az információkkal</td></tr>
     </table>
 </details>
