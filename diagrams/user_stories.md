@@ -149,7 +149,7 @@ Játékmenet
         <tr><td>WHEN</td> <td> Rákattintok egy általam épített útra, hídra vagy megállóra</td></tr>
         <tr><td>THEN</td> <td> A struktúra eltűnik a térképről, visszakapom a költség kis részét</td></tr>
         <tr><td rowspan="3"> 2 </td> <td>GIVEN</td> <td> Rombolás módban vagyok</td></tr>
-        <tr><td>WHEN</td> <td> Rákattintok egy olyan épületre/természeti elemre/útra, ami a pálya alapértelmezett része</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok egy olyan épületre/természeti elemre/útra/buszmegállóra, ami a pálya alapértelmezett része</td></tr>
         <tr><td>THEN</td> <td> A rombolás nem történik meg, hibaüzenetet kapok</td></tr>
     </table>
 </details>
@@ -163,8 +163,8 @@ Játékmenet
         <tr><td>WHEN</td> <td> Rákattintok egy városi épületre</td></tr>
         <tr><td>THEN</td> <td> Megnyílik az épület infólapja (pl. termelt áru, kapacitás)</td></tr>
         <tr><td rowspan="3"> 2 </td> <td>GIVEN</td> <td> Jétékban vagyok</td></tr>
-        <tr><td>WHEN</td> <td> Rákattintok egy általam épített megállóra</td></tr>
-        <tr><td>THEN</td> <td> Megnyílik a megálló infólapja ???</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok egy buszmegállóra</td></tr>
+        <tr><td>THEN</td> <td> Megnyílik a megálló infólapja (pl. kapacitás)</td></tr>
     </table>
 </details>
 
