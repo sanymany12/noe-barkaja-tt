@@ -14,17 +14,31 @@ Főmenü
 </details>
 
 <details>
-    <summary>Játék indítása</summary>
+    <summary>Új játék indítása</summary>
     <table>
         <tr><td colspan="2"> AS A </td> <td>Játékos</td></tr>
-        <tr><td colspan="2"> I WANT TO</td> <td>Elindítani a játékot</td></tr>
+        <tr><td colspan="2"> I WANT TO</td> <td>Elindítani a játékot egy friss mentésen</td></tr>
         <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> A Főmenüben vagyok</td></tr>
-        <tr><td>WHEN</td> <td> Rákattintok a "Játék indítása" gombra</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok az "Új játék indítása" gombra</td></tr>
         <tr><td>THEN</td> <td> A játék betölt egy előre meghatározott pályát</td></tr>
         <tr><td rowspan="3"> 2 </td> <td>GIVEN</td> <td> A betöltés sikeres</td></tr>
         <tr><td>WHEN</td> <td> A játékmenet elindul </td></tr>
         <tr><td>THEN</td> <td> Az idő telése szünetelt módban kezdődik és a játékos megkapja az irányítást</td></tr>
-</table>
+    </table>
+</details>
+
+<details>
+    <summary>Játék betöltése</summary>
+    <table>
+        <tr><td colspan="2"> AS A </td> <td>Játékos</td></tr>
+        <tr><td colspan="2"> I WANT TO</td> <td>Elindítani a játékot egy korábban elmentett állapotban</td></tr>
+        <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> A Főmenüben vagyok</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok a "Játék betöltése" gombra</td></tr>
+        <tr><td>THEN</td> <td> A játék betölt egy korában mentett állapotot</td></tr>
+        <tr><td rowspan="3"> 2 </td> <td>GIVEN</td> <td> A betöltés sikeres</td></tr>
+        <tr><td>WHEN</td> <td> A játékmenet elindul </td></tr>
+        <tr><td>THEN</td> <td> Az idő telése szünetelt módban kezdődik és a játékos megkapja az irányítást</td></tr>
+    </table>
 </details>
 
 <details>
@@ -62,8 +76,19 @@ Játékmenet
         <tr><td colspan="2"> AS A </td> <td>Játékos</td></tr>
         <tr><td colspan="2"> I WANT TO</td> <td>Visszatérni a főmenübe</td></tr>
         <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> Játékban vagyok</td></tr>
-        <tr><td>WHEN</td> <td> Az "Esc" lenyomása után rákattintok a "Vissza a menübe" gombra</td></tr>
-        <tr><td>THEN</td> <td> A jelenlegi játékmenet bezárul, és a Főmenü képernyő jelenik meg</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok a "Vissza a menübe" gombra</td></tr>
+        <tr><td>THEN</td> <td> A játék megerősítést kér, jelenlegi játékmenet bezárul, és a Főmenü képernyő jelenik meg</td></tr>
+    </table>
+</details>
+
+<details>
+    <summary>Játék mentése</summary>
+    <table>
+        <tr><td colspan="2"> AS A </td> <td>Játékos</td></tr>
+        <tr><td colspan="2"> I WANT TO</td> <td>Elmenteni a pálya állapotát</td></tr>
+        <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> Játékban vagyok</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok a "Mentés" gombra</td></tr>
+        <tr><td>THEN</td> <td> Minden állapot és folyamat mentésre kerül, megszakítás nélkül folytatódik minden</td></tr>
     </table>
 </details>
 
@@ -73,16 +98,16 @@ Játékmenet
         <tr><td colspan="2"> AS A </td> <td>Játékos</td></tr>
         <tr><td colspan="2"> I WANT TO</td> <td>Utakat építeni a pályára</td></tr>
         <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> Játékban vagyok</td></tr>
-        <tr><td>WHEN</td> <td> Rákattintok az "útépítés" ikonra</td></tr>
-        <tr><td>THEN</td> <td> Kiválaszthatom a lehelyezni kívánt út típusát vagy eltűntethetem a legördülő menüt</td></tr>
-        <tr><td rowspan="3"> 2 </td> <td>GIVEN</td> <td> Kiválasztottam milyen utat szeretnék építeni és üres mezőre építenék, van rá pénzem</td></tr>
-        <tr><td>WHEN</td> <td> Lehelyezem az utat megfelelő irányba</td></tr>
-        <tr><td>THEN</td> <td> A kiválasztott típusú és irányú út jelenik meg az üres mező helyén</td></tr>
-        <tr><td rowspan="3"> 3 </td> <td>GIVEN</td> <td> Kiválaszottam a kívánt utat, a kiválasztott területen fák/erdő található és van elég pénzem eltávolítani</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok az egyik út típus ikonra</td></tr>
+        <tr><td>THEN</td> <td> Belépek az "Útépítés" módba</td></tr>
+        <tr><td rowspan="3"> 2 </td> <td>GIVEN</td> <td> "Útépítés" módban vagyok, van elég pénzem</td></tr>
+        <tr><td>WHEN</td> <td> Rákattintok egy üres mezőre</td></tr>
+        <tr><td>THEN</td> <td> A kiválasztott típusú út jelenik meg az üres mező helyén és módosul az egyenlegem</td></tr>
+        <tr><td rowspan="3"> 3 </td> <td>GIVEN</td> <td> Kiválaszottam a kívánt utat, a kigondolt területen fák/erdő található és van elég pénzem eltávolítani</td></tr>
         <tr><td>WHEN</td> <td> Megpróbálom lehelyezni az utat</td></tr>
-        <tr><td>THEN</td> <td> A "Fa/erdő eltávolítása" megtörténik, majd az út megépül</td></tr>
+        <tr><td>THEN</td> <td> A "Fa/erdő eltávolítása" megtörténik, majd az út megépül és módosul az egyenlegem</td></tr>
         <tr><td rowspan="3"> 4 </td> <td>GIVEN</td> <td> Kiválasztottam a kívánt utat</td></tr>
-        <tr><td>WHEN</td> <td> Olyan területre kattintok, ami víz, vagy ahol már egy épület áll</td></tr>
+        <tr><td>WHEN</td> <td> Olyan területre kattintok, ami víz, vagy ahol már egy épület/út van</td></tr>
         <tr><td>THEN</td> <td> Hibaüzenet jelenik meg, és az út nem épül meg</td></tr>
     </table>
 </details>
@@ -102,10 +127,10 @@ Játékmenet
 </details>
 
 <details>
-    <summary>Megálló lehelyezése</summary>
+    <summary>Ipari megálló lehelyezése</summary>
     <table>
         <tr><td colspan="2"> AS A </td> <td>Játékos</td></tr>
-        <tr><td colspan="2"> I WANT TO</td> <td>Megállókat kijelölni az utasok/nyersanyagok/állatok számára</td></tr>
+        <tr><td colspan="2"> I WANT TO</td> <td>Ipari megállókat kijelölni az nyersanyagok/állatok számára</td></tr>
         <tr><td rowspan="3"> 1 </td> <td>GIVEN</td> <td> Kiválaszottam, hogy megállót akarok építeni és van elég pénzem</td></tr>
         <tr><td>WHEN</td> <td> Egy épület mellé kattintok</td></tr>
         <tr><td>THEN</td> <td> A megálló lehelyezésre kerül az épület mellett, ha erdőre került, extra költség felszámolása</td></tr>
