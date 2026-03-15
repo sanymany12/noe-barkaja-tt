@@ -33,26 +33,32 @@ public class AssetManager {
     private void init(){
 
         //szarazfold vagy viz tile
-        loadAsset("land", "/assets/landscapeTiles_067.png");
-        loadAsset("water", "/assets/landscapeTiles_066.png");
+        loadAsset("land0", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_125.png"); //land 0 fával
+        //loadAsset("land1", "/assets/landscapeTiles_067.png"); //land 1 fával
+        //loadAsset("land2", "/assets/landscapeTiles_067.png"); //land 2 fával
+        //loadAsset("land3", "/assets/landscapeTiles_067.png"); //land 3 fával
+        //loadAsset("land4", "/assets/landscapeTiles_067.png"); //land 4 fával
+
+        loadAsset("water", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_124.png");
 
         //road tipusok (road + NORTH EAST SOUTH WEST) amerre nyitott
-        loadAsset("roadN", "/assets/landscapeTiles_117.png");
-        loadAsset("roadE", "/assets/landscapeTiles_112.png");
-        loadAsset("roadS", "/assets/landscapeTiles_111.png");
-        loadAsset("roadW", "/assets/landscapeTiles_105.png");
+        //loadAsset("roadN", "/assets/landscapeTiles_117.png");
+        //loadAsset("roadE", "/assets/landscapeTiles_112.png");
+        //loadAsset("roadS", "/assets/landscapeTiles_111.png");
+        //loadAsset("roadW", "/assets/landscapeTiles_105.png");
 
-        loadAsset("roadNS", "/assets/landscapeTiles_082.png");
-        loadAsset("roadEW", "/assets/landscapeTiles_074.png");
+        //loadAsset("roadNS", "/assets/landscapeTiles_082.png");
+        //loadAsset("roadEW", "/assets/landscapeTiles_074.png");
 
-        loadAsset("roadNES", "/assets/landscapeTiles_089.png");
-        loadAsset("roadNEW", "/assets/landscapeTiles_104.png");
-        loadAsset("roadNSW", "/assets/landscapeTiles_096.png");
-        loadAsset("roadESW", "/assets/landscapeTiles_097.png");
+        //loadAsset("roadNES", "/assets/landscapeTiles_089.png");
+        //loadAsset("roadNEW", "/assets/landscapeTiles_104.png");
+        //loadAsset("roadNSW", "/assets/landscapeTiles_096.png");
+        //loadAsset("roadESW", "/assets/landscapeTiles_097.png");
 
-        loadAsset("roadNESW", "/assets/landscapeTiles_090.png");
+        //loadAsset("roadNESW", "/assets/landscapeTiles_090.png");
 
-
+        loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
+        loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
     }
 /*
 kep betoltese a mapbe input streammel
