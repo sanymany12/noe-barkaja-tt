@@ -24,13 +24,13 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
     private void renderGround(Graphics g, World world){
         for (int i = 0; i < world.getRows(); i++) {
             for (int j = 0; j < world.getCols(); j++) {
-                // 1. Kiszámoljuk a csempe BAL FELSŐ sarkát
+                //Kiszámoljuk a csempe bal felső sarkát
                 Point topLeft = camera.worldToScreen(i, j);
 
-                // 2. Kiszámoljuk a csempe JOBB ALSÓ sarkát (ami a következő csempe kezdete)
+                //jobb alsó sarok
                 Point bottomRight = camera.worldToScreen(i + 1, j + 1);
 
-                // 3. A tényleges szélesség és magasság a két pont különbsége
+                //A tényleges szélesség és magasság a két pont különbsége
                 int renderWidth = bottomRight.x - topLeft.x;
                 int renderHeight = bottomRight.y - topLeft.y;
                drawTile(g, world.get(i,j),topLeft, renderWidth, renderHeight);
@@ -68,13 +68,13 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
                if(tile.isAnchor()){
                    int width = 3; //tile.getBuilding().getWidth();
                    int height = 9; //tile.getBuilding().getHeight();
-
+                   //Kiszámoljuk a csempe bal felső sarkát
                    Point topLeft = camera.worldToScreen(i, j);
 
-                   // 2. Kiszámoljuk a csempe JOBB ALSÓ sarkát (ami a következő csempe kezdete)
+                   //jobb alsó sarok
                    Point bottomRight = camera.worldToScreen(i + 1, j + 1);
 
-                   // 3. A tényleges szélesség és magasság a két pont különbsége
+                   //A tényleges szélesség és magasság a két pont különbsége
                    int renderWidth = bottomRight.x - topLeft.x;
                    int renderHeight = bottomRight.y - topLeft.y;
                    drawBuilding(g, world.get(i,j),topLeft, renderWidth * width, renderHeight * height);

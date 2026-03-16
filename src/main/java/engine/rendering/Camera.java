@@ -78,7 +78,7 @@ public class Camera {
         double worldX = pixelX / (TILE_WIDTH * zoom);
         double worldY = pixelY / (TILE_HEIGHT * zoom);
 
-        // Kerekítés lefelé (Math.floor), hogy megkapjuk a pontos csempe indexét
+        // Kerekítés lefelé, hogy megkapjuk a pontos csempe indexét
         int tileX = (int) Math.floor(worldX);
         int tileY = (int) Math.floor(worldY);
 
