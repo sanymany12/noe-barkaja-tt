@@ -37,6 +37,7 @@ public class World {
         grid[2][1].setTerrainType(TerrainType.WATER);
         grid[2][2].setTerrainType(TerrainType.WATER);
 
+        //Egy 3x3as épület létrehozása
         grid[10][10].setTerrainType(TerrainType.BUILDING);
         grid[10][10].setAnchor(true);
 
@@ -49,6 +50,7 @@ public class World {
         grid[11][12].setTerrainType(TerrainType.BUILDING);
         grid[12][11].setTerrainType(TerrainType.BUILDING);
 
+        //Egy 3x3as épület létrehozása
         grid[8][8].setTerrainType(TerrainType.BUILDING);
         grid[8][8].setAnchor(true);
 

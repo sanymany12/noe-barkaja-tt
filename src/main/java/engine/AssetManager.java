@@ -42,7 +42,7 @@ public class AssetManager {
         loadAsset("water", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_124.png");
 
         //road tipusok (road + NORTH EAST SOUTH WEST) amerre nyitott
-        //loadAsset("roadN", "/assets/landscapeTiles_117.png");
+        //loadAsset("roadN", "/assets/landscapeTiles_117.png"); régi assetek
         //loadAsset("roadE", "/assets/landscapeTiles_112.png");
         //loadAsset("roadS", "/assets/landscapeTiles_111.png");
         //loadAsset("roadW", "/assets/landscapeTiles_105.png");

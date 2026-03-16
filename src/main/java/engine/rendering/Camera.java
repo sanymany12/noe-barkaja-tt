@@ -60,7 +60,7 @@ public class Camera {
         double pixelX = worldX * TILE_WIDTH * zoom;
         double pixelY = worldY * TILE_HEIGHT * zoom;
 
-        // Kamera eltolás (offset) és képernyő közepéhez igazítás
+        //Kamera eltolás (offset) és képernyő közepéhez igazítás
         int screenX = (int) Math.round(pixelX - offsetX + (screenWidth / 2.0));
         int screenY = (int) Math.round(pixelY - offsetY + (screenHeight / 2.0));
 
@@ -70,15 +70,15 @@ public class Camera {
     Az előző metódus inverze. Egy kattintásnál ki lehet számolni melyik mezőt érintettük a rácson.
      */
     public Point screenToWorld(int screenX, int screenY){
-        // Kamera eltolás visszafejtése
+        //Kamera eltolás visszafejtése
         double pixelX = screenX + offsetX - (screenWidth / 2.0);
         double pixelY = screenY + offsetY - (screenHeight / 2.0);
 
-        // Visszaosztás a csempe méretével és a zoommal
+        //Visszaosztás a csempe méretével és a zoommal
         double worldX = pixelX / (TILE_WIDTH * zoom);
         double worldY = pixelY / (TILE_HEIGHT * zoom);
 
-        // Kerekítés lefelé, hogy megkapjuk a pontos csempe indexét
+        //Kerekítés lefelé, hogy megkapjuk a pontos csempe indexét
         int tileX = (int) Math.floor(worldX);
         int tileY = (int) Math.floor(worldY);
 
@@ -89,19 +89,19 @@ A kamera pozícióját clampeljük, hogy ne lehessen ki görgetni a világból.
  */
     public void clampCamera(int gridWidth, int gridHeight){
 
-        // A teljes térkép tényleges mérete pixelekben, a jelenlegi nagyítással
+        //A teljes térkép tényleges mérete pixelekben, a jelenlegi nagyítással
         double mapPixelWidth = gridWidth * TILE_WIDTH * zoom;
         double mapPixelHeight = gridHeight * TILE_HEIGHT * zoom;
 
-        // Kiszámoljuk, meddig mehet el a kamera anélkül, hogy lelépne a térképről
+        //Kiszámoljuk, meddig mehet el a kamera anélkül, hogy lelépne a térképről
         double minOffsetX = 0 - (screenWidth / 2.0);
         double maxOffsetX = mapPixelWidth - (screenWidth / 2.0);
 
         double minOffsetY = 0 - (screenHeight / 2.0);
         double maxOffsetY = mapPixelHeight - (screenHeight / 2.0);
 
-        // Biztonsági ellenőrzés: ha a térkép kisebb, mint a képernyő (nagyon kizoomoltunk)
-        // Akkor fixen középen tartjuk, különben rángatózna a kamera
+        //Biztonsági ellenőrzés: ha a térkép kisebb, mint a képernyő (nagyon kizoomoltunk)
+        //Akkor fixen középen tartjuk, különben rángatózna a kamera
         if (mapPixelWidth < screenWidth) {
             this.offsetX = mapPixelWidth / 2.0;
         } else {

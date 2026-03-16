@@ -9,7 +9,7 @@ public class Tile {
     private int treeCount;
     private Road road;
     private Building<?,?> building;
-    private boolean isAnchor;
+    private boolean isAnchor; //Az épület bal alsó cellája (horgony)
 
     public Tile(Point coordinate, TerrainType terrainType, int treeCount, Road road, Building<?, ?> building, boolean isAnchor) {
         this.coordinate = coordinate;
@@ -64,12 +64,12 @@ public class Tile {
         isAnchor = value;
     }
 
-    //TODO
+    //TODO a mező értékének kiszámítása a romboláshoz/építéshez
     public int calculateCost(){
         return 0;
     }
 
-    //TODO
+    //TODO üres e a mező? segédfüggvény
     public boolean isEmpty(){
         return false;
     }

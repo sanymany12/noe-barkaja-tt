@@ -8,20 +8,25 @@ import world.tile.Tile;
 import java.awt.*;
 
 public class Renderer {
-    private Camera camera;
+    private final Camera camera;
+    private final World world;
+    private final Graphics graphics;
 
-    public Renderer(Camera camera) {
+    public Renderer(Camera camera, World world, Graphics graphics) {
         this.camera = camera;
+        this.world = world;
+        this.graphics = graphics;
     }
 
-    public void renderMap(Graphics g, World world){
-        renderGround(g, world);
-        renderBuildings(g, world);
+    public void renderMap(){
+        renderGround();
+        renderBuildings();
+        renderVehicles();
     }
 /*
 pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát kirajzolni)
  */
-    private void renderGround(Graphics g, World world){
+    private void renderGround(){
         for (int i = 0; i < world.getRows(); i++) {
             for (int j = 0; j < world.getCols(); j++) {
                 //Kiszámoljuk a csempe bal felső sarkát
@@ -33,25 +38,25 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
                 //A tényleges szélesség és magasság a két pont különbsége
                 int renderWidth = bottomRight.x - topLeft.x;
                 int renderHeight = bottomRight.y - topLeft.y;
-               drawTile(g, world.get(i,j),topLeft, renderWidth, renderHeight);
+               drawTile(world.get(i,j),topLeft, renderWidth, renderHeight);
             }
         }
     }
 
 //Talaj rajzolása
-    private void drawTile(Graphics g, Tile tile, Point screenPosition, int width, int height){
+    private void drawTile(Tile tile, Point screenPosition, int width, int height){
         switch(tile.getTerrainType()){
             case LAND:
-                g.drawImage(AssetManager.get("land" + tile.getTreeCount()), screenPosition.x, screenPosition.y, width, height, null);
+                graphics.drawImage(AssetManager.get("land" + tile.getTreeCount()), screenPosition.x, screenPosition.y, width, height, null);
                 break;
             case WATER:
-                g.drawImage(AssetManager.get("water"), screenPosition.x, screenPosition.y, width, height, null);
+                graphics.drawImage(AssetManager.get("water"), screenPosition.x, screenPosition.y, width, height, null);
                 break;
             case ROAD:
                 //TODO: utak és hídak kirajzolása
                 break;
             case BUILDING:
-                g.drawImage(AssetManager.get("concrete"), screenPosition.x, screenPosition.y, width, height, null);
+                graphics.drawImage(AssetManager.get("concrete"), screenPosition.x, screenPosition.y, width, height, null);
                 break;
             default:
                 System.err.println("Nem található ilyen TerrainType");
@@ -61,7 +66,7 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
     /*
     épületek kirajzolása
      */
-    private void renderBuildings(Graphics g, World world){
+    private void renderBuildings(){
         for (int i = 0; i < world.getRows(); i++) {
             for (int j = 0; j < world.getCols(); j++) {
                 Tile tile = world.get(i,j);
@@ -77,13 +82,14 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
                    //A tényleges szélesség és magasság a két pont különbsége
                    int renderWidth = bottomRight.x - topLeft.x;
                    int renderHeight = bottomRight.y - topLeft.y;
-                   drawBuilding(g, world.get(i,j),topLeft, renderWidth * width, renderHeight * height);
+                   drawBuilding(world.get(i,j),topLeft, renderWidth * width, renderHeight * height);
                }
             }
         }
     }
 
-    private void drawBuilding(Graphics g, Tile tile, Point screenPosition, int width, int height){
+    private void drawBuilding(Tile tile, Point screenPosition, int width, int height){
+        //TODO
         /*switch(tile.getBuilding().getType()){
             case SILO:
                 break;
@@ -94,8 +100,14 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
             case STB...:
                 break;
         }*/
-        g.drawImage(AssetManager.get("building"), screenPosition.x, screenPosition.y, width, height, null);
+        graphics.drawImage(AssetManager.get("building"), screenPosition.x, screenPosition.y, width, height, null);
 
     }
 
+    private void renderVehicles(){
+        //TODO
+    }
+    private void drawVehicle(Tile tile, Point screenPosition, int width, int height){
+        //TODO
+    }
 }
