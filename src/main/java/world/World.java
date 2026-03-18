@@ -1,9 +1,10 @@
 package world;
 
-import world.building.Building;
 import world.tile.Point;
 import world.tile.TerrainType;
 import world.tile.Tile;
+
+import java.util.List;
 
 public class World {
     private final int rows;
@@ -67,12 +68,13 @@ public class World {
 
     }
 
-    public Tile get(int x, int y){
-        if(x < 0 || x > rows || y < 0 || y > cols){
-            System.err.println("Koordinata kivul esik a griden: (" + x + ","+ y + ")");
+    public Tile get(int x, int y) {
+        if (x < 0 || x > rows || y < 0 || y > cols) {
+            System.err.println("Koordinata kivul esik a griden: (" + x + "," + y + ")");
             return null;
         }
         return grid[x][y];
+    }
 
     public List<Point> findPath(Tile start, Tile stop) throws Exception {
         if (stop.getTerrainType() != TerrainType.STOP || stop.getTerrainType() != TerrainType.ROAD) {
