@@ -1,6 +1,6 @@
 package world.resources;
 
-public enum AnimalType implements ICargo{
+public enum AnimalType implements ICargo {
     UNKNOWN("???", -1),
     HORSE("Ló", 10),
     FISH("Hal", 5),
@@ -19,7 +19,6 @@ public enum AnimalType implements ICargo{
         this.displayName = name;
         this.value = value;
     }
-
 
     @Override
     public String getDisplayName() {
