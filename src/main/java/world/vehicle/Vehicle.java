@@ -5,27 +5,27 @@ import world.building.Building;
 import world.resources.ICargo;
 import world.tile.Point;
 import world.tile.Tile;
-import world.vehicle.order.OrderManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Vehicle {
+    protected final World world;
+
     protected int currentRow;
     protected int currentCol;
-    protected double pixelX;
-    protected double pixelY;
+
     protected double speed;
     protected int capacity;
-    protected int cargoNum;
-    protected ICargo cargoType;
-    protected List<Point> path;
-    protected int pathIndex;
-    protected boolean isLoading;
-    protected OrderManager orderManager;
     protected int costToOperate;
 
+    protected int cargoNum;
+    protected List<Point> path;
+
     public Vehicle(World world, int x, int y) throws Exception {
+        this.world = world;
+
         if (world.isValidTile(x, y)) {
             this.currentRow = x;
             this.currentCol = y;
@@ -33,16 +33,9 @@ public abstract class Vehicle {
         else {
             throw new Exception("Invalid tile!");
         }
-    }
 
-    public abstract void onDestinationReached(World world);
-
-    public void update() {
-
-    }
-
-    public void draw(Graphics g, int screenX, int screenY) {
-
+        this.cargoNum = 0;
+        this.path = new ArrayList<Point>();
     }
 
     public abstract void loadFrom(Building building);
@@ -67,7 +60,9 @@ public abstract class Vehicle {
         }
     }
 
-    public void findPath(Tile tile) {
+    public void findPath(Tile destination) throws Exception {
+        Tile currentPosition = world.getTile(this.currentRow, this.currentCol);
 
+        List<Point> path = world.findPath(currentPosition, destination);
     }
 }
