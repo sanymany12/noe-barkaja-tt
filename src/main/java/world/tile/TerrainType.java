@@ -1,5 +1,9 @@
 package world.tile;
 
 public enum TerrainType {
-    LAND, WATER, ROAD, BUILDING
+    LAND,
+    WATER,
+    ROAD,
+    STOP,
+    BUILDING
 }

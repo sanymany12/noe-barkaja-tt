@@ -1,13 +1,12 @@
 package world.resources;
 
-public enum ResourceType implements ICargo{
-    GRAIN("Gabona", 0),
-    FOOD("Ételkonzerv", 1);
+public enum PersonType implements ICargo {
+    PERSON("Emberke", 15);
 
     private String displayName;
     private int value;
 
-    ResourceType(String name, int value) {
+    PersonType(String name, int value) {
         this.displayName = name;
         this.value = value;
     }
