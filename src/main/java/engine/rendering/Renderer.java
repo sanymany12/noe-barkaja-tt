@@ -3,6 +3,7 @@ package engine.rendering;
 import engine.AssetManager;
 import world.World;
 import world.tile.Point;
+import world.tile.TerrainType;
 import world.tile.Tile;
 
 import java.awt.*;
@@ -10,6 +11,7 @@ import java.awt.*;
 public class Renderer {
     private final Camera camera;
     private final World world;
+    private final float treeHeight = 1.7f;
 
     public Renderer(Camera camera, World world) {
         this.camera = camera;
@@ -18,8 +20,10 @@ public class Renderer {
 
     public void renderMap(Graphics graphics){
         renderGround(graphics);
-        renderBuildings(graphics);
+        renderTrees(graphics);
+        //renderBuildings(graphics);
         renderVehicles(graphics);
+
     }
 /*
 pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát kirajzolni)
@@ -45,7 +49,7 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
     private void drawTile(Graphics graphics, Tile tile, Point screenPosition, int width, int height){
         switch(tile.getTerrainType()){
             case LAND:
-                graphics.drawImage(AssetManager.get("land" + tile.getTreeCount()), screenPosition.x, screenPosition.y, width, height, null);
+                graphics.drawImage(AssetManager.get("land"), screenPosition.x, screenPosition.y, width, height, null);
                 break;
             case WATER:
                 graphics.drawImage(AssetManager.get("water"), screenPosition.x, screenPosition.y, width, height, null);
@@ -63,18 +67,31 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
     private void renderTrees(Graphics graphics){
         for (int i = 0; i < world.getRows(); i++) {
             for (int j = 0; j < world.getCols(); j++) {
-                //Kiszámoljuk a csempe bal felső sarkát
-                Point topLeft = camera.worldToScreen(i, j);
+                Tile tile = world.get(i,j);
+                if(tile != null && tile.getTreeCount() > 0
+                        && tile.getTerrainType() == TerrainType.LAND && tile.getBuilding() == null){
+                    //Kiszámoljuk a csempe bal felső sarkát
+                    Point topLeft = camera.worldToScreen(i, j);
 
-                //jobb alsó sarok
-                Point bottomRight = camera.worldToScreen(i + 1, j + 1);
+                    //jobb alsó sarok
+                    Point bottomRight = camera.worldToScreen(i + 1, j + 1);
 
-                //A tényleges szélesség és magasság a két pont különbsége
-                int renderWidth = bottomRight.x - topLeft.x;
-                int renderHeight = bottomRight.y - topLeft.y;
-                drawTile(graphics, world.get(i,j),topLeft, renderWidth, renderHeight);
+                    //A tényleges szélesség és magasság a két pont különbsége
+                    int renderWidth = bottomRight.x - topLeft.x;
+                    int renderHeight = (int)((bottomRight.y - topLeft.y) * treeHeight); // megnöveljük a cella magasságát
+
+                    // Az y koordinátán eltoljuk felfele
+                    int drawY = bottomRight.y - renderHeight;
+                    topLeft.y = drawY;
+                    drawTree(graphics, tile, topLeft, renderWidth, renderHeight);
+                }
+
             }
         }
+    }
+
+    private void drawTree(Graphics graphics, Tile tile, Point screenPosition, int width, int height){
+        graphics.drawImage(AssetManager.get("tree" + tile.getTreeCount()), screenPosition.x, screenPosition.y, width, height, null);
     }
 
 

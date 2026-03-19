@@ -40,6 +40,8 @@ public class ForestManager {
     public ForestManager(World world) {
         this.world = world;
         random = new Random();
+        chanceToGrow = 15;
+        chanceToSpread = 10;
     }
 
     public void updateForests(){

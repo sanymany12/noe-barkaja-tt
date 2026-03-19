@@ -34,6 +34,8 @@ public class World {
             }
         }
 
+        grid[0][0].setTreeCount(1);
+
         grid[1][1].setTerrainType(TerrainType.WATER);
         grid[1][2].setTerrainType(TerrainType.WATER);
         grid[2][1].setTerrainType(TerrainType.WATER);
@@ -70,7 +72,6 @@ public class World {
 
     public Tile get(int x, int y) {
         if (x < 0 || x > rows || y < 0 || y > cols) {
-            System.err.println("Koordinata kivul esik a griden: (" + x + "," + y + ")");
             return null;
         }
         return grid[x][y];
@@ -85,4 +86,12 @@ public class World {
             // pathfinding algorithm needed
         }
     }
+
+    public boolean isValidTile(int x, int y) {
+        if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
+            return true;
+        }
+        return true;
+    }
+
 }
