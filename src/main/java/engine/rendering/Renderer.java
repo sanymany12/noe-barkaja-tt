@@ -55,7 +55,7 @@ public class Renderer {
                             topLeft.x, drawY, renderWidth, renderHeight, bottomRight.y));
                 }
 
-                //Összegyűjtjük az épületeket
+                //Összegyűjtjük az épületeket:
 
                 if(tile != null && tile.isAnchor()){
 

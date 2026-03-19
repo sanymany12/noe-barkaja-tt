@@ -1,7 +1,7 @@
 package engine.rendering;
 
 import java.awt.image.BufferedImage;
-
+/*Kirajzolandó objektumok adatai*/
 public class RenderObj {
     private BufferedImage image;
     private int x, y;
