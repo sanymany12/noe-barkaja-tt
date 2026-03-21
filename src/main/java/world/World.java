@@ -3,7 +3,10 @@ package world;
 import world.tile.Point;
 import world.tile.TerrainType;
 import world.tile.Tile;
+import world.tile.road.Road;
+import world.tile.road.RoadDirection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class World {
@@ -92,6 +95,39 @@ public class World {
             return true;
         }
         return true;
+    }
+
+    // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
+    public void buildRoad(Tile t) {
+        t.setRoad(new Road());
+        Tile neighbourNorth = this.get(t.getCoordinate().x, t.getCoordinate().y-1);
+        Tile neighbourWest = this.get(t.getCoordinate().x-1, t.getCoordinate().y);
+        Tile neighbourEast = this.get(t.getCoordinate().x+1, t.getCoordinate().y);
+        Tile neighbourSouth = this.get(t.getCoordinate().x, t.getCoordinate().y+1);
+        if (neighbourNorth != null) {
+            if (neighbourNorth.getRoad() != null) {
+                t.getRoad().setConnection(RoadDirection.NORTH);
+                neighbourNorth.getRoad().setConnection(RoadDirection.NORTH.getOpposite());
+            }
+        }
+        if (neighbourSouth != null) {
+            if (neighbourSouth.getRoad() != null) {
+                t.getRoad().setConnection(RoadDirection.SOUTH);
+                neighbourSouth.getRoad().setConnection(RoadDirection.SOUTH.getOpposite());;
+            }
+        }
+        if (neighbourEast != null) {
+            if (neighbourEast.getRoad() != null) {
+                t.getRoad().setConnection(RoadDirection.EAST);
+                neighbourEast.getRoad().setConnection(RoadDirection.EAST.getOpposite());
+            }
+        }
+        if (neighbourWest != null) {
+            if (neighbourWest.getRoad() != null) {
+                t.getRoad().setConnection(RoadDirection.WEST);
+                neighbourWest.getRoad().setConnection(RoadDirection.WEST.getOpposite());;
+            }
+        }
     }
 
 }
