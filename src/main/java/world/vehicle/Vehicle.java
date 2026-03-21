@@ -61,7 +61,7 @@ public abstract class Vehicle {
     }
 
     public void findPath(Tile destination) throws Exception {
-        Tile currentPosition = world.getTile(this.currentRow, this.currentCol);
+        Tile currentPosition = world.get(this.currentRow, this.currentCol);
 
         List<Point> path = world.findPath(currentPosition, destination);
     }

@@ -3,6 +3,7 @@ package engine.rendering;
 import engine.AssetManager;
 import world.World;
 import world.tile.Point;
+import world.tile.TerrainType;
 import world.tile.Tile;
 
 import java.awt.*;
@@ -10,23 +11,24 @@ import java.awt.*;
 public class Renderer {
     private final Camera camera;
     private final World world;
-    private final Graphics graphics;
+    private final float treeHeight = 1.7f;
 
-    public Renderer(Camera camera, World world, Graphics graphics) {
+    public Renderer(Camera camera, World world) {
         this.camera = camera;
         this.world = world;
-        this.graphics = graphics;
     }
 
-    public void renderMap(){
-        renderGround();
-        renderBuildings();
-        renderVehicles();
+    public void renderMap(Graphics graphics){
+        renderGround(graphics);
+        renderTrees(graphics);
+        //renderBuildings(graphics);
+        renderVehicles(graphics);
+
     }
 /*
 pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát kirajzolni)
  */
-    private void renderGround(){
+    private void renderGround(Graphics graphics){
         for (int i = 0; i < world.getRows(); i++) {
             for (int j = 0; j < world.getCols(); j++) {
                 //Kiszámoljuk a csempe bal felső sarkát
@@ -38,16 +40,16 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
                 //A tényleges szélesség és magasság a két pont különbsége
                 int renderWidth = bottomRight.x - topLeft.x;
                 int renderHeight = bottomRight.y - topLeft.y;
-               drawTile(world.get(i,j),topLeft, renderWidth, renderHeight);
+               drawTile(graphics, world.get(i,j),topLeft, renderWidth, renderHeight);
             }
         }
     }
 
 //Talaj rajzolása
-    private void drawTile(Tile tile, Point screenPosition, int width, int height){
+    private void drawTile(Graphics graphics, Tile tile, Point screenPosition, int width, int height){
         switch(tile.getTerrainType()){
             case LAND:
-                graphics.drawImage(AssetManager.get("land" + tile.getTreeCount()), screenPosition.x, screenPosition.y, width, height, null);
+                graphics.drawImage(AssetManager.get("land"), screenPosition.x, screenPosition.y, width, height, null);
                 break;
             case WATER:
                 graphics.drawImage(AssetManager.get("water"), screenPosition.x, screenPosition.y, width, height, null);
@@ -62,11 +64,41 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
                 System.err.println("Nem található ilyen TerrainType");
         }
     }
+    private void renderTrees(Graphics graphics){
+        for (int i = 0; i < world.getRows(); i++) {
+            for (int j = 0; j < world.getCols(); j++) {
+                Tile tile = world.get(i,j);
+                if(tile != null && tile.getTreeCount() > 0
+                        && tile.getTerrainType() == TerrainType.LAND && tile.getBuilding() == null){
+                    //Kiszámoljuk a csempe bal felső sarkát
+                    Point topLeft = camera.worldToScreen(i, j);
+
+                    //jobb alsó sarok
+                    Point bottomRight = camera.worldToScreen(i + 1, j + 1);
+
+                    //A tényleges szélesség és magasság a két pont különbsége
+                    int renderWidth = bottomRight.x - topLeft.x;
+                    int renderHeight = (int)((bottomRight.y - topLeft.y) * treeHeight); // megnöveljük a cella magasságát
+
+                    // Az y koordinátán eltoljuk felfele
+                    int drawY = bottomRight.y - renderHeight;
+                    topLeft.y = drawY;
+                    drawTree(graphics, tile, topLeft, renderWidth, renderHeight);
+                }
+
+            }
+        }
+    }
+
+    private void drawTree(Graphics graphics, Tile tile, Point screenPosition, int width, int height){
+        graphics.drawImage(AssetManager.get("tree" + tile.getTreeCount()), screenPosition.x, screenPosition.y, width, height, null);
+    }
+
 
     /*
     épületek kirajzolása
      */
-    private void renderBuildings(){
+    private void renderBuildings(Graphics graphics){
         for (int i = 0; i < world.getRows(); i++) {
             for (int j = 0; j < world.getCols(); j++) {
                 Tile tile = world.get(i,j);
@@ -82,13 +114,13 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
                    //A tényleges szélesség és magasság a két pont különbsége
                    int renderWidth = bottomRight.x - topLeft.x;
                    int renderHeight = bottomRight.y - topLeft.y;
-                   drawBuilding(world.get(i,j),topLeft, renderWidth * width, renderHeight * height);
+                   drawBuilding(graphics,world.get(i,j),topLeft, renderWidth * width, renderHeight * height);
                }
             }
         }
     }
 
-    private void drawBuilding(Tile tile, Point screenPosition, int width, int height){
+    private void drawBuilding(Graphics graphics, Tile tile, Point screenPosition, int width, int height){
         //TODO
         /*switch(tile.getBuilding().getType()){
             case SILO:
@@ -104,7 +136,7 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
 
     }
 
-    private void renderVehicles(){
+    private void renderVehicles(Graphics graphics){
         //TODO
     }
     private void drawVehicle(Tile tile, Point screenPosition, int width, int height){

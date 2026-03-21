@@ -33,11 +33,11 @@ public class AssetManager {
     private void init(){
 
         //szarazfold vagy viz tile
-        loadAsset("land0", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_125.png"); //land 0 fával
-        //loadAsset("land1", "/assets/landscapeTiles_067.png"); //land 1 fával
-        //loadAsset("land2", "/assets/landscapeTiles_067.png"); //land 2 fával
-        //loadAsset("land3", "/assets/landscapeTiles_067.png"); //land 3 fával
-        //loadAsset("land4", "/assets/landscapeTiles_067.png"); //land 4 fával
+        loadAsset("land", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_125.png"); //land 0 fával
+        loadAsset("tree1", "/assets/CP_V1.0.4_nyknck/tree1.png"); //land 1 fával
+        loadAsset("tree2", "/assets/CP_V1.0.4_nyknck/tree2.png"); //land 2 fával
+        loadAsset("tree3", "/assets/CP_V1.0.4_nyknck/tree3.png"); //land 3 fával
+        loadAsset("tree4", "/assets/CP_V1.0.4_nyknck/tree4.png"); //land 4 fával
 
         loadAsset("water", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_124.png");
 
