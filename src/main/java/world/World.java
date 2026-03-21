@@ -13,11 +13,15 @@ public class World {
     private final int rows;
     private final int cols;
     private final Tile[][] grid;
+    private int money;
+    private int elapsedTime;
 
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         grid = new Tile[rows][cols];
+        this.money = 10000;
+        this.elapsedTime = 0;
         initWorld();
     }
 
@@ -78,6 +82,22 @@ public class World {
             return null;
         }
         return grid[x][y];
+    }
+
+    public int getMoney() {
+        return this.money;
+    }
+
+    public void receiveMoney(int income) {
+        this.money = this.money + income;
+    }
+
+    public void spendMoney(int spending) {
+        this.money = this.money - spending;
+    }
+
+    public void newDay() {
+        this.elapsedTime = this.elapsedTime + 1;
     }
 
     public List<Point> findPath(Tile start, Tile stop) throws Exception {

@@ -18,7 +18,7 @@ public class AssetManager {
     private static AssetManager instance;
     private static Map<String, BufferedImage> textures;
 
-    private AssetManager(){
+    public AssetManager(){
         textures = new HashMap<>();
         init();
     }
