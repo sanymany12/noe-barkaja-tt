@@ -57,6 +57,24 @@ public class AssetManager {
 
         //loadAsset("roadNESW", "/assets/landscapeTiles_090.png");
 
+        // ROAD típusok betöltése
+        loadAsset("road-0-", "/assets-final/road-0-.png");
+        loadAsset("road-1-n", "/assets-final/road-1-n.png");
+        loadAsset("road-1-w", "/assets-final/road-1-w.png");
+        loadAsset("road-1-s", "/assets-final/road-1-s.png");
+        loadAsset("road-1-e", "/assets-final/road-1-e.png");
+        loadAsset("road-2-nw", "/assets-final/road-2-nw.png");
+        loadAsset("road-2-ns", "/assets-final/road-2-ns.png");
+        loadAsset("road-2-ne", "/assets-final/road-2-ne.png");
+        loadAsset("road-2-ws", "/assets-final/road-2-ws.png");
+        loadAsset("road-2-we", "/assets-final/road-2-we.png");
+        loadAsset("road-2-se", "/assets-final/road-2-se.png");
+        loadAsset("road-3-nws", "/assets-final/road-3-nws.png");
+        loadAsset("road-3-nse", "/assets-final/road-3-nse.png");
+        loadAsset("road-3-nwe", "/assets-final/road-3-nwe.png");
+        loadAsset("road-3-wse", "/assets-final/road-3-wse.png");
+        loadAsset("road-4-nwse", "/assets-final/road-4-nwse.png");
+
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
     }

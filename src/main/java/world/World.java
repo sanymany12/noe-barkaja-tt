@@ -100,6 +100,7 @@ public class World {
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
     public void buildRoad(Tile t) {
         t.setRoad(new Road());
+        t.setTerrainType(TerrainType.ROAD);
         Tile neighbourNorth = this.get(t.getCoordinate().x, t.getCoordinate().y-1);
         Tile neighbourWest = this.get(t.getCoordinate().x-1, t.getCoordinate().y);
         Tile neighbourEast = this.get(t.getCoordinate().x+1, t.getCoordinate().y);
