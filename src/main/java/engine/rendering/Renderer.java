@@ -55,7 +55,7 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
                 graphics.drawImage(AssetManager.get("water"), screenPosition.x, screenPosition.y, width, height, null);
                 break;
             case ROAD:
-                //TODO: utak és hídak kirajzolása
+                graphics.drawImage(AssetManager.get(tile.getRoad().getSpriteName()), screenPosition.x, screenPosition.y, width, height, null);
                 break;
             case BUILDING:
                 graphics.drawImage(AssetManager.get("concrete"), screenPosition.x, screenPosition.y, width, height, null);
