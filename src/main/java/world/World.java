@@ -14,11 +14,14 @@ public class World {
     private final int cols;
     private final Tile[][] grid;
 
+    private List<Road> roads;
+
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         grid = new Tile[rows][cols];
         initWorld();
+        this.roads = new ArrayList<Road>();
     }
 
     public int getRows() {
@@ -80,9 +83,15 @@ public class World {
         return grid[x][y];
     }
 
-    public List<Point> findPath(Tile start, Tile stop) throws Exception {
-        if (stop.getTerrainType() != TerrainType.STOP || stop.getTerrainType() != TerrainType.ROAD) {
-            throw new Exception("The destination isn't on the road!");
+    public List<Point> findPath(Point start, Point stop) throws Exception {
+//        if (start.getTerrainType() != TerrainType.STOP && start.getTerrainType() != TerrainType.ROAD && start.getTerrainType() != TerrainType.BRIDGE) {
+//            throw new Exception("The start isn't on the road!");
+//        }
+//        else if (stop.getTerrainType() != TerrainType.STOP) {
+//            throw new Exception("The destination isn't a stop!");
+//        }
+        if (isValidTile(start.x, start.y) && isValidTile(stop.x, stop.y)) {
+
         }
         else {
             return null;
@@ -99,7 +108,8 @@ public class World {
 
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
     public void buildRoad(Tile t) {
-        t.setRoad(new Road());
+        t.setRoad(new Road(t.getCoordinate().x, t.getCoordinate().y));
+        this.roads.add(t.getRoad());
         t.setTerrainType(TerrainType.ROAD);
         Tile neighbourNorth = this.get(t.getCoordinate().x, t.getCoordinate().y-1);
         Tile neighbourWest = this.get(t.getCoordinate().x-1, t.getCoordinate().y);

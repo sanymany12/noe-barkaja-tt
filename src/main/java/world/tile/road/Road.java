@@ -1,14 +1,28 @@
 package world.tile.road;
 
+import world.vehicle.Vehicle;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Road {
     private List<RoadDirection> connections;
+    private Vehicle rightLane;
+    private Vehicle leftLane;
+
     private final int COST_TO_REMOVE = 3;
 
-    public Road() {
+    private int locationX;
+    private int locationY;
+
+    public Road(int x, int y) {
         this.connections = new ArrayList<RoadDirection>();
+
+        this.rightLane = null;
+        this.leftLane = null;
+
+        this.locationX = x;
+        this.locationY = y;
     }
 
     public void setConnection(RoadDirection dir) {
