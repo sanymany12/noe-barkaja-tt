@@ -91,7 +91,7 @@ public class World {
 //            throw new Exception("The destination isn't a stop!");
 //        }
         if (isValidTile(start.x, start.y) && isValidTile(stop.x, stop.y)) {
-
+            throw new Exception("Invalid tile!");
         }
         else {
             return null;
