@@ -118,7 +118,7 @@ public class ingameGUI {
 
     public void setBalance(int money)
     {
-        balanceLabel.setText("<html><span style='font-size:24px'>" + money + "</span><sup style='font-size:14px'></sup></html>");
+        balanceLabel.setText("<html><span style='font-size:24px'>$" + money + "</span><sup style='font-size:14px'></sup></html>");
     }
 
     public GameMapPanel getMapPanel() { return mapPanel; }

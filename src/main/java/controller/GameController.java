@@ -55,6 +55,7 @@ public class GameController implements GameListener {
             {
                 currentState = BuildState.BUILD_ROAD;
                 view.getRoadToggle().setText("**Ut ikon**");
+
             }
         });
         view.getSpeedPaused().addActionListener(e -> {
@@ -145,6 +146,8 @@ public class GameController implements GameListener {
             model.getWorld().buildRoad(tile);
             view.mapRefresh();
         }
+
+        afterSpending(model.getWorld().getMoney());
     }
 
     @Override
