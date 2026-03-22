@@ -37,11 +37,20 @@ public class GameEngine {
         this.timeMultiplier = TimeSpeed.PAUSED;
         this.forestManager = new ForestManager(world);
         this.timer = new Timer(ticksPerSecond * timeMultiplier.getMultiplier(), new TimerListener());
-        timer.start();
     }
 
     public void setTimeMultiplier(TimeSpeed ts) {
-        this.timeMultiplier = ts;
+        if (ts != this.timeMultiplier) {
+            if (ts == TimeSpeed.PAUSED) {
+                timer.stop();
+            } else {
+                if (this.timeMultiplier == TimeSpeed.PAUSED) {
+                    timer.start();
+                }
+                timer.setDelay(ticksPerSecond * ts.getMultiplier());
+            }
+            this.timeMultiplier = ts;
+        }
     }
 
     public Renderer getRenderer() { return this.renderer; }

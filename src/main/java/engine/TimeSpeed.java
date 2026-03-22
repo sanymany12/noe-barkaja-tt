@@ -2,9 +2,9 @@ package engine;
 
 public enum TimeSpeed {
     PAUSED(0),
-    NORMAL(1),
+    NORMAL(4),
     FAST(2),
-    SUPERFAST(4);
+    SUPERFAST(1);
 
     private int multiplier;
 

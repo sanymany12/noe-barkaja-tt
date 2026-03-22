@@ -145,4 +145,9 @@ public class GameController implements GameListener {
     {
         view.setDay(currentDay);
     }
+
+    @Override
+    public void afterSpending(int money) {
+        view.setBalance(money);
+    }
 }
