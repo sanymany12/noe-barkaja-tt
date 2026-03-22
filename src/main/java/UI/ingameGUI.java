@@ -1,19 +1,27 @@
 package UI;
 
-import engine.rendering.Camera;
 import engine.rendering.Renderer;
-import world.World;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ingameGUI {
 
-    static class GameMapPanel extends JPanel {
+    private JFrame gameWindow;
+    private GameMapPanel mapPanel;
+    private JLabel dayCounter;
+    private JLabel balanceLabel;
+    private JButton roadToggle;
+
+    public class GameMapPanel extends JPanel {
         private Renderer renderer;
 
-        public GameMapPanel(Renderer renderer) {
-            this.renderer = renderer;
+        public GameMapPanel() {
             setBackground(Color.BLACK);
+        }
+
+        public void setRenderer(Renderer renderer) {
+            this.renderer = renderer;
         }
 
         @Override
@@ -25,60 +33,54 @@ public class ingameGUI {
         }
     }
 
-    public static void main(String[] args) {
-        engine.AssetManager.getInstance();
+    public ingameGUI() {
+        gameWindow = new JFrame("Noé bárkája");
+        gameWindow.setSize(1000, 750);
+        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameWindow.setLocationRelativeTo(null);
+        gameWindow.setLayout(new BorderLayout(10, 10));
 
-        World vilag = new World(50,50);
-        vilag.initWorld();
-        Camera kamera = new Camera(400,100,0.3,800,500);
-        Renderer jatekRenderer = new Renderer(kamera, vilag);
-
-        JFrame ablak = new JFrame("Noé bárkája");
-        ablak.setSize(1000, 750);
-        ablak.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ablak.setLocationRelativeTo(null);
-
-        ablak.setLayout(new BorderLayout(10, 10));
-
-        JPanel felsoPanel = new JPanel(new BorderLayout(10, 0));
-        felsoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Pici üres margó a szélekre
+        JPanel upperPanel = new JPanel(new BorderLayout(10, 0));
+        upperPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
         JPanel minimapPanel = new JPanel();
         minimapPanel.setPreferredSize(new Dimension(200, 120));
         minimapPanel.setBorder(BorderFactory.createTitledBorder("Minimap"));
-        felsoPanel.add(minimapPanel, BorderLayout.WEST);
+        upperPanel.add(minimapPanel, BorderLayout.WEST);
 
         JPanel buildPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         buildPanel.setBorder(BorderFactory.createTitledBorder("Build Options"));
-        buildPanel.add(new JButton("Út"));
-        buildPanel.add(new JButton("Megálló"));
-        buildPanel.add(new JButton("Jármű"));
-        felsoPanel.add(buildPanel, BorderLayout.CENTER);
+        roadToggle = new JButton("Ut ikon");
+        buildPanel.add(roadToggle);
+        buildPanel.add(new JButton("Megálló ikon"));
+        buildPanel.add(new JButton("További ikonok"));
+        upperPanel.add(buildPanel, BorderLayout.CENTER);
 
         JPanel napPanel = new JPanel(new BorderLayout());
         napPanel.setPreferredSize(new Dimension(100, 100));
         napPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        JLabel napSzoveg = new JLabel("<html><center>Day<br><b>1</b></center></html>", SwingConstants.CENTER);
-        napSzoveg.setFont(new Font("Arial", Font.PLAIN, 18));
-        napPanel.add(napSzoveg, BorderLayout.CENTER);
-        felsoPanel.add(napPanel, BorderLayout.EAST);
 
-        ablak.add(felsoPanel, BorderLayout.NORTH);
+        dayCounter = new JLabel("<html><center>Day<br><b>1</b></center></html>", SwingConstants.CENTER);
+        dayCounter.setFont(new Font("Arial", Font.PLAIN, 18));
+        napPanel.add(dayCounter, BorderLayout.CENTER);
+        upperPanel.add(napPanel, BorderLayout.EAST);
 
-        GameMapPanel mapPanel = new GameMapPanel(jatekRenderer);
+        gameWindow.add(upperPanel, BorderLayout.NORTH);
+
+        mapPanel = new GameMapPanel();
         mapPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
 
         JPanel mapContainer = new JPanel(new BorderLayout());
         mapContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mapContainer.add(mapPanel, BorderLayout.CENTER);
 
-        ablak.add(mapContainer, BorderLayout.CENTER);
+        gameWindow.add(mapContainer, BorderLayout.CENTER);
 
         JPanel alsoPanel = new JPanel(new BorderLayout(10, 0));
         alsoPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
-        JLabel penzLabel = new JLabel("<html><span style='font-size:24px'>$12345</span><sup style='font-size:14px'>-123</sup></html>");
-        alsoPanel.add(penzLabel, BorderLayout.WEST);
+        balanceLabel = new JLabel("<html><span style='font-size:24px'>$10000</span><sup style='font-size:14px'></sup></html>");
+        alsoPanel.add(balanceLabel, BorderLayout.WEST);
 
         JPanel idoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         idoPanel.add(new JButton("||"));
@@ -87,16 +89,35 @@ public class ingameGUI {
         idoPanel.add(new JButton("►|"));
         alsoPanel.add(idoPanel, BorderLayout.CENTER);
 
-        JPanel rendszerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        rendszerPanel.add(new JButton("Save"));
-        JButton exitGomb = new JButton("Exit");
+        JPanel lowerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        lowerPanel.add(new JButton("Mentés"));
+        JButton exitGomb = new JButton("Kilépés");
         exitGomb.addActionListener(e -> System.exit(0));
-        rendszerPanel.add(exitGomb);
-        rendszerPanel.add(new JButton("?"));
-        alsoPanel.add(rendszerPanel, BorderLayout.EAST);
+        lowerPanel.add(exitGomb);
+        lowerPanel.add(new JButton("?"));
+        alsoPanel.add(lowerPanel, BorderLayout.EAST);
 
-        ablak.add(alsoPanel, BorderLayout.SOUTH);
+        gameWindow.add(alsoPanel, BorderLayout.SOUTH);
+    }
 
-        ablak.setVisible(true);
+    public void mapRefresh() {
+        mapPanel.repaint();
+    }
+
+    public void setDay(int day) {
+        dayCounter.setText("<html><center>Nap:<br><b>" + day + "</b></center></html>");
+    }
+
+    public void setBalance(int money)
+    {
+        balanceLabel.setText("<html><span style='font-size:24px'>" + money + "</span><sup style='font-size:14px'></sup></html>");
+    }
+
+    public GameMapPanel getMapPanel() { return mapPanel; }
+
+    public JButton getRoadToggle() { return roadToggle; }
+
+    public void show() {
+        gameWindow.setVisible(true);
     }
 }
