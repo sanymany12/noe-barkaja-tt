@@ -22,7 +22,7 @@ public class GameEngine {
 
     private GameListener listener; //Milán: MVC módosítás
 
-    private int ticksPerSecond = 20;
+    private int delay;
     private final int ticksPerDay = 100;
 
     public void start(GameListener listener) {
@@ -33,10 +33,10 @@ public class GameEngine {
         this.renderer = new Renderer(camera, world);
         this.assetManager = new AssetManager();
         this.isRunning = true;
-        this.ticksPerSecond = 20;
+        this.delay = 5;
         this.timeMultiplier = TimeSpeed.PAUSED;
         this.forestManager = new ForestManager(world);
-        this.timer = new Timer(ticksPerSecond * timeMultiplier.getMultiplier(), new TimerListener());
+        this.timer = new Timer(delay * timeMultiplier.getMultiplier(), new TimerListener());
     }
 
     public void setTimeMultiplier(TimeSpeed ts) {
@@ -47,7 +47,7 @@ public class GameEngine {
                 if (this.timeMultiplier == TimeSpeed.PAUSED) {
                     timer.start();
                 }
-                timer.setDelay(ticksPerSecond * ts.getMultiplier());
+                timer.setDelay(delay * ts.getMultiplier());
             }
             this.timeMultiplier = ts;
         }

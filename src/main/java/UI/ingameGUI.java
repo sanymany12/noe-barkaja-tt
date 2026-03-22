@@ -12,6 +12,10 @@ public class ingameGUI {
     private JLabel dayCounter;
     private JLabel balanceLabel;
     private JButton roadToggle;
+    private JButton speedPaused;
+    private JButton speedNormal;
+    private JButton speedFast;
+    private JButton speedSuperFast;
 
     public class GameMapPanel extends JPanel {
         private Renderer renderer;
@@ -83,10 +87,14 @@ public class ingameGUI {
         alsoPanel.add(balanceLabel, BorderLayout.WEST);
 
         JPanel idoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        idoPanel.add(new JButton("||"));
-        idoPanel.add(new JButton("►"));
-        idoPanel.add(new JButton("►►"));
-        idoPanel.add(new JButton("►|"));
+        speedPaused = new JButton("||");
+        idoPanel.add(speedPaused);
+        speedNormal = new JButton("►");
+        idoPanel.add(speedNormal);
+        speedFast = new JButton("►►");
+        idoPanel.add(speedFast);
+        speedSuperFast = new JButton("►|");
+        idoPanel.add(speedSuperFast);
         alsoPanel.add(idoPanel, BorderLayout.CENTER);
 
         JPanel lowerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -116,6 +124,14 @@ public class ingameGUI {
     public GameMapPanel getMapPanel() { return mapPanel; }
 
     public JButton getRoadToggle() { return roadToggle; }
+
+    public JButton getSpeedPaused() { return speedPaused; }
+
+    public JButton getSpeedNormal() { return speedNormal; }
+
+    public JButton getSpeedFast() { return speedFast; }
+
+    public JButton getSpeedSuperFast() { return speedSuperFast; }
 
     public void show() {
         gameWindow.setVisible(true);
