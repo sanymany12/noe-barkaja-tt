@@ -23,19 +23,19 @@ public class Road {
 
     public String getSpriteName() {
         String spriteName = "road-";
-        spriteName.concat(String.valueOf(connections.toArray().length));
-        spriteName.concat("-");
+        spriteName = spriteName.concat(String.valueOf(connections.toArray().length));
+        spriteName = spriteName.concat("-");
         if (canGo(RoadDirection.NORTH)) {
-            spriteName.concat("n");
+            spriteName = spriteName.concat("n");
         }
         if (canGo(RoadDirection.WEST)) {
-            spriteName.concat("w");
+            spriteName = spriteName.concat("w");
         }
         if (canGo(RoadDirection.SOUTH)) {
-            spriteName.concat("s");
+            spriteName = spriteName.concat("s");
         }
         if (canGo(RoadDirection.EAST)) {
-            spriteName.concat("e");
+            spriteName = spriteName.concat("e");
         }
 //        spriteName.concat(".png");
         return spriteName;

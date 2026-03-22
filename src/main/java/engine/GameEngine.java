@@ -13,7 +13,6 @@ public class GameEngine {
     private World world;
     private Camera camera;
     private Renderer renderer;
-    private Graphics graphics;
     private AssetManager assetManager;
     private boolean isRunning;
     private TimeSpeed timeMultiplier;
@@ -21,12 +20,16 @@ public class GameEngine {
     private Timer timer;
     private int tickCounter;
 
+    private GameListener listener; //Milán: MVC módosítás
+
     private int ticksPerSecond = 20;
     private final int ticksPerDay = 100;
 
-    public void start() {
+    public void start(GameListener listener) {
+        this.listener = listener;
         this.world = new World(20, 20);
-        this.camera = new Camera(0, 0, 1, 1920, 1080);
+        world.initWorld();
+        this.camera = new Camera(0, 0, 2.0, 800, 600);
         this.renderer = new Renderer(camera, world);
         this.assetManager = new AssetManager();
         this.isRunning = true;
@@ -41,8 +44,14 @@ public class GameEngine {
         this.timeMultiplier = ts;
     }
 
+    public Renderer getRenderer() { return this.renderer; }
+
+    public World getWorld() { return this.world; }
+
+    public Camera getCamera() { return this.camera; }
+
     private void update() {
-        renderer.renderMap(graphics);
+
     }
 
     class TimerListener implements ActionListener {
@@ -51,10 +60,20 @@ public class GameEngine {
             if (isRunning) {
                 update();
                 tickCounter++;
+
+                if(listener != null)
+                {
+                    listener.onTick();
+                }
             }
             if (tickCounter == ticksPerDay) {
                 tickCounter = 0;
                 world.newDay();
+
+                if(listener != null)
+                {
+                    listener.onNewDay(world.getElapsedTime() + 1);
+                }
             }
         }
     }
