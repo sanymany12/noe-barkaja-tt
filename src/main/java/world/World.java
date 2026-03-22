@@ -78,7 +78,7 @@ public class World {
     }
 
     public Tile get(int x, int y) {
-        if (x < 0 || x > rows || y < 0 || y > cols) {
+        if (x < 0 || x > rows - 1 || y < 0 || y > cols - 1) {
             return null;
         }
         return grid[x][y];
@@ -87,6 +87,8 @@ public class World {
     public int getMoney() {
         return this.money;
     }
+
+    public int getElapsedTime() { return this.elapsedTime; }
 
     public void receiveMoney(int income) {
         this.money = this.money + income;
