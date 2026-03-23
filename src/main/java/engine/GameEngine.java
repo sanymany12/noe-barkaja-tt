@@ -78,7 +78,7 @@ public class GameEngine {
             if (tickCounter == ticksPerDay) {
                 tickCounter = 0;
                 world.newDay();
-
+                forestManager.updateForests();
                 if(listener != null)
                 {
                     listener.onNewDay(world.getElapsedTime() + 1);
