@@ -3,6 +3,7 @@ package controller;
 import UI.ingameGUI;
 import engine.GameEngine;
 import engine.GameListener;
+import engine.TimeSpeed;
 import world.tile.Point;
 import world.tile.Tile;
 import world.tile.TerrainType;
@@ -54,7 +55,20 @@ public class GameController implements GameListener {
             {
                 currentState = BuildState.BUILD_ROAD;
                 view.getRoadToggle().setText("**Ut ikon**");
+
             }
+        });
+        view.getSpeedPaused().addActionListener(e -> {
+            model.setTimeMultiplier(TimeSpeed.PAUSED);
+        });
+        view.getSpeedNormal().addActionListener(e -> {
+            model.setTimeMultiplier(TimeSpeed.NORMAL);
+        });
+        view.getSpeedFast().addActionListener(e -> {
+            model.setTimeMultiplier(TimeSpeed.FAST);
+        });
+        view.getSpeedSuperFast().addActionListener(e -> {
+            model.setTimeMultiplier(TimeSpeed.SUPERFAST);
         });
     }
 
@@ -132,6 +146,8 @@ public class GameController implements GameListener {
             model.getWorld().buildRoad(tile);
             view.mapRefresh();
         }
+
+        afterSpending(model.getWorld().getMoney());
     }
 
     @Override
@@ -144,5 +160,10 @@ public class GameController implements GameListener {
     public void onNewDay(int currentDay)
     {
         view.setDay(currentDay);
+    }
+
+    @Override
+    public void afterSpending(int money) {
+        view.setBalance(money);
     }
 }
