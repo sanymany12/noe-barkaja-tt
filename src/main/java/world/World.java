@@ -122,7 +122,7 @@ public class World {
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
     public void buildRoad(Tile t) {
         Road newRoad = new Road();
-        this.spendMoney(newRoad.getCostToBuild());
+        this.spendMoney(newRoad.getCostToBuild() + t.getTreeCount() * 5);
         t.setRoad(newRoad);
         t.setTerrainType(TerrainType.ROAD);
         Tile neighbourNorth = this.get(t.getCoordinate().x, t.getCoordinate().y-1);
