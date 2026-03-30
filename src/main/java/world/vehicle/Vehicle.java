@@ -23,6 +23,10 @@ public abstract class Vehicle {
     protected int cargoNum;
     protected List<Point> path;
 
+    protected ICargo cargoType;
+
+    protected VehicleType type;
+
     public Vehicle(World world, int x, int y) throws Exception {
         this.world = world;
 
@@ -36,11 +40,16 @@ public abstract class Vehicle {
 
         this.cargoNum = 0;
         this.path = new ArrayList<Point>();
+        this.type = null;
+    }
+
+    public VehicleType getVehicleType() {
+        return this.type;
     }
 
     public abstract void loadFrom(Building building);
 
-    public abstract void unloadFrom(Building building);
+    public abstract void unloadTo(Building building);
 
     public boolean isEmpty() {
         if (this.cargoNum == 0) {
@@ -58,6 +67,10 @@ public abstract class Vehicle {
         else {
             return false;
         }
+    }
+
+    public ICargo getCargoType() {
+        return this.cargoType;
     }
 
     public void findPath(Tile destination) throws Exception {
