@@ -10,8 +10,12 @@ import world.tile.road.RoadDirection;
 import world.building.BusStop;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class World {
+    private Random random;
+
     private final int rows;
     private final int cols;
 
@@ -20,15 +24,18 @@ public class World {
     private int money;
     private int elapsedTime;
 
+    private ArrayList<BusStop> busStops;
     private BusStop start;
     private BusStop stop;
 
     public World(int rows, int cols) {
+        this.random = new Random();
         this.rows = rows;
         this.cols = cols;
         grid = new Tile[rows][cols];
         this.money = 10000;
         this.elapsedTime = 0;
+        this.busStops = new ArrayList<BusStop>();
         initWorld();
     }
 
@@ -174,6 +181,24 @@ public class World {
         if (buildingTile != null && buildingTile.getTerrainType() == TerrainType.BUILDING && buildingTile.getBuilding() != null) {
             if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
                 this.get(t.getCoordinate().x, t.getCoordinate().y).setBuilding(new Station(this, t, buildingTile.getBuilding()));
+            }
+        }
+    }
+
+    public void setBusRoute() throws Exception {
+        if (start == null && stop == null) {
+            if (this.busStops.size() < 2) {
+                throw new Exception("Not enough bus stops in world!");
+            } else {
+                List<Integer> listOfIndexes = new ArrayList<Integer>();
+                for (int i = 0; i < busStops.size(); i++) {
+                    listOfIndexes.add(i);
+                }
+                int startInd = random.nextInt(0, listOfIndexes.size());
+                listOfIndexes.remove(startInd);
+                busStops.get(startInd).setAsStart();
+                int stopInd = random.nextInt(0, listOfIndexes.size());
+                busStops.get(stopInd).setAsStop();
             }
         }
     }

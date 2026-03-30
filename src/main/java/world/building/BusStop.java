@@ -44,25 +44,23 @@ public class BusStop extends Building<Integer,Integer> {
     }
 
     // Utasok érkeznek
-    public boolean setAsStart() {
+    public void setAsStart() throws Exception {
         if (this.isStop) {
-            return false;
+            throw new Exception("This stop is already assigned as a destination!");
         }
         else {
             this.numOfPeople = random.nextInt(1,20);
             this.isStart = true;
-            return true;
         }
     }
 
     // Új célpont beállítása ebbe a buszmegállóba
-    public boolean setAsStop() {
+    public void setAsStop() throws Exception {
         if (this.isStart) {
-            return false;
+            throw new Exception("This stop is already assigned as a starting point!");
         }
         else {
             this.isStop = true;
-            return true;
         }
     }
 
