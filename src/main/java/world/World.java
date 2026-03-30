@@ -1,20 +1,27 @@
 package world;
 
+import world.building.BuildingType;
+import world.building.Station;
 import world.tile.Point;
 import world.tile.TerrainType;
 import world.tile.Tile;
 import world.tile.road.Road;
 import world.tile.road.RoadDirection;
+import world.building.BusStop;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class World {
     private final int rows;
     private final int cols;
+
     private final Tile[][] grid;
+
     private int money;
     private int elapsedTime;
+
+    private BusStop start;
+    private BusStop stop;
 
     public World(int rows, int cols) {
         this.rows = rows;
@@ -153,4 +160,21 @@ public class World {
         }
     }
 
+    public void buildStation(Tile t, RoadDirection dir) {
+        Tile buildingTile = null;
+        if (dir == RoadDirection.NORTH) {
+            buildingTile = this.get(t.getCoordinate().x, t.getCoordinate().y - 1);
+        } else if (dir == RoadDirection.SOUTH) {
+            buildingTile = this.get(t.getCoordinate().x, t.getCoordinate().y + 1);
+        } else if (dir == RoadDirection.WEST) {
+            buildingTile = this.get(t.getCoordinate().x - 1, t.getCoordinate().y);
+        } else if (dir == RoadDirection.EAST) {
+            buildingTile = this.get(t.getCoordinate().x + 1, t.getCoordinate().y);
+        }
+        if (buildingTile != null && buildingTile.getTerrainType() == TerrainType.BUILDING && buildingTile.getBuilding() != null) {
+            if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
+                this.get(t.getCoordinate().x, t.getCoordinate().y).setBuilding(new Station(this, t, buildingTile.getBuilding()));
+            }
+        }
+    }
 }
