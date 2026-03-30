@@ -6,20 +6,28 @@ import world.tile.Tile;
 public abstract class Building<In, Out> {
     protected World world;
 
-    protected int row;
-    protected int col;
+    protected int width;
+    protected int height;
 
     protected BuildingType type;
 
-    public Building(World world, Tile tile) {
+    public Building(World world) {
         this.world = world;
-        this.col = tile.getCoordinate().x;
-        this.row = tile.getCoordinate().y;
+        this.width = 0;
+        this.height = 0;
         this.type = null;
     }
 
     public BuildingType getBuildingType() {
         return this.type;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 
     public void update() {

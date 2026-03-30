@@ -17,8 +17,11 @@ public class BusStop extends Building<Integer,Integer> {
     private boolean isStart;
     private boolean isStop;
 
-    public BusStop(World world, Tile tile) {
-        super(world, tile);
+    public BusStop(World world) {
+        super(world);
+
+        this.width = 1;
+        this.height = 1;
 
         this.random = new Random();
 

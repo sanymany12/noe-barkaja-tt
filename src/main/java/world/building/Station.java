@@ -11,65 +11,54 @@ public class Station extends Building<Object, Object> {
     private Building building;
     private Vehicle vehicle;
 
-    public Station(World world, Tile tile, Building building) {
-        super(world, tile);
+    public Station(World world, Building building) {
+        super(world);
         this.type = BuildingType.STATION;
+        this.width = 1;
+        this.height = 1;
         this.building = building;
         this.vehicle = null;
     }
 
     public void vehicleArrives(Vehicle vehicle) {
         this.vehicle = vehicle;
-        if (this.building.getBuildingType() == BuildingType.CITY) {
-            // TODO
-        } else if (this.building.getBuildingType() == BuildingType.FARM) {
-            if (this.vehicle.getVehicleType() == VehicleType.FOODTRUCK) {
-                if (this.vehicle.isEmpty() || (!this.vehicle.isFull() && this.vehicle.getCargoType() == ResourceType.GRAIN)) {
-                    this.vehicle.loadFrom(building);
+        switch (this.vehicle.getVehicleType()) {
+            case VehicleType.FOODTRUCK:
+                switch (this.building.getBuildingType()) {
+                    case BuildingType.FARM:
+                        if (this.vehicle.isEmpty() || (!this.vehicle.isFull() && this.vehicle.getCargoType() == ResourceType.GRAIN)) {
+                            this.vehicle.loadFrom(building);
+                        }
+                        break;
+                    case BuildingType.AGRICULTURALPLANT:
+                        if (this.vehicle.isEmpty() || (!this.vehicle.isFull() && this.vehicle.getCargoType() == ResourceType.FOOD)) {
+                            this.vehicle.loadFrom(building);
+                        }
+                        else if (!this.vehicle.isEmpty() && this.vehicle.getCargoType() == ResourceType.GRAIN) {
+                            this.vehicle.unloadTo(building);
+                        }
+                        break;
+                    case BuildingType.SILO:
+                        if (!this.vehicle.isEmpty() && this.vehicle.getCargoType() == ResourceType.FOOD) {
+                            this.vehicle.unloadTo(building);
+                        }
+                        break;
                 }
-            }
-        } else if (this.building.getBuildingType() == BuildingType.AGRICULTURALPLANT) {
-            if (this.vehicle.getVehicleType() == VehicleType.FOODTRUCK) {
-                if (this.vehicle.isEmpty() || (!this.vehicle.isFull() && this.vehicle.getCargoType() == ResourceType.FOOD)) {
-                    this.vehicle.loadFrom(building);
+                break;
+            case VehicleType.ANIMALTRUCK:
+                switch (this.building.getBuildingType()) {
+                    case BuildingType.CITY:
+                        // TODO
+                        break;
+                    case BuildingType.ENCLOSURE, BuildingType.RESEARCHLAB, BuildingType.CLONINGFACILITY:
+                        if (this.vehicle.isEmpty()) {
+                            this.vehicle.loadFrom(building);
+                        }
+                        else {
+                            this.vehicle.unloadTo(building);
+                        }
+                        break;
                 }
-                else if (!this.vehicle.isEmpty() && this.vehicle.getCargoType() == ResourceType.GRAIN) {
-                    this.vehicle.unloadTo(building);
-                }
-            }
-        } else if (this.building.getBuildingType() == BuildingType.SILO) {
-            if (this.vehicle.getVehicleType() == VehicleType.FOODTRUCK) {
-                if (!this.vehicle.isEmpty() && this.vehicle.getCargoType() == ResourceType.FOOD) {
-                    this.vehicle.unloadTo(building);
-                }
-            }
-        } else if (this.building.getBuildingType() == BuildingType.ENCLOSURE) {
-            if (this.vehicle.getVehicleType() == VehicleType.ANIMALTRUCK) {
-                if (this.vehicle.isEmpty()) {
-                    this.vehicle.loadFrom(building);
-                }
-                else {
-                    this.vehicle.unloadTo(building);
-                }
-            }
-        } else if (this.building.getBuildingType() == BuildingType.CLONINGFACILITY) {
-            if (this.vehicle.getVehicleType() == VehicleType.ANIMALTRUCK) {
-                if (this.vehicle.isEmpty()) {
-                    this.vehicle.loadFrom(building);
-                }
-                else {
-                    this.vehicle.unloadTo(building);
-                }
-            }
-        } else if (this.building.getBuildingType() == BuildingType.RESEARCHLAB) {
-            if (this.vehicle.getVehicleType() == VehicleType.ANIMALTRUCK) {
-                if (this.vehicle.isEmpty()) {
-                    this.vehicle.loadFrom(building);
-                }
-                else {
-                    this.vehicle.unloadTo(building);
-                }
-            }
         }
     }
 

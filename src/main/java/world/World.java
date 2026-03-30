@@ -169,18 +169,36 @@ public class World {
 
     public void buildStation(Tile t, RoadDirection dir) {
         Tile buildingTile = null;
-        if (dir == RoadDirection.NORTH) {
-            buildingTile = this.get(t.getCoordinate().x, t.getCoordinate().y - 1);
-        } else if (dir == RoadDirection.SOUTH) {
-            buildingTile = this.get(t.getCoordinate().x, t.getCoordinate().y + 1);
-        } else if (dir == RoadDirection.WEST) {
-            buildingTile = this.get(t.getCoordinate().x - 1, t.getCoordinate().y);
-        } else if (dir == RoadDirection.EAST) {
-            buildingTile = this.get(t.getCoordinate().x + 1, t.getCoordinate().y);
+        Tile roadTile = null;
+        switch(dir) {
+            case RoadDirection.NORTH:
+                buildingTile = this.get(t.getCoordinate().x, t.getCoordinate().y - 1);
+                roadTile = this.get(t.getCoordinate().x, t.getCoordinate().y + 1);
+                break;
+            case RoadDirection.EAST:
+                buildingTile = this.get(t.getCoordinate().x + 1, t.getCoordinate().y);
+                roadTile = this.get(t.getCoordinate().x - 1, t.getCoordinate().y);
+                break;
+            case RoadDirection.SOUTH:
+                buildingTile = this.get(t.getCoordinate().x, t.getCoordinate().y + 1);
+                roadTile = this.get(t.getCoordinate().x, t.getCoordinate().y - 1);
+                break;
+            case RoadDirection.WEST:
+                buildingTile = this.get(t.getCoordinate().x - 1, t.getCoordinate().y);
+                roadTile = this.get(t.getCoordinate().x + 1, t.getCoordinate().y);
+                break;
         }
+        // Ellenőrzés, hogy van-e épület abban az irányban, ahova építeni szeretnénk
         if (buildingTile != null && buildingTile.getTerrainType() == TerrainType.BUILDING && buildingTile.getBuilding() != null) {
-            if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
-                this.get(t.getCoordinate().x, t.getCoordinate().y).setBuilding(new Station(this, t, buildingTile.getBuilding()));
+            // Ellenőrzés, hogy van-e a megállóhoz kapcsolódó út
+            if (roadTile != null && roadTile.getTerrainType() == TerrainType.ROAD && roadTile.getRoad() != null) {
+                // Ellenőrzés, hogy a megálló melletti épület nem buszmegálló / ipari megálló
+                if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
+                    // Ipari megálló "megépítése"
+                    this.get(t.getCoordinate().x, t.getCoordinate().y).setBuilding(new Station(this, buildingTile.getBuilding()));
+                    // Út elágazásainak frissítése
+                    this.get(roadTile.getCoordinate().x, roadTile.getCoordinate().y).getRoad().setConnection(dir);
+                }
             }
         }
     }
