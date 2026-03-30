@@ -129,7 +129,7 @@ public class GameController implements GameListener {
 
         if(tile != null && tile.getTerrainType() == TerrainType.LAND && tile.getBuilding() == null)
         {
-            model.getWorld().buildRoad(tile);
+            model.getBuildManager().buildRoad(tile);
             view.mapRefresh();
         }
     }
