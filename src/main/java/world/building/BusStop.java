@@ -29,17 +29,21 @@ public class BusStop extends Building<Integer,Integer> {
         this.isStop = false;
     }
 
+    // Jármű érkezésekor ellenőrzi, hogy busz érkezett-e
+    //      -> ha igen és a mező a jelenlegi kiindulópont az utasoknak, felveszi őket
+    //      -> ha igen és a mező a jelenlegi célpont az utasoknak, leteszi őket
     public void vehicleArrives(Vehicle vehicle) {
         this.vehicle = vehicle;
         if (this.vehicle.getVehicleType() == VehicleType.BUS) {
-            if (this.isStop) {
+            if (this.isStop && !vehicle.isEmpty()) {
                 vehicle.unloadTo(this);
-            } else if (this.isStart) {
+            } else if (this.isStart && vehicle.isEmpty()) {
                 vehicle.loadFrom(this);
             }
         }
     }
 
+    // Utasok érkeznek
     public boolean setAsStart() {
         if (this.isStop) {
             return false;
@@ -51,6 +55,7 @@ public class BusStop extends Building<Integer,Integer> {
         }
     }
 
+    // Új célpont beállítása ebbe a buszmegállóba
     public boolean setAsStop() {
         if (this.isStart) {
             return false;
@@ -61,12 +66,14 @@ public class BusStop extends Building<Integer,Integer> {
         }
     }
 
+    // Megálló visszaállítása alaphelyzetbe (ha letelt az idő a teljesítésre és már új útvonal van)
     public void resetStop() {
         this.numOfPeople = 0;
         this.isStart = false;
         this.isStop = false;
     }
 
+    // Segédfüggvény az utasok buszra való feltöltéséhez
     public int loadTo(Bus bus) {
         return this.numOfPeople;
     }
