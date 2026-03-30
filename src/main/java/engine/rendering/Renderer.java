@@ -17,6 +17,14 @@ public class Renderer {
     private final World world;
     private final float treeHeight = 1.7f;
 
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
     public Renderer(Camera camera, World world) {
         this.camera = camera;
         this.world = world;
