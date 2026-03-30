@@ -51,6 +51,7 @@ public class BuildManager {
         }
     }
 
+    // A direction itt az épület irányára hivatkozik!!!
     public void buildStation(Tile t, RoadDirection dir) {
         Tile buildingTile = null;
         Tile roadTile = null;
@@ -79,7 +80,7 @@ public class BuildManager {
                 // Ellenőrzés, hogy a megálló melletti épület nem buszmegálló / ipari megálló
                 if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
                     // Ipari megálló "megépítése"
-                    this.world.get(t.getCoordinate().x, t.getCoordinate().y).setBuilding(new Station(this.world, buildingTile.getBuilding()));
+                    this.world.get(t.getCoordinate().x, t.getCoordinate().y).setBuilding(new Station(this.world, buildingTile.getBuilding(), dir.getOpposite()));
                     // Út elágazásainak frissítése
                     this.world.get(roadTile.getCoordinate().x, roadTile.getCoordinate().y).getRoad().setConnection(dir);
                 }

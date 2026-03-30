@@ -1,6 +1,7 @@
 package world.building;
 
 import world.World;
+import world.tile.road.RoadDirection;
 import world.vehicle.Bus;
 import world.vehicle.Vehicle;
 import world.tile.Tile;
@@ -17,7 +18,9 @@ public class BusStop extends Building<Integer,Integer> {
     private boolean isStart;
     private boolean isStop;
 
-    public BusStop(World world) {
+    private RoadDirection direction;
+
+    public BusStop(World world, RoadDirection dir) {
         super(world);
 
         this.width = 1;
@@ -30,6 +33,8 @@ public class BusStop extends Building<Integer,Integer> {
         this.numOfPeople = 0;
         this.isStart = false;
         this.isStop = false;
+
+        this.direction = dir;
     }
 
     // Jármű érkezésekor ellenőrzi, hogy busz érkezett-e
@@ -77,5 +82,29 @@ public class BusStop extends Building<Integer,Integer> {
     // Segédfüggvény az utasok buszra való feltöltéséhez
     public int loadTo(Bus bus) {
         return this.numOfPeople;
+    }
+
+    public String getSpriteName() {
+        String spriteName = "bus-stop-";
+        switch(this.direction) {
+            case RoadDirection.NORTH:
+                spriteName = spriteName.concat("n-");
+                break;
+            case RoadDirection.EAST:
+                spriteName = spriteName.concat("e-");
+                break;
+            case RoadDirection.SOUTH:
+                spriteName = spriteName.concat("s-");
+                break;
+            case RoadDirection.WEST:
+                spriteName = spriteName.concat("w-");
+        }
+        if (this.isStart) {
+            spriteName = spriteName.concat("start");
+        }
+        if (this.isStop) {
+            spriteName = spriteName.concat("stop");
+        }
+        return spriteName;
     }
 }
