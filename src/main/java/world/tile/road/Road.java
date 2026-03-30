@@ -8,12 +8,17 @@ import java.util.List;
 public class Road {
     private List<RoadDirection> connections;
     private final int COST_TO_REMOVE = 3;
+    private final int COST_TO_BUILD = 5;
 
     private Vehicle rightLane;
     private Vehicle leftLane;
 
     public Road() {
         this.connections = new ArrayList<RoadDirection>();
+    }
+
+    public int getCostToBuild() {
+        return this.COST_TO_BUILD;
     }
 
     public void setConnection(RoadDirection dir) {
