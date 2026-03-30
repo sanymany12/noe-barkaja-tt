@@ -17,7 +17,9 @@ public class BuildManager {
 
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
     public void buildRoad(Tile t) {
-        t.setRoad(new Road());
+        Road newRoad = new Road();
+        world.spendMoney(newRoad.getCostToBuild() + t.getTreeCount() * 5);
+        t.setRoad(newRoad);
         t.setTerrainType(TerrainType.ROAD);
         Tile neighbourNorth = this.world.get(t.getCoordinate().x, t.getCoordinate().y-1);
         Tile neighbourWest = this.world.get(t.getCoordinate().x-1, t.getCoordinate().y);

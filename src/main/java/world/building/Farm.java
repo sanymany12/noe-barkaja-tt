@@ -2,5 +2,10 @@ package world.building;
 
 // Teszt komment
 
-public class Farm extends Building<Integer,Integer>{
+import world.World;
+
+public class Farm extends Building<Integer,Integer> {
+    public Farm(World world) {
+        super(world);
+    }
 }

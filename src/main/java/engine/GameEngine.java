@@ -37,6 +37,7 @@ public class GameEngine {
         this.delay = 5;
         this.timeMultiplier = TimeSpeed.PAUSED;
         this.forestManager = new ForestManager(world);
+        this.buildManager = new BuildManager(world);
         this.timer = new Timer(delay * timeMultiplier.getMultiplier(), new TimerListener());
     }
 
