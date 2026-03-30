@@ -1,13 +1,18 @@
 package world.building;
 
+import world.World;
 import world.tile.Tile;
 
 public abstract class Building<In, Out> {
+    protected World world;
+
     protected int row;
     protected int col;
+
     protected BuildingType type;
 
-    public Building(Tile tile) {
+    public Building(World world, Tile tile) {
+        this.world = world;
         this.col = tile.getCoordinate().x;
         this.row = tile.getCoordinate().y;
         this.type = null;

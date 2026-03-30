@@ -1,6 +1,7 @@
 package world.building;
 
 import world.resources.ResourceType;
+import world.World;
 import world.tile.Tile;
 import world.vehicle.Vehicle;
 import world.vehicle.VehicleType;
@@ -10,8 +11,8 @@ public class Station extends Building<Object, Object> {
     private Building building;
     private Vehicle vehicle;
 
-    public Station(Tile tile, Building building) {
-        super(tile);
+    public Station(World world, Tile tile, Building building) {
+        super(world, tile);
         this.type = BuildingType.STATION;
         this.building = building;
         this.vehicle = null;
@@ -74,5 +75,13 @@ public class Station extends Building<Object, Object> {
 
     public void vehicleLeaves() {
         this.vehicle = null;
+    }
+
+    public boolean isOccupied() {
+        return this.vehicle == null;
+    }
+
+    public Vehicle getVehicle() {
+        return this.vehicle;
     }
 }
