@@ -71,9 +71,17 @@ public abstract class Vehicle {
         return this.cargoType;
     }
 
+    public void move() {
+        if (!this.path.isEmpty()) {
+            this.currentPlace = this.path.removeFirst();
+        }
+    }
+
     public void findPath(Tile destination) throws Exception {
         Tile currentPosition = world.get(this.currentPlace.x, this.currentPlace.y);
 
         List<Point> path = world.findPath(currentPosition, destination);
+
+        this.path = path;
     }
 }
