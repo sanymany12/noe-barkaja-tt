@@ -14,6 +14,7 @@ public class AnimalTruck extends Vehicle {
         this.capacity = 1;
         this.costToOperate = 5;
         this.cargoType = null;
+        this.type = VehicleType.ANIMALTRUCK;
     }
 
     @Override
@@ -22,7 +23,7 @@ public class AnimalTruck extends Vehicle {
     }
 
     @Override
-    public void unloadFrom(Building building) {
+    public void unloadTo(Building building) {
 
     }
 }

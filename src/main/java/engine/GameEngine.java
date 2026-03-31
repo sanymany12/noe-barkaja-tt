@@ -17,6 +17,7 @@ public class GameEngine {
     private boolean isRunning;
     private TimeSpeed timeMultiplier;
     private ForestManager forestManager;
+    private BuildManager buildManager;
     private Timer timer;
     private int tickCounter;
 
@@ -36,6 +37,7 @@ public class GameEngine {
         this.delay = 5;
         this.timeMultiplier = TimeSpeed.PAUSED;
         this.forestManager = new ForestManager(world);
+        this.buildManager = new BuildManager(world);
         this.timer = new Timer(delay * timeMultiplier.getMultiplier(), new TimerListener());
     }
 
@@ -58,6 +60,10 @@ public class GameEngine {
     public World getWorld() { return this.world; }
 
     public Camera getCamera() { return this.camera; }
+
+    public BuildManager getBuildManager() {
+        return this.buildManager;
+    }
 
     private void update() {
 
