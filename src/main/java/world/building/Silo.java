@@ -1,4 +1,9 @@
 package world.building;
 
-public class Silo extends Building<Integer,Integer>{
+import world.World;
+
+public class Silo extends Building<Integer,Integer> {
+    public Silo(World world) {
+        super(world);
+    }
 }

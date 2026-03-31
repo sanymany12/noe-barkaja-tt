@@ -7,6 +7,10 @@ import world.tile.TerrainType;
 import world.tile.Tile;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class Renderer {
     private final Camera camera;
@@ -20,10 +24,77 @@ public class Renderer {
 
     public void renderMap(Graphics graphics){
         renderGround(graphics);
-        renderTrees(graphics);
-        //renderBuildings(graphics);
-        renderVehicles(graphics);
+        renderObjects(graphics);
+    }
 
+    private void renderObjects(Graphics g){
+        List<RenderObj> objectsToRender = new ArrayList<>();
+
+        for (int i = 0; i < world.getRows(); i++) {
+            for (int j = 0; j < world.getCols(); j++) {
+
+                Tile tile = world.get(i,j);
+                //Összegyűjtjük a fákat
+                if(tile != null && tile.getTreeCount() > 0
+                        && tile.getTerrainType() == TerrainType.LAND && tile.getBuilding() == null){
+                    //Kiszámoljuk a csempe bal felső sarkát
+                    Point topLeft = camera.worldToScreen(i, j);
+
+                    //jobb alsó sarok
+                    Point bottomRight = camera.worldToScreen(i + 1, j + 1);
+
+                    //A tényleges szélesség és magasság a két pont különbsége
+                    int renderWidth = bottomRight.x - topLeft.x;
+                    int renderHeight = (int)((bottomRight.y - topLeft.y) * treeHeight); // megnöveljük a cella magasságát
+
+                    // Az y koordinátán eltoljuk felfelé
+                    int drawY = bottomRight.y - renderHeight;
+
+
+                    objectsToRender.add(new RenderObj(AssetManager.get("tree"+tile.getTreeCount()),
+                            topLeft.x, drawY, renderWidth, renderHeight, bottomRight.y));
+                }
+
+                //Összegyűjtjük az épületeket:
+
+                if(tile != null && tile.isAnchor()){
+
+                    int baseWidth = 3;  // tile.getBuilding().getWidth()
+                    int baseHeight = 3; // tile.getBuilding().getHeight()
+
+                    //Kiszámoljuk a csempe bal felső sarkát
+                    Point topLeft = camera.worldToScreen(i, j);
+
+                    //jobb alsó sarok
+                    Point bottomRight = camera.worldToScreen(i + baseWidth, j + baseHeight);
+
+                    //A tényleges szélesség és magasság a két pont különbsége
+                    int renderWidth = bottomRight.x - topLeft.x;
+
+                    BufferedImage buildingImg = AssetManager.get("building");
+
+                    // tényleges magasság kiszámolása a kép méretei alapján
+                    float imageRatio = (float) buildingImg.getHeight(null) / buildingImg.getWidth(null);
+                    int renderHeight = (int) (renderWidth * imageRatio);
+
+                    // Az y koordinátán eltoljuk felfelé
+                    int drawY = bottomRight.y - renderHeight;
+
+                    objectsToRender.add(new RenderObj(buildingImg,
+                            topLeft.x, drawY, renderWidth, renderHeight, bottomRight.y));
+                }
+
+
+                //TODO: Összegyűjtjük a járműveket
+            }
+        }
+        // sortoljuk a listát bottomY alapján, így minél leljebb van annál később rajzoljuk ki
+        objectsToRender.sort(Comparator.comparing(RenderObj::getBottomY));
+
+        //kirajzolás
+        for(RenderObj r : objectsToRender){
+            g.drawImage(r.getImage(), r.getX(), r.getY(), r.getWidth(), r.getHeight(), null);
+        }
     }
 /*
 pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát kirajzolni)
@@ -64,82 +135,5 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
                 System.err.println("Nem található ilyen TerrainType");
         }
     }
-    private void renderTrees(Graphics graphics){
-        for (int i = 0; i < world.getRows(); i++) {
-            for (int j = 0; j < world.getCols(); j++) {
-                Tile tile = world.get(i,j);
-                if(tile != null && tile.getTreeCount() > 0
-                        && tile.getTerrainType() == TerrainType.LAND && tile.getBuilding() == null){
-                    //Kiszámoljuk a csempe bal felső sarkát
-                    Point topLeft = camera.worldToScreen(i, j);
 
-                    //jobb alsó sarok
-                    Point bottomRight = camera.worldToScreen(i + 1, j + 1);
-
-                    //A tényleges szélesség és magasság a két pont különbsége
-                    int renderWidth = bottomRight.x - topLeft.x;
-                    int renderHeight = (int)((bottomRight.y - topLeft.y) * treeHeight); // megnöveljük a cella magasságát
-
-                    // Az y koordinátán eltoljuk felfele
-                    int drawY = bottomRight.y - renderHeight;
-                    topLeft.y = drawY;
-                    drawTree(graphics, tile, topLeft, renderWidth, renderHeight);
-                }
-
-            }
-        }
-    }
-
-    private void drawTree(Graphics graphics, Tile tile, Point screenPosition, int width, int height){
-        graphics.drawImage(AssetManager.get("tree" + tile.getTreeCount()), screenPosition.x, screenPosition.y, width, height, null);
-    }
-
-
-    /*
-    épületek kirajzolása
-     */
-    private void renderBuildings(Graphics graphics){
-        for (int i = 0; i < world.getRows(); i++) {
-            for (int j = 0; j < world.getCols(); j++) {
-                Tile tile = world.get(i,j);
-               if(tile.isAnchor()){
-                   int width = 3; //tile.getBuilding().getWidth();
-                   int height = 9; //tile.getBuilding().getHeight();
-                   //Kiszámoljuk a csempe bal felső sarkát
-                   Point topLeft = camera.worldToScreen(i, j);
-
-                   //jobb alsó sarok
-                   Point bottomRight = camera.worldToScreen(i + 1, j + 1);
-
-                   //A tényleges szélesség és magasság a két pont különbsége
-                   int renderWidth = bottomRight.x - topLeft.x;
-                   int renderHeight = bottomRight.y - topLeft.y;
-                   drawBuilding(graphics,world.get(i,j),topLeft, renderWidth * width, renderHeight * height);
-               }
-            }
-        }
-    }
-
-    private void drawBuilding(Graphics graphics, Tile tile, Point screenPosition, int width, int height){
-        //TODO
-        /*switch(tile.getBuilding().getType()){
-            case SILO:
-                break;
-            case FARM:
-                break;
-            case STATION:
-                break;
-            case STB...:
-                break;
-        }*/
-        graphics.drawImage(AssetManager.get("building"), screenPosition.x, screenPosition.y, width, height, null);
-
-    }
-
-    private void renderVehicles(Graphics graphics){
-        //TODO
-    }
-    private void drawVehicle(Tile tile, Point screenPosition, int width, int height){
-        //TODO
-    }
 }

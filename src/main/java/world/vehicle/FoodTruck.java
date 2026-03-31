@@ -15,6 +15,7 @@ public class FoodTruck extends Vehicle {
         this.capacity = 5;
         this.costToOperate = 5;
         this.cargoType = null;
+        this.type = VehicleType.FOODTRUCK;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class FoodTruck extends Vehicle {
     }
 
     @Override
-    public void unloadFrom(Building building) {
+    public void unloadTo(Building building) {
 
     }
 }

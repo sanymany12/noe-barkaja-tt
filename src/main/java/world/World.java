@@ -1,27 +1,42 @@
 package world;
 
+import world.building.BuildingType;
+import world.building.Station;
 import world.tile.Point;
 import world.tile.TerrainType;
 import world.tile.Tile;
 import world.tile.road.Road;
 import world.tile.road.RoadDirection;
+import world.building.BusStop;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class World {
+    private Random random;
+
     private final int rows;
     private final int cols;
+
     private final Tile[][] grid;
 
-    private List<Road> roads;
+    private int money;
+    private int elapsedTime;
+
+    private ArrayList<BusStop> busStops;
+    private BusStop start;
+    private BusStop stop;
 
     public World(int rows, int cols) {
+        this.random = new Random();
         this.rows = rows;
         this.cols = cols;
         grid = new Tile[rows][cols];
+        this.money = 10000;
+        this.elapsedTime = 0;
+        this.busStops = new ArrayList<BusStop>();
         initWorld();
-        this.roads = new ArrayList<Road>();
     }
 
     public int getRows() {
@@ -77,21 +92,33 @@ public class World {
     }
 
     public Tile get(int x, int y) {
-        if (x < 0 || x > rows || y < 0 || y > cols) {
+        if (x < 0 || x > rows - 1 || y < 0 || y > cols - 1) {
             return null;
         }
         return grid[x][y];
     }
 
-    public List<Point> findPath(Point start, Point stop) throws Exception {
-//        if (start.getTerrainType() != TerrainType.STOP && start.getTerrainType() != TerrainType.ROAD && start.getTerrainType() != TerrainType.BRIDGE) {
-//            throw new Exception("The start isn't on the road!");
-//        }
-//        else if (stop.getTerrainType() != TerrainType.STOP) {
-//            throw new Exception("The destination isn't a stop!");
-//        }
-        if (isValidTile(start.x, start.y) && isValidTile(stop.x, stop.y)) {
-            throw new Exception("Invalid tile!");
+    public int getMoney() {
+        return this.money;
+    }
+
+    public int getElapsedTime() { return this.elapsedTime; }
+
+    public void receiveMoney(int income) {
+        this.money = this.money + income;
+    }
+
+    public void spendMoney(int spending) {
+        this.money = this.money - spending;
+    }
+
+    public void newDay() {
+        this.elapsedTime = this.elapsedTime + 1;
+    }
+
+    public List<Point> findPath(Tile start, Tile stop) throws Exception {
+        if (stop.getTerrainType() != TerrainType.STOP || stop.getTerrainType() != TerrainType.ROAD) {
+            throw new Exception("The destination isn't on the road!");
         }
         else {
             return null;
@@ -106,39 +133,21 @@ public class World {
         return true;
     }
 
-    // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
-    public void buildRoad(Tile t) {
-        t.setRoad(new Road(t.getCoordinate().x, t.getCoordinate().y));
-        this.roads.add(t.getRoad());
-        t.setTerrainType(TerrainType.ROAD);
-        Tile neighbourNorth = this.get(t.getCoordinate().x, t.getCoordinate().y-1);
-        Tile neighbourWest = this.get(t.getCoordinate().x-1, t.getCoordinate().y);
-        Tile neighbourEast = this.get(t.getCoordinate().x+1, t.getCoordinate().y);
-        Tile neighbourSouth = this.get(t.getCoordinate().x, t.getCoordinate().y+1);
-        if (neighbourNorth != null) {
-            if (neighbourNorth.getRoad() != null) {
-                t.getRoad().setConnection(RoadDirection.NORTH);
-                neighbourNorth.getRoad().setConnection(RoadDirection.NORTH.getOpposite());
-            }
-        }
-        if (neighbourSouth != null) {
-            if (neighbourSouth.getRoad() != null) {
-                t.getRoad().setConnection(RoadDirection.SOUTH);
-                neighbourSouth.getRoad().setConnection(RoadDirection.SOUTH.getOpposite());;
-            }
-        }
-        if (neighbourEast != null) {
-            if (neighbourEast.getRoad() != null) {
-                t.getRoad().setConnection(RoadDirection.EAST);
-                neighbourEast.getRoad().setConnection(RoadDirection.EAST.getOpposite());
-            }
-        }
-        if (neighbourWest != null) {
-            if (neighbourWest.getRoad() != null) {
-                t.getRoad().setConnection(RoadDirection.WEST);
-                neighbourWest.getRoad().setConnection(RoadDirection.WEST.getOpposite());;
+    public void setBusRoute() throws Exception {
+        if (start == null && stop == null) {
+            if (this.busStops.size() < 2) {
+                throw new Exception("Not enough bus stops in world!");
+            } else {
+                List<Integer> listOfIndexes = new ArrayList<Integer>();
+                for (int i = 0; i < busStops.size(); i++) {
+                    listOfIndexes.add(i);
+                }
+                int startInd = random.nextInt(0, listOfIndexes.size());
+                listOfIndexes.remove(startInd);
+                busStops.get(startInd).setAsStart();
+                int stopInd = random.nextInt(0, listOfIndexes.size());
+                busStops.get(stopInd).setAsStop();
             }
         }
     }
-
 }

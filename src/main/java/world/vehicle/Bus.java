@@ -16,6 +16,7 @@ public class Bus extends Vehicle {
         this.capacity = 10;
         this.costToOperate = 10;
         this.cargoType = PersonType.PERSON;
+        this.type = VehicleType.BUS;
     }
 
     @Override
@@ -26,7 +27,7 @@ public class Bus extends Vehicle {
     }
 
     @Override
-    public void unloadFrom(Building building) {
+    public void unloadTo(Building building) {
 
     }
 }

@@ -18,7 +18,7 @@ public class AssetManager {
     private static AssetManager instance;
     private static Map<String, BufferedImage> textures;
 
-    private AssetManager(){
+    public AssetManager(){
         textures = new HashMap<>();
         init();
     }
@@ -74,6 +74,26 @@ public class AssetManager {
         loadAsset("road-3-nwe", "/assets-final/road-3-nwe.png");
         loadAsset("road-3-wse", "/assets-final/road-3-wse.png");
         loadAsset("road-4-nwse", "/assets-final/road-4-nwse.png");
+
+        // STATION típusok betöltése
+        loadAsset("industrial-stop-n", "/assets-final/industrial-stop-n.png");
+        loadAsset("industrial-stop-e", "/assets-final/industrial-stop-e.png");
+        loadAsset("industrial-stop-w", "/assets-final/industrial-stop-w.png");
+        loadAsset("industrial-stop-s", "/assets-final/industrial-stop-s.png");
+
+        // BUSSTOP típusok betöltése
+        loadAsset("bus-stop-n-", "/assets-final/bus-stop-n-.png");
+        loadAsset("bus-stop-n-start", "/assets-final/bus-stop-n-start.png");
+        loadAsset("bus-stop-n-stop", "/assets-final/bus-stop-n-stop.png");
+        loadAsset("bus-stop-s-", "/assets-final/bus-stop-s-.png");
+        loadAsset("bus-stop-s-start", "/assets-final/bus-stop-s-start.png");
+        loadAsset("bus-stop-s-stop", "/assets-final/bus-stop-s-stop.png");
+        loadAsset("bus-stop-e-", "/assets-final/bus-stop-e-.png");
+        loadAsset("bus-stop-e-start", "/assets-final/bus-stop-e-start.png");
+        loadAsset("bus-stop-e-stop", "/assets-final/bus-stop-e-stop.png");
+        loadAsset("bus-stop-w-", "/assets-final/bus-stop-w-.png");
+        loadAsset("bus-stop-w-start", "/assets-final/bus-stop-w-start.png");
+        loadAsset("bus-stop-w-stop", "/assets-final/bus-stop-w-stop.png");
 
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
