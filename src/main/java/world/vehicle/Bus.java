@@ -21,9 +21,7 @@ public class Bus extends Vehicle {
 
     @Override
     public void loadFrom(Building building) {
-        if (building instanceof BusStop) {
-
-        }
+        
     }
 
     @Override

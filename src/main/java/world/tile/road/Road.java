@@ -7,8 +7,6 @@ import java.util.List;
 
 public class Road {
     private List<RoadDirection> connections;
-    private Vehicle rightLane;
-    private Vehicle leftLane;
 
     private final int COST_TO_REMOVE = 3;
     private final int COST_TO_BUILD = 5;
