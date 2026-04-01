@@ -137,7 +137,9 @@ public class World {
                         } else if (pathfinder.get(neighbours.get(j)).currentMinDistance > value) {
                             pathfinder.remove(neighbours.get(j));
                             pathfinder.put(neighbours.get(j), new PathHelper(value, current));
-                            queue.add(neighbours.get(j));
+                            if (!queue.contains(neighbours.get(j))) {
+                                queue.add(neighbours.get(j));
+                            }
                         }
                     }
                 }
