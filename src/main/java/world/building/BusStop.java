@@ -84,6 +84,7 @@ public class BusStop extends Building<Integer,Integer> {
         return this.numOfPeople;
     }
 
+    @Override
     public String getSpriteName() {
         String spriteName = "bus-stop-";
         switch(this.direction) {

@@ -16,6 +16,8 @@ public class FoodTruck extends Vehicle {
         this.costToOperate = 5;
         this.cargoType = null;
         this.type = VehicleType.FOODTRUCK;
+        this.width = 0.5f;
+        this.height = 0.5f;
     }
 
     @Override
@@ -26,5 +28,10 @@ public class FoodTruck extends Vehicle {
     @Override
     public void unloadTo(Building building) {
 
+    }
+
+    @Override
+    public String getSpriteName(){
+        return "spriteName";
     }
 }

@@ -78,6 +78,7 @@ public class Station extends Building<Object, Object> {
         return this.vehicle;
     }
 
+    @Override
     public String getSpriteName() {
         String spriteName = "industrial-stop-";
         switch (this.direction) {

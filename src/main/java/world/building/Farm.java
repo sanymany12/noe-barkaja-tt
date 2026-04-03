@@ -8,4 +8,9 @@ public class Farm extends Building<Integer,Integer> {
     public Farm(World world) {
         super(world);
     }
+
+    @Override
+    public String getSpriteName() {
+        return "spriteName";
+    }
 }

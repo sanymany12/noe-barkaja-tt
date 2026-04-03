@@ -21,4 +21,9 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
     public AnimalType getSpecies() {
         return this.species;
     }
+
+    @Override
+    public String getSpriteName() {
+        return "spriteName";
+    }
 }

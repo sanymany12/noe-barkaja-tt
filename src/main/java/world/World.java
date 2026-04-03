@@ -1,13 +1,8 @@
 package world;
 
-import world.building.BuildingType;
-import world.building.Station;
-import world.tile.Point;
-import world.tile.TerrainType;
-import world.tile.Tile;
-import world.tile.road.Road;
-import world.tile.road.RoadDirection;
-import world.building.BusStop;
+import world.building.*;
+import world.tile.*;
+import world.vehicle.*;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -23,6 +18,7 @@ public class World {
     private int money;
     private int elapsedTime;
 
+    private List<Vehicle> vehicles;
     private ArrayList<BusStop> busStops;
     private BusStop start;
     private BusStop stop;
@@ -35,7 +31,12 @@ public class World {
         this.money = 10000;
         this.elapsedTime = 0;
         this.busStops = new ArrayList<BusStop>();
+        this.vehicles = new ArrayList<Vehicle>();
         initWorld();
+    }
+
+    public List<Vehicle> getVehicles() {
+        return vehicles;
     }
 
     public int getRows() {
@@ -61,31 +62,10 @@ public class World {
         grid[2][1].setTerrainType(TerrainType.WATER);
         grid[2][2].setTerrainType(TerrainType.WATER);
 
-        //Egy 3x3as épület létrehozása
-        grid[10][10].setTerrainType(TerrainType.BUILDING);
-        grid[10][10].setAnchor(true);
-
-        grid[11][10].setTerrainType(TerrainType.BUILDING);
-        grid[12][10].setTerrainType(TerrainType.BUILDING);
-        grid[10][11].setTerrainType(TerrainType.BUILDING);
-        grid[10][12].setTerrainType(TerrainType.BUILDING);
-        grid[11][11].setTerrainType(TerrainType.BUILDING);
-        grid[12][12].setTerrainType(TerrainType.BUILDING);
-        grid[11][12].setTerrainType(TerrainType.BUILDING);
-        grid[12][11].setTerrainType(TerrainType.BUILDING);
-
-        //Egy 3x3as épület létrehozása
-        grid[8][8].setTerrainType(TerrainType.BUILDING);
-        grid[8][8].setAnchor(true);
-
-        grid[9][8].setTerrainType(TerrainType.BUILDING);
-        grid[10][8].setTerrainType(TerrainType.BUILDING);
-        grid[8][9].setTerrainType(TerrainType.BUILDING);
-        grid[8][10].setTerrainType(TerrainType.BUILDING);
-        grid[9][9].setTerrainType(TerrainType.BUILDING);
-        grid[10][10].setTerrainType(TerrainType.BUILDING);
-        grid[9][10].setTerrainType(TerrainType.BUILDING);
-        grid[10][9].setTerrainType(TerrainType.BUILDING);
+        try{
+            Vehicle testVehicle = new Bus(this, new Point(5,5));
+            vehicles.add(testVehicle);
+        }catch (Exception e){System.err.println("error");}
 
 
     }

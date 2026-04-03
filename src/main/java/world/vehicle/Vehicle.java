@@ -14,13 +14,18 @@ public abstract class Vehicle {
     protected final World world;
 
     protected Point currentPlace;
-
+    protected float width; //1.0 = 1 cella
+    protected float height;//1.0 = 1 cella
     protected double speed;
     protected int capacity;
     protected int costToOperate;
 
     protected int cargoNum;
     protected List<Point> path;
+
+    public Point getCurrentPlace() {
+        return currentPlace;
+    }
 
     protected ICargo cargoType;
 
@@ -77,6 +82,14 @@ public abstract class Vehicle {
         }
     }
 
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
     public void findPath(Tile destination) throws Exception {
         Tile currentPosition = world.get(this.currentPlace.x, this.currentPlace.y);
 
@@ -84,4 +97,6 @@ public abstract class Vehicle {
 
         this.path = path;
     }
+
+    public abstract String getSpriteName();
 }
