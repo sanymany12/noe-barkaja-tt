@@ -38,8 +38,8 @@ public class Renderer {
     private void renderObjects(Graphics g){
         List<RenderObj> objectsToRender = new ArrayList<>();
 
-        for (int i = 0; i < world.getRows(); i++) {
-            for (int j = 0; j < world.getCols(); j++) {
+        for (int i = 0; i < world.getCols(); i++) {
+            for (int j = 0; j < world.getRows(); j++) {
 
                 Tile tile = world.get(i,j);
                 //Összegyűjtjük a fákat
@@ -108,8 +108,8 @@ public class Renderer {
 pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát kirajzolni)
  */
     private void renderGround(Graphics graphics){
-        for (int i = 0; i < world.getRows(); i++) {
-            for (int j = 0; j < world.getCols(); j++) {
+        for (int i = 0; i < world.getCols(); i++) {
+            for (int j = 0; j < world.getRows(); j++) {
                 //Kiszámoljuk a csempe bal felső sarkát
                 Point topLeft = camera.worldToScreen(i, j);
 

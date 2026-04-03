@@ -26,6 +26,7 @@ public class ingameGUI {
             setBackground(Color.BLACK);
         }
 
+        public Renderer getRenderer(){return renderer;}
         public void setRenderer(Renderer renderer) {
             this.renderer = renderer;
         }
@@ -47,11 +48,12 @@ public class ingameGUI {
         }
 
         public void setMinimap(Minimap minimap){ this.minimap = minimap;}
+        public Minimap getMinimap(){return this.minimap;}
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             if (minimap != null) {
-                minimap.render(g, 0, 0);
+                minimap.render(g);
             }
         }
     }
@@ -129,8 +131,10 @@ public class ingameGUI {
     }
 
     public void mapRefresh() {
-
+        mapPanel.getRenderer().getCamera().setDimensions(mapPanel.getWidth(), mapPanel.getHeight()); //Camera tényleges képernyőméret frissítése
         mapPanel.repaint();
+
+        minimapPanel.getMinimap().setDimensions(minimapPanel.getWidth(), minimapPanel.getHeight()); //Minimap tényleges képernyőméret frissítése
         minimapPanel.repaint();
     }
 

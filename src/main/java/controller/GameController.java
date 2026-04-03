@@ -146,6 +146,7 @@ public class GameController implements GameListener {
         {
             model.getWorld().buildRoad(tile);
             view.mapRefresh();
+            view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
         }
 
         afterSpending(model.getWorld().getMoney());
