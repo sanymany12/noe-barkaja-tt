@@ -104,7 +104,7 @@ public class Renderer {
                         objectsToRender.add(new RenderObj(buildingImg,
                                 topLeft.x, topLeft.y, renderWidth, renderHeight, topLeft.y));
                     }
-                    //TODO: Összegyűjtjük a járműveket
+
                 }
 
             }
@@ -122,11 +122,8 @@ public class Renderer {
             int renderWidth = (int)((bottomRight.x - topLeft.x) * vehicle.getWidth());
             int renderHeight = (int)((bottomRight.y - topLeft.y) * vehicle.getHeight()); // megnöveljük a cella magasságát
 
-            // Az y koordinátán eltoljuk felfelé
-            int drawY = bottomRight.y - renderHeight;
-
             objectsToRender.add(new RenderObj(AssetManager.get(vehicle.getSpriteName()),
-                    topLeft.x, drawY, renderWidth, renderHeight, bottomRight.y));
+                    topLeft.x, topLeft.y, renderWidth, renderHeight, bottomRight.y));
         }
         // sortoljuk a listát bottomY alapján, így minél leljebb van annál később rajzoljuk ki
         objectsToRender.sort(Comparator.comparing(RenderObj::getBottomY));
