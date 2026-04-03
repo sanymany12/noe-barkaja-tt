@@ -3,12 +3,13 @@ package world.vehicle;
 import world.World;
 import world.building.Building;
 import world.resources.ResourceType;
+import world.tile.Point;
 
 public class FoodTruck extends Vehicle {
     private ResourceType cargoType;
 
-    public FoodTruck(World world, int x, int y) throws Exception {
-        super(world, x, y);
+    public FoodTruck(World world, Point p) throws Exception {
+        super(world, p);
 
         this.speed = 1;
         this.capacity = 5;

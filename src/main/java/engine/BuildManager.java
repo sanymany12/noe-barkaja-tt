@@ -17,7 +17,7 @@ public class BuildManager {
 
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
     public void buildRoad(Tile t) {
-        Road newRoad = new Road();
+        Road newRoad = new Road(t.getCoordinate().x, t.getCoordinate().y);
         world.spendMoney(newRoad.getCostToBuild() + t.getTreeCount() * 5);
         t.setRoad(newRoad);
         t.setTerrainType(TerrainType.ROAD);
@@ -80,7 +80,8 @@ public class BuildManager {
                 // Ellenőrzés, hogy a megálló melletti épület nem buszmegálló / ipari megálló
                 if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
                     // Ipari megálló "megépítése"
-                    this.world.get(t.getCoordinate().x, t.getCoordinate().y).setBuilding(new Station(this.world, buildingTile.getBuilding(), dir.getOpposite()));
+                    t.setBuilding(new Station(this.world, buildingTile.getBuilding(), dir.getOpposite()));
+                    t.setTerrainType(TerrainType.STOP);
                     // Út elágazásainak frissítése
                     this.world.get(roadTile.getCoordinate().x, roadTile.getCoordinate().y).getRoad().setConnection(dir);
                 }

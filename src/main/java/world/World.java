@@ -9,9 +9,8 @@ import world.tile.road.Road;
 import world.tile.road.RoadDirection;
 import world.building.BusStop;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Random;
+import java.nio.file.Path;
+import java.util.*;
 
 public class World {
     private Random random;
@@ -117,12 +116,57 @@ public class World {
     }
 
     public List<Point> findPath(Tile start, Tile stop) throws Exception {
-        if (stop.getTerrainType() != TerrainType.STOP || stop.getTerrainType() != TerrainType.ROAD) {
+        if (stop.getTerrainType() != TerrainType.ROAD) {
             throw new Exception("The destination isn't on the road!");
         }
         else {
-            return null;
-            // pathfinding algorithm needed
+            List<Point> path = new ArrayList<Point>();
+            ArrayList<Tile> queue = new ArrayList<Tile>();
+            HashMap<Tile, PathHelper> pathfinder = new HashMap<Tile, PathHelper>();
+            pathfinder.put(start, new PathHelper(0, start));
+            queue.add(start);
+            while (!queue.isEmpty()) {
+                for (int i = 0; i < queue.size(); i++) {
+                    Tile current = queue.get(i);
+                    List<Tile> neighbours = getNeighbourRoads(current);
+                    for (int j = 0; j < neighbours.size(); j++) {
+                        int value = pathfinder.get(current).currentMinDistance + 1;
+                        if (!pathfinder.containsKey(neighbours.get(j))) {
+                            pathfinder.put(neighbours.get(j), new PathHelper(value, current));
+                            queue.add(neighbours.get(j));
+                        } else if (pathfinder.get(neighbours.get(j)).currentMinDistance > value) {
+                            pathfinder.remove(neighbours.get(j));
+                            pathfinder.put(neighbours.get(j), new PathHelper(value, current));
+                            if (!queue.contains(neighbours.get(j))) {
+                                queue.add(neighbours.get(j));
+                            }
+                        }
+                    }
+                }
+            }
+            if (pathfinder.containsKey(stop)) {
+                Tile currentKey = stop;
+                while (currentKey != start) {
+                    path.add(new Point(currentKey.getCoordinate().x, currentKey.getCoordinate().y));
+                    Tile newCurrentKey = pathfinder.get(currentKey).currentOrigin;
+                    currentKey = newCurrentKey;
+                }
+                Collections.reverse(path);
+                return path;
+            } else {
+                // No way to reach destination!
+                return null;
+            }
+        }
+    }
+
+    private class PathHelper {
+        public int currentMinDistance;
+        public Tile currentOrigin;
+
+        public PathHelper(int i, Tile t) {
+            this.currentMinDistance = i;
+            this.currentOrigin = t;
         }
     }
 
@@ -131,6 +175,30 @@ public class World {
             return true;
         }
         return true;
+    }
+
+    private List<Tile> getNeighbourRoads(Tile t) {
+        ArrayList<Tile> neighbourRoads = new ArrayList<Tile>();
+
+        Tile northNeighbour = this.get(t.getCoordinate().x, t.getCoordinate().y - 1);
+        Tile southNeighbour = this.get(t.getCoordinate().x, t.getCoordinate().y + 1);
+        Tile eastNeighbour = this.get(t.getCoordinate().x + 1, t.getCoordinate().y);
+        Tile westNeighbour = this.get(t.getCoordinate().x - 1, t.getCoordinate().y);
+
+        if (northNeighbour != null && northNeighbour.getTerrainType() == TerrainType.ROAD && northNeighbour.getRoad() != null) {
+            neighbourRoads.add(northNeighbour);
+        }
+        if (southNeighbour != null && southNeighbour.getTerrainType() == TerrainType.ROAD && southNeighbour.getRoad() != null) {
+            neighbourRoads.add(southNeighbour);
+        }
+        if (eastNeighbour != null && eastNeighbour.getTerrainType() == TerrainType.ROAD && eastNeighbour.getRoad() != null) {
+            neighbourRoads.add(eastNeighbour);
+        }
+        if (westNeighbour != null && westNeighbour.getTerrainType() == TerrainType.ROAD && westNeighbour.getRoad() != null) {
+            neighbourRoads.add(westNeighbour);
+        }
+
+        return neighbourRoads;
     }
 
     public void setBusRoute() throws Exception {

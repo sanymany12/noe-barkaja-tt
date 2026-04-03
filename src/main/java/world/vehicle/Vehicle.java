@@ -13,8 +13,7 @@ import java.util.List;
 public abstract class Vehicle {
     protected final World world;
 
-    protected int currentRow;
-    protected int currentCol;
+    protected Point currentPlace;
 
     protected double speed;
     protected int capacity;
@@ -27,17 +26,16 @@ public abstract class Vehicle {
 
     protected VehicleType type;
 
-    public Vehicle(World world, int x, int y) throws Exception {
+    public Vehicle(World world, Point p) throws Exception {
         this.world = world;
 
-        if (world.isValidTile(x, y)) {
-            this.currentRow = x;
-            this.currentCol = y;
-        }
-        else {
+        if (this.world.isValidTile(p.x, p.y)) {
+            this.currentPlace = p;
+        } else {
             throw new Exception("Invalid tile!");
         }
 
+        this.cargoType = null;
         this.cargoNum = 0;
         this.path = new ArrayList<Point>();
         this.type = null;
@@ -73,9 +71,17 @@ public abstract class Vehicle {
         return this.cargoType;
     }
 
+    public void move() {
+        if (!this.path.isEmpty()) {
+            this.currentPlace = this.path.removeFirst();
+        }
+    }
+
     public void findPath(Tile destination) throws Exception {
-        Tile currentPosition = world.get(this.currentRow, this.currentCol);
+        Tile currentPosition = world.get(this.currentPlace.x, this.currentPlace.y);
 
         List<Point> path = world.findPath(currentPosition, destination);
+
+        this.path = path;
     }
 }
