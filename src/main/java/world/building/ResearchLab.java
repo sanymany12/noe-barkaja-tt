@@ -12,7 +12,10 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
     private AnimalType receivedAnimal2;
     private AnimalType discoveredAnimal;
 
-    private final int COST_OF_RESEARCH = 200;
+    private boolean researchHappening;
+    private int daysSinceResearchStarted;
+
+    private final int COST_OF_RESEARCH = 500;
     private final int RESEARCH_DAYS = 5;
 
     public ResearchLab(World world) {
@@ -23,6 +26,9 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
         this.receivedAnimal1 = null;
         this.receivedAnimal2 = null;
         this.discoveredAnimal = null;
+
+        this.researchHappening = false;
+        this.daysSinceResearchStarted = 0;
     }
 
     public void receiveAnimal(AnimalType animal) {
@@ -32,6 +38,36 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
             if (this.receivedAnimal1 != animal && this.receivedAnimal2 == null) {
                 this.receivedAnimal2 = animal;
             }
+        }
+    }
+
+    public boolean research() {
+        if (!this.hasAnimalsForResearch() || this.discoveredAnimal != null) {
+            return false;
+        } else {
+            this.researchHappening = true;
+            this.daysSinceResearchStarted = 0;
+            return true;
+        }
+    }
+
+    public void newDay() {
+        if (this.researchHappening) {
+            this.daysSinceResearchStarted++;
+        }
+        if (this.daysSinceResearchStarted == this.RESEARCH_DAYS) {
+            this.compatibilityTest();
+            this.researchHappening = false;
+        }
+    }
+
+    public AnimalType takeDiscoveredAnimal() {
+        if (this.discoveredAnimal != null) {
+            AnimalType animal = this.discoveredAnimal;
+            this.discoveredAnimal = null;
+            return animal;
+        } else {
+            return null;
         }
     }
 
