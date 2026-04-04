@@ -49,8 +49,8 @@ public class World {
 
     //TODO itt kellene beolvasni a meghatározott világot
     public void initWorld(){
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < cols; i++) {
+            for (int j = 0; j < rows; j++) {
                 grid[i][j] = new Tile(new Point(i,j), TerrainType.LAND, 0, null, null, false);
             }
         }

@@ -18,6 +18,14 @@ public class Renderer {
     private final World world;
     private final float treeHeight = 1.7f;
 
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
     public Renderer(Camera camera, World world) {
         this.camera = camera;
         this.world = world;
@@ -137,8 +145,8 @@ public class Renderer {
 pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát kirajzolni)
  */
     private void renderGround(Graphics graphics){
-        for (int i = 0; i < world.getRows(); i++) {
-            for (int j = 0; j < world.getCols(); j++) {
+        for (int i = 0; i < world.getCols(); i++) {
+            for (int j = 0; j < world.getRows(); j++) {
                 //Kiszámoljuk a csempe bal felső sarkát
                 Point topLeft = camera.worldToScreen(i, j);
 

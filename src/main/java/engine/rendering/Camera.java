@@ -11,11 +11,11 @@ public class Camera {
     private double offsetY; //eltolás a térkép mozgatásához
 
     private double zoom = 1.0;
-    private static final double MAX_ZOOM = 3.0;
+    private static final double MAX_ZOOM = 4.0;
     private static final double MIN_ZOOM = 0.5;
 
-    private final int screenWidth;
-    private final int screenHeight;
+    private int screenWidth;
+    private int screenHeight;
 
     private static final int TILE_WIDTH = 64;  //Egy mező szélessége
     private static final int TILE_HEIGHT = 64; //magassága
@@ -24,6 +24,11 @@ public class Camera {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.zoom = zoom;
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+    }
+
+    public void setDimensions(int screenWidth, int screenHeight){
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
     }
@@ -61,8 +66,8 @@ public class Camera {
         double pixelY = worldY * TILE_HEIGHT * zoom;
 
         //Kamera eltolás (offset) és képernyő közepéhez igazítás
-        int screenX = (int) Math.round(pixelX - offsetX + (screenWidth / 2.0));
-        int screenY = (int) Math.round(pixelY - offsetY + (screenHeight / 2.0));
+        int screenX = (int) Math.round(pixelX - offsetX);
+        int screenY = (int) Math.round(pixelY - offsetY);
 
         return new Point(screenX, screenY);
     }
@@ -71,8 +76,8 @@ public class Camera {
      */
     public Point screenToWorld(int screenX, int screenY){
         //Kamera eltolás visszafejtése
-        double pixelX = screenX + offsetX - (screenWidth / 2.0);
-        double pixelY = screenY + offsetY - (screenHeight / 2.0);
+        double pixelX = screenX + offsetX;
+        double pixelY = screenY + offsetY;
 
         //Visszaosztás a csempe méretével és a zoommal
         double worldX = pixelX / (TILE_WIDTH * zoom);
@@ -94,25 +99,28 @@ A kamera pozícióját clampeljük, hogy ne lehessen ki görgetni a világból.
         double mapPixelHeight = gridHeight * TILE_HEIGHT * zoom;
 
         //Kiszámoljuk, meddig mehet el a kamera anélkül, hogy lelépne a térképről
-        double minOffsetX = 0 - (screenWidth / 2.0);
-        double maxOffsetX = mapPixelWidth - (screenWidth / 2.0);
+        double minOffsetX = -MARGIN;
+        double maxOffsetX;
 
-        double minOffsetY = 0 - (screenHeight / 2.0);
-        double maxOffsetY = mapPixelHeight - (screenHeight / 2.0);
+        double minOffsetY = -MARGIN;
+        double maxOffsetY;
 
-        //Biztonsági ellenőrzés: ha a térkép kisebb, mint a képernyő (nagyon kizoomoltunk)
-        //Akkor fixen középen tartjuk, különben rángatózna a kamera
-        if (mapPixelWidth < screenWidth) {
-            this.offsetX = mapPixelWidth / 2.0;
+        //ha a térkép kisebb, mint a képernyő (nagyon kizoomoltunk)
+        //Akkor fixen középen tartjuk
+        if (mapPixelWidth <= screenWidth) {
+            this.offsetX = -(screenWidth - mapPixelWidth) / 2.0;
         } else {
+            maxOffsetX = (mapPixelWidth - screenWidth) + MARGIN;
             this.offsetX = Math.max(minOffsetX, Math.min(maxOffsetX, this.offsetX));
         }
 
-        if (mapPixelHeight < screenHeight) {
-            this.offsetY = mapPixelHeight / 2.0;
+        if (mapPixelHeight <= screenHeight) {
+            this.offsetY = -(screenHeight - mapPixelHeight) / 2.0;
         } else {
+            maxOffsetY = (mapPixelHeight - screenHeight) + MARGIN;
             this.offsetY = Math.max(minOffsetY, Math.min(maxOffsetY, this.offsetY));
         }
+
     }
 
 
