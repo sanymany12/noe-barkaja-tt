@@ -11,6 +11,8 @@ public class Silo extends Building<Integer,Integer> {
     public Silo(World world) {
         super(world);
 
+        this.type = BuildingType.SILO;
+
         this.numOfFood = STARTING_STOCK;
     }
 

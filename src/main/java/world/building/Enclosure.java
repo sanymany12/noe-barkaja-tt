@@ -18,6 +18,8 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
     public Enclosure(World world, Silo silo) {
         super(world);
 
+        this.type = BuildingType.ENCLOSURE;
+
         this.silo = silo;
 
         this.width = 2;
@@ -35,6 +37,10 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
 
     public int getNumOfAnimals() {
         return this.numOfAnimals;
+    }
+
+    public void newSpeciesArrives(AnimalType a) {
+        this.species = a;
     }
 
     public void consumeFood() {

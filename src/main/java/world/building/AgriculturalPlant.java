@@ -14,6 +14,8 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
     public AgriculturalPlant(World world) {
         super(world);
 
+        this.type = BuildingType.AGRICULTURALPLANT;
+
         this.incomingGrain = 0;
         this.outgoingFood = 0;
     }
