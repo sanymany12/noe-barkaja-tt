@@ -1,7 +1,12 @@
 package world.building;
 
 import world.World;
+import world.resources.ResourceType;
 import world.tile.road.RoadDirection;
+import world.vehicle.FoodTruck;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgriculturalPlant extends Building<Integer,Integer> {
     private int incomingGrain;
@@ -20,7 +25,50 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
         this.outgoingFood = 0;
     }
 
-    public void newBatchMade() {
+    // getter az itt tartott gabona mennyiségének
+    public int getIncomingGrain() {
+        return this.incomingGrain;
+    }
+
+    // getter a gyártott étel mennyiségének
+    public int getOutgoingFood() {
+        return this.outgoingFood;
+    }
+
+    // getter a teljes gabonakapacitásnak
+    public int getCapacityIn() {
+        return this.CAPACITY_IN;
+    }
+
+    // getter a teljes ételkapacitásnak
+    public int getCapacityOut() {
+        return this.CAPACITY_OUT;
+    }
+
+    // getter annak, hogy hány nap, amíg még a teljes beküldött gabonakészletet feldolgozza
+    public int getNumOfDaysToBeDone() {
+        int days = (int) Math.ceil(this.incomingGrain / this.BATCH);
+        return days;
+    }
+
+    // metódus gabona érkezésének lekezeléséhez
+    public void loadFrom(FoodTruck truck) throws Exception {
+        if (truck.getCargoType() != ResourceType.GRAIN) {
+            throw new Exception("Can't load from truck that doesn't have grain!");
+        } else {
+            int canTake = this.CAPACITY_IN - this.incomingGrain;
+            if (canTake <= truck.getCurrentCargoNum()) {
+                this.incomingGrain = this.incomingGrain + canTake;
+                truck.decreaseCargo(canTake);
+            } else {
+                this.incomingGrain = this.incomingGrain + truck.getCurrentCargoNum();
+                truck.emptyCargo();
+            }
+        }
+    }
+
+    // új adag étel készül
+    private void newBatchMade() {
         int capacityleft = this.CAPACITY_OUT - this.outgoingFood;
         if (capacityleft >= this.BATCH) {
             if (this.incomingGrain > this.BATCH) {
@@ -41,29 +89,17 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
         }
     }
 
-    public int getNumOfDaysToBeDone() {
-        int days = (int) Math.ceil(this.incomingGrain / this.BATCH);
-        return days;
-    }
-
-    public int getIncomingGrain() {
-        return this.incomingGrain;
-    }
-
-    public int getOutgoingFood() {
-        return this.outgoingFood;
-    }
-
-    public int getCAPACITY_IN() {
-        return this.CAPACITY_IN;
-    }
-
-    public int getCAPACITY_OUT() {
-        return this.CAPACITY_OUT;
+    // napi update függvény
+    @Override
+    public void newDay() {
+        if (this.incomingGrain > 0 && this.outgoingFood <= this.CAPACITY_OUT) {
+            this.newBatchMade();
+        }
     }
 
     @Override
     public String getSpriteName() {
+        // TODO
         return "spriteName";
     }
 }
