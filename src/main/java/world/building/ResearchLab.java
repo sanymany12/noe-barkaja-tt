@@ -62,13 +62,9 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
     }
 
     public AnimalType takeDiscoveredAnimal() {
-        if (this.discoveredAnimal != null) {
-            AnimalType animal = this.discoveredAnimal;
-            this.discoveredAnimal = null;
-            return animal;
-        } else {
-            return null;
-        }
+        AnimalType animal = this.discoveredAnimal;
+        this.discoveredAnimal = null;
+        return animal;
     }
 
     private boolean hasAnimalsForResearch() {
@@ -154,6 +150,10 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
                     break;
             }
         }
+    }
+
+    public int getCostOfResearch() {
+        return this.COST_OF_RESEARCH;
     }
 
     @Override
