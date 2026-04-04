@@ -22,6 +22,14 @@ public class Farm extends Building<Integer,Integer> {
         this.random = new Random();
     }
 
+    public int getGrainMade() {
+        return this.grainMade;
+    }
+
+    public int getCapacity() {
+        return this.CAPACITY;
+    }
+
     public void newDay() {
         if (this.grainMade != this.CAPACITY) {
             this.grainGrows();
