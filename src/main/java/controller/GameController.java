@@ -35,6 +35,7 @@ public class GameController implements GameListener {
         this.model.start(this);
 
         this.view.getMapPanel().setRenderer(this.model.getRenderer());
+        this.view.getMinimapPanel().setMinimap(this.model.getMinimap());
 
         mapWidthTiles = model.getWorld().getCols();
         mapHeightTiles = model.getWorld().getRows();
@@ -145,6 +146,7 @@ public class GameController implements GameListener {
         {
             model.getBuildManager().buildRoad(tile);
             view.mapRefresh();
+            view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
         }
 
         afterSpending(model.getWorld().getMoney());

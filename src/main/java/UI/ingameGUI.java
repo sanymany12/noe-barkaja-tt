@@ -1,5 +1,6 @@
 package UI;
 
+import engine.rendering.Minimap;
 import engine.rendering.Renderer;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ public class ingameGUI {
 
     private JFrame gameWindow;
     private GameMapPanel mapPanel;
+    private MinimapPanel minimapPanel;
     private JLabel dayCounter;
     private JLabel balanceLabel;
     private JButton roadToggle;
@@ -24,6 +26,7 @@ public class ingameGUI {
             setBackground(Color.BLACK);
         }
 
+        public Renderer getRenderer(){return renderer;}
         public void setRenderer(Renderer renderer) {
             this.renderer = renderer;
         }
@@ -33,6 +36,24 @@ public class ingameGUI {
             super.paintComponent(g);
             if (renderer != null) {
                 renderer.renderMap(g);
+            }
+        }
+    }
+
+    public class MinimapPanel extends JPanel {
+        private Minimap minimap;
+
+        public MinimapPanel() {
+            setBackground(Color.BLACK);
+        }
+
+        public void setMinimap(Minimap minimap){ this.minimap = minimap;}
+        public Minimap getMinimap(){return this.minimap;}
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (minimap != null) {
+                minimap.render(g);
             }
         }
     }
@@ -47,9 +68,10 @@ public class ingameGUI {
         JPanel upperPanel = new JPanel(new BorderLayout(10, 0));
         upperPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
-        JPanel minimapPanel = new JPanel();
+        minimapPanel = new MinimapPanel();
         minimapPanel.setPreferredSize(new Dimension(200, 120));
         minimapPanel.setBorder(BorderFactory.createTitledBorder("Minimap"));
+
         upperPanel.add(minimapPanel, BorderLayout.WEST);
 
         JPanel buildPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
@@ -109,7 +131,11 @@ public class ingameGUI {
     }
 
     public void mapRefresh() {
+        mapPanel.getRenderer().getCamera().setDimensions(mapPanel.getWidth(), mapPanel.getHeight()); //Camera tényleges képernyőméret frissítése
         mapPanel.repaint();
+
+        minimapPanel.getMinimap().setDimensions(minimapPanel.getWidth(), minimapPanel.getHeight()); //Minimap tényleges képernyőméret frissítése
+        minimapPanel.repaint();
     }
 
     public void setDay(int day) {
@@ -122,6 +148,7 @@ public class ingameGUI {
     }
 
     public GameMapPanel getMapPanel() { return mapPanel; }
+    public MinimapPanel getMinimapPanel() { return minimapPanel; }
 
     public JButton getRoadToggle() { return roadToggle; }
 

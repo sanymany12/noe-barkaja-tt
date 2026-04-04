@@ -1,6 +1,7 @@
 package engine;
 
 import engine.rendering.Camera;
+import engine.rendering.Minimap;
 import engine.rendering.Renderer;
 import world.World;
 
@@ -13,6 +14,7 @@ public class GameEngine {
     private World world;
     private Camera camera;
     private Renderer renderer;
+    private Minimap minimap;
     private AssetManager assetManager;
     private boolean isRunning;
     private TimeSpeed timeMultiplier;
@@ -30,8 +32,9 @@ public class GameEngine {
         this.listener = listener;
         this.world = new World(20, 20);
         world.initWorld();
-        this.camera = new Camera(0, 0, 2.0, 800, 600);
+        this.camera = new Camera(0, 0, 2.0, 1000, 750);
         this.renderer = new Renderer(camera, world);
+        this.minimap = new Minimap(world, camera, 200, 120);
         this.assetManager = new AssetManager();
         this.isRunning = true;
         this.delay = 5;
@@ -56,6 +59,8 @@ public class GameEngine {
     }
 
     public Renderer getRenderer() { return this.renderer; }
+
+    public Minimap getMinimap() {return minimap;}
 
     public World getWorld() { return this.world; }
 
