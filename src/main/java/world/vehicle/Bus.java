@@ -17,6 +17,8 @@ public class Bus extends Vehicle {
         this.costToOperate = 10;
         this.cargoType = PersonType.PERSON;
         this.type = VehicleType.BUS;
+        this.width = 0.5f;
+        this.height = 0.5f;
     }
 
     @Override
@@ -27,5 +29,10 @@ public class Bus extends Vehicle {
     @Override
     public void unloadTo(Building building) {
 
+    }
+
+    @Override
+    public String getSpriteName(){
+        return "bus-left-side";
     }
 }

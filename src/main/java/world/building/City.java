@@ -7,4 +7,8 @@ public class City extends Building<AnimalType, Integer> {
     public City(World world) {
         super(world);
     }
+    @Override
+    public String getSpriteName() {
+        return "spriteName";
+    }
 }

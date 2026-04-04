@@ -97,6 +97,9 @@ public class AssetManager {
 
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
+
+        // BUS spriteok betöltése TODO
+        loadAsset("bus-left-side", "/assets-final/bus-left-side.png");
     }
 /*
 kep betoltese a mapbe input streammel

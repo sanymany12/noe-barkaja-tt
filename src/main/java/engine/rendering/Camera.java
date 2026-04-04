@@ -17,9 +17,8 @@ public class Camera {
     private int screenWidth;
     private int screenHeight;
 
-    private static final int TILE_WIDTH = 16;  //Egy mező szélessége
-    private static final int TILE_HEIGHT = 16; //magassága
-    private static final int MARGIN = 15; //Mennyi helyet engedünk meg a pálya szélétől
+    private static final int TILE_WIDTH = 64;  //Egy mező szélessége
+    private static final int TILE_HEIGHT = 64; //magassága
 
     public Camera(double offsetX, double offsetY, double zoom, int screenWidth, int screenHeight) {
         this.offsetX = offsetX;

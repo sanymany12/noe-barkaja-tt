@@ -33,4 +33,6 @@ public abstract class Building<In, Out> {
     public void update() {
 
     }
+
+    public abstract String getSpriteName();
 }
