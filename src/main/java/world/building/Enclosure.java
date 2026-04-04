@@ -39,11 +39,15 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
         return this.numOfAnimals;
     }
 
+    public boolean isFull() {
+        return this.numOfAnimals == this.CAPACITY;
+    }
+
     public void newSpeciesArrives(AnimalType a) {
         this.species = a;
     }
 
-    public void consumeFood() {
+    private void consumeFood() {
         if (!this.silo.consumeFood(numOfAnimals)) {
             this.starving = true;
         } else {
@@ -51,14 +55,34 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
         }
     }
 
-    public void animalBorn() {
-        if (this.numOfAnimals < this.CAPACITY && !this.starving) {
-            this.numOfAnimals++;
+    private void animalBorn() {
+        int animalsBornNum;
+        if (this.numOfAnimals < 2) {
+            animalsBornNum = 0;
+        } else {
+            animalsBornNum = (int) Math.ceil(this.numOfAnimals * this.ANIMAL_MULTIPLIER);
+        }
+        if (!this.starving) {
+            if (this.numOfAnimals + animalsBornNum <= this.CAPACITY) {
+                this.numOfAnimals = this.numOfAnimals + animalsBornNum;
+            }
+            else {
+                this.numOfAnimals = this.CAPACITY;
+            }
+        }
+    }
+
+    @Override
+    public void newDay() {
+        this.consumeFood();
+        if (!this.isFull()) {
+            this.animalBorn();
         }
     }
 
     @Override
     public String getSpriteName() {
+        // TODO
         return "spriteName";
     }
 }

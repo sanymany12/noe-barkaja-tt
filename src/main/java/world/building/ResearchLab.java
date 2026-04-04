@@ -31,17 +31,28 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
         this.daysSinceResearchStarted = 0;
     }
 
-    public void receiveAnimal(AnimalType animal) {
+    // getter a kutatás árára
+    public int getCostOfResearch() {
+        return this.COST_OF_RESEARCH;
+    }
+
+    // állat érkezésének lekezelése
+    // igaz, ha be tudtuk fogadni az állatot, hamis, ha nem
+    public boolean receiveAnimal(AnimalType animal) {
         if (this.receivedAnimal1 == null) {
             this.receivedAnimal1 = animal;
+            return true;
+        } else if (this.receivedAnimal1 != animal && this.receivedAnimal2 == null) {
+            this.receivedAnimal2 = animal;
+            return true;
         } else {
-            if (this.receivedAnimal1 != animal && this.receivedAnimal2 == null) {
-                this.receivedAnimal2 = animal;
-            }
+            return false;
         }
     }
 
-    public boolean research() {
+    // igazat ad vissza, ha most lehet kutatni, hamisat, ha nem
+    // ha lehet, elindítja a kutatást
+    public boolean startResearch() {
         if (!this.hasAnimalsForResearch() || this.discoveredAnimal != null) {
             return false;
         } else {
@@ -51,31 +62,15 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
         }
     }
 
-    public void newDay() {
-        if (this.researchHappening) {
-            this.daysSinceResearchStarted++;
-        }
-        if (this.daysSinceResearchStarted == this.RESEARCH_DAYS) {
-            this.compatibilityTest();
-            this.researchHappening = false;
-        }
-    }
-
+    // metódus a felfedezett állat elszállításához
     public AnimalType takeDiscoveredAnimal() {
         AnimalType animal = this.discoveredAnimal;
         this.discoveredAnimal = null;
         return animal;
     }
 
-    private boolean hasAnimalsForResearch() {
-        if (this.receivedAnimal1 == null || this.receivedAnimal2 == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public void compatibilityTest() {
+    // állatok kompatibilitástesztje
+    private void compatibilityTest() {
         if (this.hasAnimalsForResearch() && this.discoveredAnimal == null) {
             switch(this.receivedAnimal1) {
                 case AnimalType.HORSE:
@@ -152,8 +147,24 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
         }
     }
 
-    public int getCostOfResearch() {
-        return this.COST_OF_RESEARCH;
+    // segédfüggvény, megmondja, van-e két állatunk amin kutathatunk
+    private boolean hasAnimalsForResearch() {
+        if (this.receivedAnimal1 == null || this.receivedAnimal2 == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void newDay() {
+        if (this.researchHappening) {
+            this.daysSinceResearchStarted++;
+        }
+        if (this.daysSinceResearchStarted == this.RESEARCH_DAYS) {
+            this.compatibilityTest();
+            this.researchHappening = false;
+        }
     }
 
     @Override

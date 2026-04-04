@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
     private AnimalType receivedAnimal;
-    private boolean doneCloning;
+    private int animalsMade;
 
     private boolean isCloning;
     private int daysSinceStarted;
@@ -20,28 +20,42 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
         this.type = BuildingType.CLONINGFACILITY;
 
         this.receivedAnimal = null;
-        this.doneCloning = false;
+        this.animalsMade = 0;
 
         this.isCloning = false;
         this.daysSinceStarted = 0;
     }
 
+    // getter a klónozás árának
+    public int getCostOfCloning() {
+        return this.COST_OF_CLONING;
+    }
+
+    // állat fogadásának metódusa
+    // igaz, ha sikeres, hamis, ha nem
     public boolean receiveAnimal(AnimalType animal) {
         if (this.receivedAnimal == null) {
             this.receivedAnimal = animal;
+            this.animalsMade = 1;
             return true;
         } else {
             return false;
         }
     }
 
-    public void startCloning() {
-        if (this.hasAnimal() && !this.doneCloning) {
+    // klónozás megkezdésének metódusa
+    // igazat ad vissza, ha sikeres, hamisat, ha nem
+    public boolean startCloning() {
+        if (this.hasAnimal()) {
             this.isCloning = true;
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public boolean hasAnimal() {
+    // segédfüggvény arra, van-e itt állat
+    private boolean hasAnimal() {
         if (this.receivedAnimal != null) {
             return true;
         } else {
@@ -49,29 +63,15 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
         }
     }
 
+    @Override
     public void newDay() {
         if (this.isCloning) {
             this.daysSinceStarted++;
         }
         if (this.daysSinceStarted == this.DAYS_TO_CLONE) {
-            this.doneCloning = true;
+            this.animalsMade++;
             this.isCloning = false;
         }
-    }
-
-    public AnimalType takeAnimals() {
-        if (this.doneCloning) {
-            this.doneCloning = false;
-            AnimalType animal = this.receivedAnimal;
-            this.receivedAnimal = null;
-            return animal;
-        } else {
-            return null;
-        }
-    }
-
-    public int getCostOfCloning() {
-        return this.COST_OF_CLONING;
     }
 
     @Override

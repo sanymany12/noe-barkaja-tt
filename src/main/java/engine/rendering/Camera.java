@@ -17,6 +17,8 @@ public class Camera {
     private int screenWidth;
     private int screenHeight;
 
+    private final int MARGIN = 15;
+
     private static final int TILE_WIDTH = 64;  //Egy mező szélessége
     private static final int TILE_HEIGHT = 64; //magassága
 
