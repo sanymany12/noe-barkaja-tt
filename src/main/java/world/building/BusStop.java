@@ -108,4 +108,9 @@ public class BusStop extends Building<Integer,Integer> {
         }
         return spriteName;
     }
+
+    @Override
+    public void newDay() {
+        // Itt abszolút nincs semmi dolga, mivel a buszokat globálisan kezeljük, de az épületek nagyrészénél igen, szóval...
+    }
 }

@@ -79,6 +79,11 @@ public class Station extends Building<Object, Object> {
     }
 
     @Override
+    public void newDay() {
+
+    }
+
+    @Override
     public String getSpriteName() {
         String spriteName = "industrial-stop-";
         switch (this.direction) {
