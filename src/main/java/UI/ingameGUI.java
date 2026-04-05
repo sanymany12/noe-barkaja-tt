@@ -14,6 +14,7 @@ public class ingameGUI {
     private JLabel dayCounter;
     private JLabel balanceLabel;
     private JButton roadToggle;
+    private JButton vehicleToggle;
     private JButton speedPaused;
     private JButton speedNormal;
     private JButton speedFast;
@@ -79,6 +80,8 @@ public class ingameGUI {
         roadToggle = new JButton("Ut ikon");
         buildPanel.add(roadToggle);
         buildPanel.add(new JButton("Megálló ikon"));
+        vehicleToggle = new JButton("Jarmu ikon");
+        buildPanel.add(vehicleToggle);
         buildPanel.add(new JButton("További ikonok"));
         upperPanel.add(buildPanel, BorderLayout.CENTER);
 
@@ -151,6 +154,10 @@ public class ingameGUI {
     public MinimapPanel getMinimapPanel() { return minimapPanel; }
 
     public JButton getRoadToggle() { return roadToggle; }
+
+    public JButton getVehicleToggle() {
+        return this.vehicleToggle;
+    }
 
     public JButton getSpeedPaused() { return speedPaused; }
 
