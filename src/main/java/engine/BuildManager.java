@@ -7,6 +7,7 @@ import world.tile.TerrainType;
 import world.tile.Tile;
 import world.tile.road.Road;
 import world.tile.road.RoadDirection;
+import world.vehicle.FoodTruck;
 
 public class BuildManager {
     private World world;
@@ -86,6 +87,17 @@ public class BuildManager {
                     this.world.get(roadTile.getCoordinate().x, roadTile.getCoordinate().y).getRoad().setConnection(dir);
                 }
             }
+        }
+    }
+
+    // Temporary itt, majd át kell rakni máshova ig
+    public void buyFoodTruck(Tile t) throws Exception {
+        if (t.getTerrainType() != TerrainType.ROAD && t.getRoad() != null) {
+            throw new Exception("Unable to purchase food truck here!");
+        } else {
+            FoodTruck ft = new FoodTruck(this.world, t.getCoordinate());
+            world.spendMoney(ft.getCostToBuy());
+            t.getRoad().vehicleEnters(ft);
         }
     }
 }

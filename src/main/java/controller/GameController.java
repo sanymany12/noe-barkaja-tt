@@ -24,7 +24,7 @@ public class GameController implements GameListener {
     private int mapWidthTiles;
     private int mapHeightTiles;
 
-    private enum BuildState { NONE, BUILD_ROAD}
+    private enum BuildState { NONE, BUY_VEHICLE, BUILD_ROAD}
     private BuildState currentState = BuildState.NONE;
 
     public GameController(GameEngine model, ingameGUI view)
@@ -57,6 +57,15 @@ public class GameController implements GameListener {
                 currentState = BuildState.BUILD_ROAD;
                 view.getRoadToggle().setText("**Ut ikon**");
 
+            }
+        });
+        view.getVehicleToggle().addActionListener(e -> {
+            if(currentState == BuildState.BUY_VEHICLE) {
+                currentState = BuildState.NONE;
+                view.getRoadToggle().setText("Jarmu ikon");
+            } else {
+                currentState = BuildState.BUY_VEHICLE;
+                view.getRoadToggle().setText("**Jarmu ikon**");
             }
         });
         view.getSpeedPaused().addActionListener(e -> {
@@ -147,6 +156,19 @@ public class GameController implements GameListener {
             model.getBuildManager().buildRoad(tile);
             view.mapRefresh();
             view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
+        }
+
+        afterSpending(model.getWorld().getMoney());
+    }
+
+    private void buyFoodTruck(int screenX, int screenY) throws Exception {
+        Point gridPos = model.getCamera().screenToWorld(screenX, screenY);
+        Tile tile = model.getWorld().get(gridPos.x, gridPos.y);
+
+        if(tile != null && tile.getTerrainType() == TerrainType.ROAD && tile.getRoad() != null)
+        {
+            model.getBuildManager().buyFoodTruck(tile);
+            view.mapRefresh();
         }
 
         afterSpending(model.getWorld().getMoney());

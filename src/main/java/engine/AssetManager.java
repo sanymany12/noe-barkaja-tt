@@ -95,11 +95,26 @@ public class AssetManager {
         loadAsset("bus-stop-w-start", "/assets-final/bus-stop-w-start.png");
         loadAsset("bus-stop-w-stop", "/assets-final/bus-stop-w-stop.png");
 
+        // BUS spriteok betöltése
+        loadAsset("bus-w", "/assets-final/bus-left-side.png");
+        loadAsset("bus-e", "/assets-final/bus-right-side.png");
+        loadAsset("bus-n", "/assets-final/bus-back.png");
+        loadAsset("bus-s", "/assets-final/bus-front.png");
+
+        // FOODTRUCK spriteok betöltése
+        loadAsset("foodtruck-s", "/assets-final/food-truck-front.png");
+        loadAsset("foodtruck-n", "/assets-final/food-truck-back.png");
+        loadAsset("foodtruck-n-grain", "/assets-final/food-truck-back-grain.png");
+        loadAsset("foodtruck-n-food", "/assets-final/food-truck-back-food.png");
+        loadAsset("foodtruck-w", "/assets-final/food-truck-left-side.png");
+        loadAsset("foodtruck-w-grain", "/assets-final/food-truck-left-side-grain.png");
+        loadAsset("foodtruck-w-food", "/assets-final/food-truck-left-side-food.png");
+        loadAsset("foodtruck-e", "/assets-final/food-truck-right-side.png");
+        loadAsset("foodtruck-e-grain", "/assets-final/food-truck-right-side-grain.png");
+        loadAsset("foodtruck-e-food", "/assets-final/food-truck-right-side-food.png");
+
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
-
-        // BUS spriteok betöltése TODO
-        loadAsset("bus-left-side", "/assets-final/bus-left-side.png");
     }
 /*
 kep betoltese a mapbe input streammel

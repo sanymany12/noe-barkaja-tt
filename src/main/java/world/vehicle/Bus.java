@@ -33,6 +33,6 @@ public class Bus extends Vehicle {
 
     @Override
     public String getSpriteName(){
-        return "bus-left-side";
+        return "bus-w";
     }
 }

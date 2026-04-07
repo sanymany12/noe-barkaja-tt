@@ -5,6 +5,7 @@ import world.building.Building;
 import world.resources.ICargo;
 import world.tile.Point;
 import world.tile.Tile;
+import world.tile.road.RoadDirection;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,8 +15,11 @@ public abstract class Vehicle {
     protected final World world;
 
     protected Point currentPlace;
+    protected RoadDirection currentDirection;
+
     protected float width; //1.0 = 1 cella
     protected float height;//1.0 = 1 cella
+
     protected double speed;
     protected int capacity;
     protected int costToOperate;
@@ -39,6 +43,8 @@ public abstract class Vehicle {
         } else {
             throw new Exception("Invalid tile!");
         }
+
+        this.currentDirection = RoadDirection.SOUTH;
 
         this.cargoType = null;
         this.cargoNum = 0;

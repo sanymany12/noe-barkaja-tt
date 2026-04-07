@@ -31,6 +31,10 @@ public class Road {
         return this.COST_TO_BUILD;
     }
 
+    public Vehicle getRightLane() {
+        return this.rightLane;
+    }
+
     public void setConnection(RoadDirection dir) {
         if (!this.connections.contains(dir)) {
             this.connections.add(dir);
