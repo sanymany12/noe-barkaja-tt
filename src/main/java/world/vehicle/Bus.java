@@ -5,6 +5,7 @@ import world.building.Building;
 import world.building.BusStop;
 import world.resources.PersonType;
 import world.tile.Point;
+import world.tile.road.RoadDirection;
 
 public class Bus extends Vehicle {
     private PersonType cargoType;
@@ -33,6 +34,21 @@ public class Bus extends Vehicle {
 
     @Override
     public String getSpriteName(){
-        return "bus-w";
+        String spriteName = "bus";
+        switch(this.currentDirection) {
+            case RoadDirection.NORTH:
+                spriteName = spriteName.concat("-n");
+                break;
+            case RoadDirection.EAST:
+                spriteName = spriteName.concat("-e");
+                break;
+            case RoadDirection.SOUTH:
+                spriteName = spriteName.concat("-s");
+                break;
+            case RoadDirection.WEST:
+                spriteName = spriteName.concat("-w");
+                break;
+        }
+        return spriteName;
     }
 }

@@ -84,7 +84,49 @@ public abstract class Vehicle {
 
     public void move() {
         if (!this.path.isEmpty()) {
-            this.currentPlace = this.path.removeFirst();
+            Point nextTile = this.path.removeFirst();
+            int relativeX = this.currentPlace.x - nextTile.x;
+            int relativeY = this.currentPlace.y - nextTile.y;
+
+            switch (relativeX) {
+                case -1:
+                    this.currentDirection = RoadDirection.WEST;
+                    break;
+                case 0:
+                    switch (relativeY) {
+                        case -1:
+                            this.currentDirection = RoadDirection.NORTH;
+                            break;
+                        case 1:
+                            this.currentDirection = RoadDirection.SOUTH;
+                            break;
+                    }
+                    break;
+                case 1:
+                    this.currentDirection = RoadDirection.EAST;
+                    break;
+            }
+
+            switch (this.currentDirection) {
+                case RoadDirection.NORTH:
+                    this.width = 0.5F;
+                    this.height = 0.5F;
+                    break;
+                case RoadDirection.SOUTH:
+                    this.width = 0.5F;
+                    this.height = 0.5F;
+                    break;
+                case RoadDirection.EAST:
+                    this.width = 0.75F;
+                    this.height = 0.5F;
+                    break;
+                case RoadDirection.WEST:
+                    this.width = 0.75F;
+                    this.height = 0.5F;
+                    break;
+            }
+
+            this.currentPlace = nextTile;
         }
     }
 

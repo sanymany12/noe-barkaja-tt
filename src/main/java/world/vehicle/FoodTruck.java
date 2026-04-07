@@ -48,6 +48,10 @@ public class FoodTruck extends Vehicle {
         return this.COST_TO_BUY;
     }
 
+    public int getCostToSell() {
+        return this.COST_TO_SELL;
+    }
+
     public boolean hasCargo() {
         if (this.currentCargoNum > 0 && this.cargoType != null) {
             return true;
