@@ -23,20 +23,32 @@ public class Silo extends Building<Integer,Integer> {
         return this.numOfFood;
     }
 
-    // metódus az ide érkező étel lekezelésére
-    public void loadFrom(FoodTruck truck) throws Exception {
-        if (truck.getCargoType() != ResourceType.FOOD) {
-            throw new Exception("Can't load from a truck that doesn't have food!");
-        } else {
-            int canTake = this.CAPACITY - this.numOfFood;
-            if (canTake <= truck.getCurrentCargoNum()) {
-                this.numOfFood = this.numOfFood + canTake;
-                truck.decreaseCargo(canTake);
-            } else {
-                this.numOfFood = this.numOfFood + truck.getCurrentCargoNum();
-                truck.emptyCargo();
-            }
+    public int getRemainingCapacity() {
+        return this.CAPACITY - this.numOfFood;
+    }
+
+    // régi metódus az ide érkező étel lekezelésére
+//    public void loadFrom(FoodTruck truck) throws Exception {
+//        if (truck.getCargoType() != ResourceType.FOOD) {
+//            throw new Exception("Can't load from a truck that doesn't have food!");
+//        } else {
+//            int canTake = this.CAPACITY - this.numOfFood;
+//            if (canTake <= truck.getCurrentCargoNum()) {
+//                this.numOfFood = this.numOfFood + canTake;
+//                truck.decreaseCargo(canTake);
+//            } else {
+//                this.numOfFood = this.numOfFood + truck.getCurrentCargoNum();
+//                truck.emptyCargo();
+//            }
+//        }
+//    }
+
+    // étel érkezése teherautóról
+    public void loadFromTruck(int load) throws Exception {
+        if (this.getRemainingCapacity() < load) {
+            throw new Exception("Nincs elég hely az ételnek!");
         }
+        this.numOfFood = this.numOfFood + load;
     }
 
     // a boolean visszaadja, volt-e elég étel a silóban

@@ -30,7 +30,7 @@ public abstract class Building<In, Out> {
         return this.height;
     }
 
-    public abstract void newDay();
+    public abstract void newDay() throws Exception;
 
     public abstract String getSpriteName();
 }

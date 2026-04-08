@@ -24,7 +24,7 @@ public class Station extends Building<Object, Object> {
         this.direction = dir;
     }
 
-    public void vehicleArrives(Vehicle vehicle) {
+    public void vehicleArrives(Vehicle vehicle) throws Exception {
         this.vehicle = vehicle;
         switch (this.vehicle.getVehicleType()) {
             case VehicleType.FOODTRUCK:
@@ -38,7 +38,7 @@ public class Station extends Building<Object, Object> {
                         if (this.vehicle.isEmpty() || (!this.vehicle.isFull() && this.vehicle.getCargoType() == ResourceType.FOOD)) {
                             this.vehicle.loadFrom(building);
                         }
-                        else if (!this.vehicle.isEmpty() && this.vehicle.getCargoType() == ResourceType.GRAIN) {
+                        if (!this.vehicle.isEmpty() && this.vehicle.getCargoType() == ResourceType.GRAIN) {
                             this.vehicle.unloadTo(building);
                         }
                         break;
@@ -79,8 +79,9 @@ public class Station extends Building<Object, Object> {
     }
 
     @Override
-    public void newDay() {
-
+    // Újra triggereljük a járműérkezést, ha esetleg valami termelés történt volna
+    public void newDay() throws Exception {
+        this.vehicleArrives(this.vehicle);
     }
 
     @Override

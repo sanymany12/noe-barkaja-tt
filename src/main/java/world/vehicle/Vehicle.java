@@ -147,9 +147,9 @@ public abstract class Vehicle {
         this.path = path;
     }
 
-    public abstract void loadFrom(Building building);
+    public abstract void loadFrom(Building building) throws Exception;
 
-    public abstract void unloadTo(Building building);
+    public abstract void unloadTo(Building building) throws Exception;
 
     public abstract String getSpriteName();
 }
