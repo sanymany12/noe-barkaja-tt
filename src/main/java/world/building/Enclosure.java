@@ -13,7 +13,7 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
     private boolean starving;
 
     private final double ANIMAL_MULTIPLIER = 1.2;
-    private final int CAPACITY = 100;
+    private final int CAPACITY = 200;
 
     public Enclosure(World world, Silo silo) {
         super(world);

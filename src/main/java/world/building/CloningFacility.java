@@ -13,6 +13,7 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
 
     private final int DAYS_TO_CLONE = 10;
     private final int COST_OF_CLONING = 200;
+    private final int CAPACITY = 20;
 
     public CloningFacility(World world) {
         super(world);
@@ -60,7 +61,7 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
     // klónozás megkezdésének metódusa
     // igazat ad vissza, ha sikeres, hamisat, ha nem
     public boolean startCloning() {
-        if (this.hasAnimal()) {
+        if (this.hasAnimal() && this.animalsMade < this.CAPACITY) {
             this.isCloning = true;
             return true;
         } else {
