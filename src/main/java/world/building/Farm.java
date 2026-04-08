@@ -22,18 +22,14 @@ public class Farm extends Building<Integer,Integer> {
         this.random = new Random();
     }
 
+    // metódus az eddig termelt gabona mennyiségének lekérésére
     public int getGrainMade() {
         return this.grainMade;
     }
 
+    // metódus a teljes kapacitás lekérésére
     public int getCapacity() {
         return this.CAPACITY;
-    }
-
-    public void newDay() {
-        if (this.grainMade != this.CAPACITY) {
-            this.grainGrows();
-        }
     }
 
     private void grainGrows() {
@@ -46,6 +42,28 @@ public class Farm extends Building<Integer,Integer> {
         }
     }
 
+    // összes gabona teherautóra való töltése
+    public void loadOntoTruck() {
+        this.grainMade = 0;
+    }
+
+    // a gabona egy része teherautóra való töltése
+    public void loadOntoTruck(int load) throws Exception {
+        if (this.grainMade < load) {
+            throw new Exception("Nincs elég gabona!");
+        }
+        this.grainMade = this.grainMade - load;
+    }
+
+    // új nap metódus, minden nap termel gabonát
+    @Override
+    public void newDay() {
+        if (this.grainMade != this.CAPACITY) {
+            this.grainGrows();
+        }
+    }
+
+    // TODO
     @Override
     public String getSpriteName() {
         return "spriteName";

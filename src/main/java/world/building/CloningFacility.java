@@ -13,6 +13,7 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
 
     private final int DAYS_TO_CLONE = 10;
     private final int COST_OF_CLONING = 200;
+    private final int CAPACITY = 20;
 
     public CloningFacility(World world) {
         super(world);
@@ -31,6 +32,20 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
         return this.COST_OF_CLONING;
     }
 
+    // getter a jelenleg gyártott állat típusára
+    public AnimalType getAnimalType() {
+        return this.receivedAnimal;
+    }
+
+    // segédfüggvény arra, van-e itt állat
+    public boolean hasAnimal() {
+        if (this.receivedAnimal != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // állat fogadásának metódusa
     // igaz, ha sikeres, hamis, ha nem
     public boolean receiveAnimal(AnimalType animal) {
@@ -46,7 +61,7 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
     // klónozás megkezdésének metódusa
     // igazat ad vissza, ha sikeres, hamisat, ha nem
     public boolean startCloning() {
-        if (this.hasAnimal()) {
+        if (this.hasAnimal() && this.animalsMade < this.CAPACITY) {
             this.isCloning = true;
             return true;
         } else {
@@ -54,12 +69,10 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
         }
     }
 
-    // segédfüggvény arra, van-e itt állat
-    private boolean hasAnimal() {
-        if (this.receivedAnimal != null) {
-            return true;
-        } else {
-            return false;
+    public void takeAnimal() {
+        this.animalsMade = this.animalsMade - 1;
+        if (this.animalsMade == 0) {
+            this.receivedAnimal = null;
         }
     }
 

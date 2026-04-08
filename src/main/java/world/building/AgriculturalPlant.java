@@ -35,6 +35,10 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
         return this.outgoingFood;
     }
 
+    public int getRemainingCapacityIn() {
+        return this.CAPACITY_IN - this.incomingGrain;
+    }
+
     // getter a teljes gabonakapacitásnak
     public int getCapacityIn() {
         return this.CAPACITY_IN;
@@ -51,21 +55,21 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
         return days;
     }
 
-    // metódus gabona érkezésének lekezeléséhez
-    public void loadFrom(FoodTruck truck) throws Exception {
-        if (truck.getCargoType() != ResourceType.GRAIN) {
-            throw new Exception("Can't load from truck that doesn't have grain!");
-        } else {
-            int canTake = this.CAPACITY_IN - this.incomingGrain;
-            if (canTake <= truck.getCurrentCargoNum()) {
-                this.incomingGrain = this.incomingGrain + canTake;
-                truck.decreaseCargo(canTake);
-            } else {
-                this.incomingGrain = this.incomingGrain + truck.getCurrentCargoNum();
-                truck.emptyCargo();
-            }
-        }
-    }
+    // régi metódus gabona érkezésének lekezeléséhez
+//    public void loadFrom(FoodTruck truck) throws Exception {
+//        if (truck.getCargoType() != ResourceType.GRAIN) {
+//            throw new Exception("Can't load from truck that doesn't have grain!");
+//        } else {
+//            int canTake = this.CAPACITY_IN - this.incomingGrain;
+//            if (canTake <= truck.getCurrentCargoNum()) {
+//                this.incomingGrain = this.incomingGrain + canTake;
+//                truck.decreaseCargo(canTake);
+//            } else {
+//                this.incomingGrain = this.incomingGrain + truck.getCurrentCargoNum();
+//                truck.emptyCargo();
+//            }
+//        }
+//    }
 
     // új adag étel készül
     private void newBatchMade() {
@@ -87,6 +91,27 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
                 this.incomingGrain = 0;
             }
         }
+    }
+
+    // összes étel teherautóra való töltése
+    public void loadOntoTruck() {
+        this.outgoingFood = 0;
+    }
+
+    // az ételből bizonyos mennyiség teherautóra való töltése
+    public void loadOntoTruck(int load) throws Exception {
+        if (this.outgoingFood < load) {
+            throw new Exception("Nincs elég étel az üzemben!");
+        }
+        this.outgoingFood = this.outgoingFood - load;
+    }
+
+    // gabona érkezése egy teherautóról
+    public void loadFromTruck(int load) throws Exception {
+        if (this.getRemainingCapacityIn() < load) {
+            throw new Exception("Nincs elég hely az üzemben!");
+        }
+        this.incomingGrain = this.incomingGrain + load;
     }
 
     // napi update függvény

@@ -20,6 +20,8 @@ public class BusStop extends Building<Integer,Integer> {
 
     private RoadDirection direction;
 
+    private final int BUS_TICKET_PRICE = 50;
+
     public BusStop(World world, RoadDirection dir) {
         super(world);
 
@@ -37,10 +39,34 @@ public class BusStop extends Building<Integer,Integer> {
         this.direction = dir;
     }
 
+    public boolean isStart() {
+        return this.isStart;
+    }
+
+    public boolean isStop() {
+        return this.isStop;
+    }
+
+    public int getNumOfPeople() {
+        return this.numOfPeople;
+    }
+
+    // Segédfüggvény az utasok buszra való feltöltéséhez
+    public void loadOntoBus() {
+        this.numOfPeople = 0;
+        this.world.startedBusRoute();
+        this.isStart = false;
+    }
+
+    public void peopleArrived(int people) {
+        this.world.receiveMoney(people * this.BUS_TICKET_PRICE);
+        this.isStop = false;
+    }
+
     // Jármű érkezésekor ellenőrzi, hogy busz érkezett-e
     //      -> ha igen és a mező a jelenlegi kiindulópont az utasoknak, felveszi őket
     //      -> ha igen és a mező a jelenlegi célpont az utasoknak, leteszi őket
-    public void vehicleArrives(Vehicle vehicle) {
+    public void vehicleArrives(Vehicle vehicle) throws Exception {
         this.vehicle = vehicle;
         if (this.vehicle.getVehicleType() == VehicleType.BUS) {
             if (this.isStop && !vehicle.isEmpty()) {
@@ -77,11 +103,6 @@ public class BusStop extends Building<Integer,Integer> {
         this.numOfPeople = 0;
         this.isStart = false;
         this.isStop = false;
-    }
-
-    // Segédfüggvény az utasok buszra való feltöltéséhez
-    public int loadTo(Bus bus) {
-        return this.numOfPeople;
     }
 
     @Override

@@ -13,8 +13,10 @@ public abstract class Building<In, Out> {
 
     public Building(World world) {
         this.world = world;
+
         this.width = 0;
         this.height = 0;
+        
         this.type = null;
     }
 
@@ -30,7 +32,7 @@ public abstract class Building<In, Out> {
         return this.height;
     }
 
-    public abstract void newDay();
+    public abstract void newDay() throws Exception;
 
     public abstract String getSpriteName();
 }

@@ -36,6 +36,10 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
         return this.COST_OF_RESEARCH;
     }
 
+    public AnimalType getDiscoveredAnimal() {
+        return this.discoveredAnimal;
+    }
+
     // állat érkezésének lekezelése
     // igaz, ha be tudtuk fogadni az állatot, hamis, ha nem
     public boolean receiveAnimal(AnimalType animal) {
@@ -63,10 +67,8 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
     }
 
     // metódus a felfedezett állat elszállításához
-    public AnimalType takeDiscoveredAnimal() {
-        AnimalType animal = this.discoveredAnimal;
+    public void takeDiscoveredAnimal() {
         this.discoveredAnimal = null;
-        return animal;
     }
 
     // állatok kompatibilitástesztje

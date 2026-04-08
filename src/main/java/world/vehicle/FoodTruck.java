@@ -1,7 +1,7 @@
 package world.vehicle;
 
 import world.World;
-import world.building.Building;
+import world.building.*;
 import world.resources.ResourceType;
 import world.tile.Point;
 import world.tile.road.RoadDirection;
@@ -48,6 +48,10 @@ public class FoodTruck extends Vehicle {
         return this.COST_TO_BUY;
     }
 
+    public int getCostToSell() {
+        return this.COST_TO_SELL;
+    }
+
     public boolean hasCargo() {
         if (this.currentCargoNum > 0 && this.cargoType != null) {
             return true;
@@ -56,7 +60,7 @@ public class FoodTruck extends Vehicle {
         }
     }
 
-    public void addCargo(ResourceType type, int n) throws Exception {
+    private void addCargo(ResourceType type, int n) throws Exception {
         if (this.currentCargoNum + n > this.CAPACITY) {
             throw new Exception("Can't take that much cargo!");
         } else {
@@ -71,7 +75,7 @@ public class FoodTruck extends Vehicle {
         }
     }
 
-    public void decreaseCargo(int n) throws Exception {
+    private void decreaseCargo(int n) throws Exception {
         if (this.currentCargoNum - n < 0) {
             throw new Exception("Don't have that much cargo!");
         } else if (this.currentCargoNum == n) {
@@ -81,19 +85,73 @@ public class FoodTruck extends Vehicle {
         }
     }
 
-    public void emptyCargo() {
+    private void emptyCargo() {
         this.currentCargoNum = 0;
         this.cargoType = null;
     }
 
     @Override
-    public void loadFrom(Building building) {
-
+    public void loadFrom(Building building) throws Exception {
+        switch (building.getBuildingType()) {
+            case BuildingType.FARM:
+                if (this.isEmpty() || (!this.isFull() && this.cargoType == ResourceType.GRAIN)) {
+                    int canLoad = this.CAPACITY - this.currentCargoNum;
+                    if (canLoad >= ((Farm) building).getGrainMade()) {
+                        this.addCargo(ResourceType.GRAIN, ((Farm) building).getGrainMade());
+                        ((Farm) building).loadOntoTruck();
+                    } else {
+                        this.addCargo(ResourceType.GRAIN, canLoad);
+                        ((Farm) building).loadOntoTruck(canLoad);
+                    }
+                }
+                break;
+            case BuildingType.AGRICULTURALPLANT:
+                if (this.isEmpty() || (!this.isFull() && this.cargoType == ResourceType.FOOD)) {
+                    int canLoad = this.CAPACITY - this.currentCargoNum;
+                    if (canLoad >= ((AgriculturalPlant) building).getOutgoingFood()) {
+                        this.addCargo(ResourceType.FOOD, ((AgriculturalPlant) building).getOutgoingFood());
+                        ((AgriculturalPlant) building).loadOntoTruck();
+                    } else {
+                        this.addCargo(ResourceType.FOOD, canLoad);
+                        ((AgriculturalPlant) building).loadOntoTruck(canLoad);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
-    public void unloadTo(Building building) {
-
+    public void unloadTo(Building building) throws Exception {
+        switch (building.getBuildingType()) {
+            case BuildingType.AGRICULTURALPLANT:
+                if (!this.isEmpty() && this.cargoType == ResourceType.GRAIN) {
+                    int canUnload = ((AgriculturalPlant) building).getRemainingCapacityIn();
+                    if (canUnload >= this.currentCargoNum) {
+                        ((AgriculturalPlant) building).loadFromTruck(this.currentCargoNum);
+                        this.emptyCargo();
+                    } else {
+                        ((AgriculturalPlant) building).loadFromTruck(canUnload);
+                        this.decreaseCargo(canUnload);
+                    }
+                }
+                break;
+            case BuildingType.SILO:
+                if (!this.isEmpty() && this.cargoType == ResourceType.FOOD) {
+                    int canUnload = ((Silo) building).getRemainingCapacity();
+                    if (canUnload >= this.currentCargoNum) {
+                        ((Silo) building).loadFromTruck(this.currentCargoNum);
+                        this.emptyCargo();
+                    } else {
+                        ((Silo) building).loadFromTruck(canUnload);
+                        this.decreaseCargo(canUnload);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

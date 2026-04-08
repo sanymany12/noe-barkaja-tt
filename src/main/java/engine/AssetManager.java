@@ -113,6 +113,51 @@ public class AssetManager {
         loadAsset("foodtruck-e-grain", "/assets-final/food-truck-right-side-grain.png");
         loadAsset("foodtruck-e-food", "/assets-final/food-truck-right-side-food.png");
 
+        // ANIMALTRUCK spriteok betöltése
+        loadAsset("animaltruck-n", "/assets-final/animal-truck-back.png");
+        loadAsset("animaltruck-n-bear", "/assets-final/animal-truck-back-bear.png");
+        loadAsset("animaltruck-n-capybara", "/assets-final/animal-truck-back-capybara.png");
+        loadAsset("animaltruck-n-cat", "/assets-final/animal-truck-back-cat.png");
+        loadAsset("animaltruck-n-fish", "/assets-final/animal-truck-back-fish.png");
+        loadAsset("animaltruck-n-guineapig", "/assets-final/animal-truck-back-guineapig.png");
+        loadAsset("animaltruck-n-horse", "/assets-final/animal-truck-back-horse.png");
+        loadAsset("animaltruck-n-pig", "/assets-final/animal-truck-back-pig.png");
+        loadAsset("animaltruck-n-racoon", "/assets-final/animal-truck-back-racoon.png");
+        loadAsset("animaltruck-n-seahorse", "/assets-final/animal-truck-back-seahorse.png");
+
+        loadAsset("animaltruck-s", "/assets-final/animal-truck-front.png");
+        loadAsset("animaltruck-s-bear", "/assets-final/animal-truck-front-bear.png");
+        loadAsset("animaltruck-s-capybara", "/assets-final/animal-truck-front-capybara.png");
+        loadAsset("animaltruck-s-cat", "/assets-final/animal-truck-front-cat.png");
+        loadAsset("animaltruck-s-fish", "/assets-final/animal-truck-front-fish.png");
+        loadAsset("animaltruck-s-guineapig", "/assets-final/animal-truck-front-guineapig.png");
+        loadAsset("animaltruck-s-horse", "/assets-final/animal-truck-front-horse.png");
+        loadAsset("animaltruck-s-pig", "/assets-final/animal-truck-front-pig.png");
+        loadAsset("animaltruck-s-racoon", "/assets-final/animal-truck-front-racoon.png");
+        loadAsset("animaltruck-s-seahorse", "/assets-final/animal-truck-front-seahorse.png");
+
+        loadAsset("animaltruck-w", "/assets-final/animal-truck-left-side.png");
+        loadAsset("animaltruck-w-bear", "/assets-final/animal-truck-left-side-bear.png");
+        loadAsset("animaltruck-w-capybara", "/assets-final/animal-truck-left-side-capybara.png");
+        loadAsset("animaltruck-w-cat", "/assets-final/animal-truck-left-side-cat.png");
+        loadAsset("animaltruck-w-fish", "/assets-final/animal-truck-left-side-fish.png");
+        loadAsset("animaltruck-w-guineapig", "assets-final/animal-truck-left-side-guineapig");
+        loadAsset("animaltruck-w-horse", "/assets-final/animal-truck-left-side-horse.png");
+        loadAsset("animaltruck-w-pig", "/assets-final/animal-truck-left-side-pig.png");
+        loadAsset("animaltruck-w-racoon", "/assets-final/animal-truck-left-side-racoon.png");
+        loadAsset("animaltruck-w-seahorse", "/assets-final/animal-truck-left-side-seahorse.png");
+
+        loadAsset("animaltruck-e", "/assets-final/animal-truck-right-side.png");
+        loadAsset("animaltruck-e-bear", "/assets-final/animal-truck-right-side-bear.png");
+        loadAsset("animaltruck-e-capybara", "/assets-final/animal-truck-right-side-capybara.png");
+        loadAsset("animaltruck-e-cat", "/assets-final/animal-truck-right-side-cat.png");
+        loadAsset("animaltruck-e-fish", "/assets-final/animal-truck-right-side-fish.png");
+        loadAsset("animaltruck-e-guineapig", "assets-final/animal-truck-right-side-guineapig");
+        loadAsset("animaltruck-e-horse", "/assets-final/animal-truck-right-side-horse.png");
+        loadAsset("animaltruck-e-pig", "/assets-final/animal-truck-right-side-pig.png");
+        loadAsset("animaltruck-e-racoon", "/assets-final/animal-truck-right-side-racoon.png");
+        loadAsset("animaltruck-e-seahorse", "/assets-final/animal-truck-right-side-seahorse.png");
+
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
     }
