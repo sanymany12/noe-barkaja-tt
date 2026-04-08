@@ -102,14 +102,14 @@ public class World {
         this.money = this.money - spending;
     }
 
-    public void newDay() throws Exception {
+    public void newDay() {
         this.elapsedTime = this.elapsedTime + 1;
         for (int i = 0; i < this.vehicles.size(); i++) {
             this.vehicles.get(i).move();
         }
         this.daysSinceBusRoute++;
         if (this.daysSinceBusRoute >= this.DAYS_UNTIL_NEW_BUS_ROUTE && !(this.start == null && this.stop != null)) {
-            this.setBusRoute();
+            //this.setBusRoute();
         }
     }
 

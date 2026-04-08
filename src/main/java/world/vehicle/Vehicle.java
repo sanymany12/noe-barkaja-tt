@@ -30,11 +30,6 @@ public abstract class Vehicle {
     protected List<Tile> routeStops = new ArrayList<>();
     protected int stopIndex = 0;
     protected boolean movingForward = true;
-
-    public Point getCurrentPlace() {
-        return currentPlace;
-    }
-
     protected ICargo cargoType;
 
     protected VehicleType type;
