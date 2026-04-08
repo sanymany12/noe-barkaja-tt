@@ -79,7 +79,7 @@ public class Station extends Building<Object, Object> {
     }
 
     @Override
-    // Újra triggereljük a járműérkezést, ha esetleg valami termelés történt volna
+    // Újra triggereljük a járműérkezést, ha esetleg valami termelés történt volna???
     public void newDay() throws Exception {
         this.vehicleArrives(this.vehicle);
     }

@@ -39,12 +39,27 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
         return this.numOfAnimals;
     }
 
+    public boolean hasAnimals() {
+        return this.numOfAnimals > 0 && this.species != null;
+    }
+
     public boolean isFull() {
         return this.numOfAnimals == this.CAPACITY;
     }
 
     public void newSpeciesArrives(AnimalType a) {
         this.species = a;
+    }
+
+    public void receiveAnimal() {
+        this.numOfAnimals = this.numOfAnimals + 1;
+    }
+
+    public void takeAnimal() {
+        this.numOfAnimals = this.numOfAnimals - 1;
+        if (this.numOfAnimals == 0) {
+            this.species = null;
+        }
     }
 
     private void consumeFood() {

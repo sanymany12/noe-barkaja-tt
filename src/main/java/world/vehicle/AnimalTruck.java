@@ -1,8 +1,8 @@
 package world.vehicle;
 
 import world.World;
+import world.building.*;
 import world.resources.AnimalType;
-import world.building.Building;
 import world.resources.ResourceType;
 import world.tile.Point;
 import world.tile.road.RoadDirection;
@@ -24,12 +24,52 @@ public class AnimalTruck extends Vehicle {
 
     @Override
     public void loadFrom(Building building) {
-
+        switch (building.getBuildingType()) {
+            case BuildingType.ENCLOSURE:
+                if (this.cargoType == null && ((Enclosure) building).hasAnimals()) {
+                    this.cargoType = ((Enclosure) building).getSpecies();
+                    ((Enclosure) building).takeAnimal();
+                }
+                break;
+            case BuildingType.RESEARCHLAB:
+                if (this.cargoType == null && ((ResearchLab) building).getDiscoveredAnimal() != null) {
+                    this.cargoType = ((ResearchLab) building).getDiscoveredAnimal();
+                    ((ResearchLab) building).takeDiscoveredAnimal();
+                }
+                break;
+            case BuildingType.CLONINGFACILITY:
+                if (this.cargoType == null && ((CloningFacility) building).hasAnimal()) {
+                    this.cargoType = ((CloningFacility) building).getAnimalType();
+                    ((CloningFacility) building).takeAnimal();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void unloadTo(Building building) {
-
+        switch (building.getBuildingType()) {
+            case BuildingType.ENCLOSURE:
+                if (this.cargoType != null && this.cargoType == ((Enclosure) building).getSpecies()) {
+                    this.cargoType = null;
+                    ((Enclosure) building).receiveAnimal();
+                }
+                break;
+            case BuildingType.RESEARCHLAB:
+                if (this.cargoType != null && ((ResearchLab) building).receiveAnimal(this.cargoType)) {
+                    this.cargoType = null;
+                }
+                break;
+            case BuildingType.CLONINGFACILITY:
+                if (this.cargoType != null && ((CloningFacility) building).receiveAnimal(this.cargoType)) {
+                    this.cargoType = null;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
