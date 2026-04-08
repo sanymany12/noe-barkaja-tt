@@ -67,6 +67,11 @@ public class AnimalTruck extends Vehicle {
                     this.cargoType = null;
                 }
                 break;
+            case BuildingType.CITY:
+                if (this.cargoType != null && ((City) building).hasOrder() && this.cargoType == ((City) building).getOrderedAnimal()) {
+                    this.cargoType = null;
+                    ((City) building).receiveAnimal();
+                }
             default:
                 break;
         }
