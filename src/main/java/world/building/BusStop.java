@@ -54,10 +54,13 @@ public class BusStop extends Building<Integer,Integer> {
     // Segédfüggvény az utasok buszra való feltöltéséhez
     public void loadOntoBus() {
         this.numOfPeople = 0;
+        this.world.startedBusRoute();
+        this.isStart = false;
     }
 
     public void peopleArrived(int people) {
         this.world.receiveMoney(people * this.BUS_TICKET_PRICE);
+        this.isStop = false;
     }
 
     // Jármű érkezésekor ellenőrzi, hogy busz érkezett-e

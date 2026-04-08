@@ -20,8 +20,12 @@ public class World {
 
     private List<Vehicle> vehicles;
     private ArrayList<BusStop> busStops;
+
     private BusStop start;
     private BusStop stop;
+    private int daysSinceBusRoute;
+
+    private final int DAYS_UNTIL_NEW_BUS_ROUTE = 7;
 
     public World(int rows, int cols) {
         this.random = new Random();
@@ -30,8 +34,15 @@ public class World {
         grid = new Tile[rows][cols];
         this.money = 10000;
         this.elapsedTime = 0;
+
         this.busStops = new ArrayList<BusStop>();
         this.vehicles = new ArrayList<Vehicle>();
+
+        this.start = null;
+        this.stop = null;
+
+        this.daysSinceBusRoute = DAYS_UNTIL_NEW_BUS_ROUTE;
+
         initWorld();
     }
 
@@ -91,10 +102,14 @@ public class World {
         this.money = this.money - spending;
     }
 
-    public void newDay() {
+    public void newDay() throws Exception {
         this.elapsedTime = this.elapsedTime + 1;
         for (int i = 0; i < this.vehicles.size(); i++) {
             this.vehicles.get(i).move();
+        }
+        this.daysSinceBusRoute++;
+        if (this.daysSinceBusRoute >= this.DAYS_UNTIL_NEW_BUS_ROUTE && !(this.start == null && this.stop != null)) {
+            this.setBusRoute();
         }
     }
 
@@ -182,6 +197,10 @@ public class World {
         }
 
         return neighbourRoads;
+    }
+
+    public void startedBusRoute() {
+        this.start = null;
     }
 
     public void setBusRoute() throws Exception {
