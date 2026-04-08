@@ -125,7 +125,7 @@ public class World {
             queue.add(start);
             while (!queue.isEmpty()) {
                 for (int i = 0; i < queue.size(); i++) {
-                    Tile current = queue.get(i);
+                    Tile current = queue.removeFirst();
                     List<Tile> neighbours = getNeighbourRoads(current);
                     for (int j = 0; j < neighbours.size(); j++) {
                         int value = pathfinder.get(current).currentMinDistance + 1;

@@ -2,6 +2,9 @@ package UI;
 
 import engine.rendering.Minimap;
 import engine.rendering.Renderer;
+import world.vehicle.Vehicle;
+import world.vehicle.VehicleType;
+import controller.GameController.VehicleAction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +22,9 @@ public class ingameGUI {
     private JButton speedNormal;
     private JButton speedFast;
     private JButton speedSuperFast;
+    private VehicleType tempSelectedType = null;
+    private VehicleAction tempVehicleAction = VehicleAction.NONE;
+
 
     public class GameMapPanel extends JPanel {
         private Renderer renderer;
@@ -141,6 +147,108 @@ public class ingameGUI {
         minimapPanel.repaint();
     }
 
+    public VehicleType showVehicleSelector()
+    {
+        tempSelectedType = null;
+
+        JDialog dialog = new JDialog(gameWindow, "Jármű vásárlása", true);
+        dialog.setLayout(new GridLayout(1, 3, 10, 10));
+        dialog.setSize(450, 200);
+        dialog.setLocationRelativeTo(gameWindow);
+
+        dialog.add(createVehicleOption("Busz", "Kép helye", "$3000", VehicleType.BUS, dialog));
+        dialog.add(createVehicleOption("Étel Szállító", "Kép helye", "$2000", VehicleType.FOODTRUCK, dialog));
+        dialog.add(createVehicleOption("Állat Szállító", "Kép helye", "$2500", VehicleType.ANIMALTRUCK, dialog));
+
+        dialog.setVisible(true);
+
+        return tempSelectedType;
+    }
+
+    private JPanel createVehicleOption(String name, String imagePlaceholder, String price, VehicleType type, JDialog dialog)
+    {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+
+        JLabel title = new JLabel(name, SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 14));
+        panel.add(title, BorderLayout.NORTH);
+
+        JLabel imgLabel = new JLabel(imagePlaceholder, SwingConstants.CENTER);
+        imgLabel.setPreferredSize(new Dimension(100, 100));
+        imgLabel.setOpaque(true);
+        imgLabel.setBackground(Color.DARK_GRAY);
+        imgLabel.setForeground(Color.WHITE);
+        panel.add(imgLabel, BorderLayout.CENTER);
+
+        JButton buyBtn = new JButton(price);
+        buyBtn.addActionListener(e -> {
+            tempSelectedType = type;
+            dialog.dispose();
+        });
+
+        panel.add(buyBtn, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    public VehicleAction showVehicleInfo(Vehicle v)
+    {
+        tempVehicleAction = VehicleAction.NONE;
+        JDialog dialog = new JDialog(gameWindow, "Jármű információ", true);
+        dialog.setSize(500, 300);
+        dialog.setLayout(new BorderLayout(15, 15));
+        dialog.setLocationRelativeTo(gameWindow);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
+
+        String infoText = "<html><h3>Információ a járműről:</h3>"
+                + "Sebesség: " + v.getSpeed() + "<br>"
+                + "Kapacitás: " + v.getCapacity() + "<br>"
+                + (v.getCargoType() != null ? "Rakomány: " + v.getCargoType() : "Rakomány: Üres")
+                + "</html>";
+        JLabel infoLabel = new JLabel(infoText);
+        infoLabel.setVerticalAlignment(SwingConstants.TOP);
+        infoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+        leftPanel.add(infoLabel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        JButton routeBtn = new JButton("Útvonal kijelölése");
+        JButton sellBtn = new JButton("Eladás");
+        routeBtn.addActionListener(e -> {
+            tempVehicleAction = VehicleAction.ASSIGN_ROUTE;
+            dialog.dispose();
+        });
+        sellBtn.addActionListener(e -> {
+            tempVehicleAction = VehicleAction.SELL;
+            dialog.dispose();
+        });
+
+        buttonPanel.add(routeBtn);
+        buttonPanel.add(sellBtn);
+        leftPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.add(leftPanel, BorderLayout.CENTER);
+
+        JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
+        rightPanel.setPreferredSize(new Dimension(150, 0));
+
+        JLabel imagePlaceholder = new JLabel("Kép helye", SwingConstants.CENTER);
+        imagePlaceholder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+        rightPanel.add(imagePlaceholder, BorderLayout.CENTER);
+
+        JLabel typeLabel = new JLabel("Típus: " + (v.getVehicleType() != null ? v.getVehicleType().name() : "Ismeretlen"), SwingConstants.CENTER);
+        typeLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        rightPanel.add(typeLabel, BorderLayout.SOUTH);
+
+        dialog.add(rightPanel, BorderLayout.EAST);
+
+        dialog.setVisible(true);
+        return tempVehicleAction;
+    }
+
     public void setDay(int day) {
         dayCounter.setText("<html><center>Nap:<br><b>" + day + "</b></center></html>");
     }
@@ -170,4 +278,6 @@ public class ingameGUI {
     public void show() {
         gameWindow.setVisible(true);
     }
+
+
 }
