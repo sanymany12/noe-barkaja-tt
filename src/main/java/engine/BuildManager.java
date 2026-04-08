@@ -97,6 +97,7 @@ public class BuildManager {
         } else {
             FoodTruck ft = new FoodTruck(this.world, t.getCoordinate());
             world.spendMoney(ft.getCostToBuy());
+            world.getVehicles().add(ft);
             t.getRoad().vehicleEnters(ft);
         }
     }

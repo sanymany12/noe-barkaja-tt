@@ -16,8 +16,11 @@ public class Bus extends Vehicle {
         this.speed = 1;
         this.capacity = 10;
         this.costToOperate = 10;
+
         this.cargoType = PersonType.PERSON;
+
         this.type = VehicleType.BUS;
+
         this.width = 0.5f;
         this.height = 0.5f;
     }
