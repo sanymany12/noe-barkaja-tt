@@ -2,6 +2,7 @@ package world.vehicle;
 
 import world.World;
 import world.building.Building;
+import world.building.BuildingType;
 import world.building.BusStop;
 import world.resources.PersonType;
 import world.tile.Point;
@@ -9,6 +10,8 @@ import world.tile.road.RoadDirection;
 
 public class Bus extends Vehicle {
     private PersonType cargoType;
+
+    private Point destination;
 
     public Bus(World world, Point p) throws Exception {
         super(world, p);
@@ -27,12 +30,22 @@ public class Bus extends Vehicle {
 
     @Override
     public void loadFrom(Building building) {
-        
+        if (building.getBuildingType() == BuildingType.BUSSTOP && this.cargoNum == 0) {
+            if (((BusStop) building).isStart()) {
+                this.cargoNum = ((BusStop) building).getNumOfPeople();
+                ((BusStop) building).loadOntoBus();
+            }
+        }
     }
 
     @Override
     public void unloadTo(Building building) {
-
+        if (building.getBuildingType() == BuildingType.BUSSTOP) {
+            if (((BusStop) building).isStop() && this.cargoNum > 0) {
+                ((BusStop) building).peopleArrived(this.cargoNum);
+                this.cargoNum = 0;
+            }
+        }
     }
 
     @Override
