@@ -27,6 +27,10 @@ public abstract class Vehicle {
     protected int cargoNum;
     protected List<Point> path;
 
+    protected List<Tile> routeStops = new ArrayList<>();
+    protected int stopIndex = 0;
+    protected boolean movingForward = true;
+
     public Point getCurrentPlace() {
         return currentPlace;
     }
@@ -50,6 +54,34 @@ public abstract class Vehicle {
         this.cargoNum = 0;
         this.path = new ArrayList<Point>();
         this.type = null;
+    }
+
+    public void clearRoute()
+    {
+        this.routeStops.clear();
+        this.path.clear();
+        this.stopIndex = 0;
+        this.movingForward = true;
+    }
+
+    public void addRouteStop(Tile stop)
+    {
+        this.routeStops.add(stop);
+    }
+
+    public void startRoute()
+    {
+        if(this.routeStops.size() >= 2)
+        {
+            this.stopIndex = 1;
+            this.movingForward = true;
+            try {
+                findPath(this.routeStops.get(this.stopIndex));
+            } catch (Exception e)
+            {
+                System.err.println("Nem található útvonal a kezdéshez: " + e.getMessage());
+            }
+        }
     }
 
     public VehicleType getVehicleType() {
@@ -86,6 +118,31 @@ public abstract class Vehicle {
         if (!this.path.isEmpty()) {
             this.currentPlace = this.path.removeFirst();
         }
+        else if(this.routeStops.size() >= 2)
+        {
+            if(movingForward)
+            {
+                stopIndex++;
+                if(stopIndex >= routeStops.size())
+                {
+                    movingForward = false;
+                    stopIndex = routeStops.size() - 2;
+                }
+            } else {
+                stopIndex--;
+                if(stopIndex < 0)
+                {
+                    movingForward = true;
+                    stopIndex = 1;
+                }
+            }
+
+            try {
+                findPath(this.routeStops.get(stopIndex));
+            } catch (Exception e) {
+                System.err.println("Hiba az allomassal: " + e.getMessage());
+            }
+        }
     }
 
     public float getWidth() {
@@ -101,8 +158,19 @@ public abstract class Vehicle {
 
         List<Point> path = world.findPath(currentPosition, destination);
 
-        this.path = path;
+        if(path != null)
+        {
+            this.path = path;
+        } else {
+            this.path = new ArrayList<>();
+            System.err.println("Nincs útvonal ehhez a megállóhoz");
+        }
+
     }
 
     public abstract String getSpriteName();
+
+    public double getSpeed() { return speed; }
+
+    public int getCapacity() { return capacity; }
 }

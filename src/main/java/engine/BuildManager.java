@@ -8,6 +8,10 @@ import world.tile.Tile;
 import world.tile.road.Road;
 import world.tile.road.RoadDirection;
 import world.vehicle.FoodTruck;
+import world.vehicle.VehicleType;
+import world.vehicle.Vehicle;
+import world.vehicle.Bus;
+import world.vehicle.AnimalTruck;
 
 public class BuildManager {
     private World world;
@@ -90,14 +94,39 @@ public class BuildManager {
         }
     }
 
-    // Temporary itt, majd át kell rakni máshova ig
-    public void buyFoodTruck(Tile t) throws Exception {
-        if (t.getTerrainType() != TerrainType.ROAD && t.getRoad() != null) {
-            throw new Exception("Unable to purchase food truck here!");
-        } else {
-            FoodTruck ft = new FoodTruck(this.world, t.getCoordinate());
-            world.spendMoney(ft.getCostToBuy());
-            t.getRoad().vehicleEnters(ft);
+    public void buyVehicle(Tile t, VehicleType type) throws Exception
+    {
+        if(t.getTerrainType() != TerrainType.ROAD || t.getRoad() == null)
+        {
+            throw new Exception("Ide nem tudsz vasarolni!");
+        }
+
+        Vehicle newVehicle = null;
+        int cost = 0;
+
+        switch(type)
+        {
+            case FOODTRUCK:
+                FoodTruck ft = new FoodTruck(this.world, t.getCoordinate());
+                cost = ft.getCostToBuy();
+                newVehicle = ft;
+                break;
+            case BUS:
+                Bus bus = new Bus(this.world, t.getCoordinate());
+                cost = 300;
+                newVehicle = bus;
+                break;
+            case ANIMALTRUCK:
+                //stb
+                break;
+        }
+
+        if(newVehicle != null)
+        {
+            world.spendMoney(cost);
+            t.getRoad().vehicleEnters(newVehicle);
+            world.getVehicles().add(newVehicle);
         }
     }
+
 }
