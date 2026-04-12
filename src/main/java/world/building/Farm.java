@@ -4,12 +4,10 @@ package world.building;
 
 import world.World;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Farm extends Building<Integer,Integer> {
     private int grainMade;
-
-    private Random random;
 
     private final int MIN_GAIN = 20;
     private final int MAX_GAIN = 70;
@@ -19,7 +17,6 @@ public class Farm extends Building<Integer,Integer> {
         super(world);
 
         this.grainMade = 0;
-        this.random = new Random();
     }
 
     // metódus az eddig termelt gabona mennyiségének lekérésére
@@ -33,7 +30,7 @@ public class Farm extends Building<Integer,Integer> {
     }
 
     private void grainGrows() {
-        int today = random.nextInt(MIN_GAIN, MAX_GAIN);
+        int today = ThreadLocalRandom.current().nextInt(MIN_GAIN, MAX_GAIN);
 
         if (this.grainMade + today <= this.CAPACITY) {
             this.grainMade = this.grainMade + today;

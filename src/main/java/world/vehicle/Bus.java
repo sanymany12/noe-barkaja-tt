@@ -9,7 +9,7 @@ import world.tile.Point;
 import world.tile.road.RoadDirection;
 
 public class Bus extends Vehicle {
-    private PersonType cargoType;
+
 
     private Point destination;
 
@@ -20,7 +20,7 @@ public class Bus extends Vehicle {
         this.capacity = 10;
         this.costToOperate = 10;
 
-        this.cargoType = PersonType.PERSON;
+        this.cargoType = null;
 
         this.type = VehicleType.BUS;
 

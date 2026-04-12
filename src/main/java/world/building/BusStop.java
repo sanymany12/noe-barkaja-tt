@@ -7,11 +7,9 @@ import world.vehicle.Vehicle;
 import world.tile.Tile;
 import world.vehicle.VehicleType;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BusStop extends Building<Integer,Integer> {
-    private Random random;
-
     private Vehicle vehicle;
 
     private int numOfPeople;
@@ -27,8 +25,6 @@ public class BusStop extends Building<Integer,Integer> {
 
         this.width = 1;
         this.height = 1;
-
-        this.random = new Random();
 
         this.vehicle = null;
 
@@ -83,7 +79,7 @@ public class BusStop extends Building<Integer,Integer> {
             throw new Exception("This stop is already assigned as a destination!");
         }
         else {
-            this.numOfPeople = random.nextInt(1,20);
+            this.numOfPeople = ThreadLocalRandom.current().nextInt(1,20);
             this.isStart = true;
         }
     }

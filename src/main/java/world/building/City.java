@@ -4,7 +4,7 @@ import world.World;
 import world.resources.AnimalType;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class City extends Building<AnimalType, Integer> {
     private AnimalType orderedAnimal;
@@ -14,17 +14,12 @@ public class City extends Building<AnimalType, Integer> {
 
     private int daysSinceLastOrder;
 
-    private Random random;
-
     private final int MAX_TO_BE_ORDERED = 10;
     private final int MIN_TO_BE_ORDERED = 1;
     private final int DAYS_TIL_NEW_ORDER = 14;
 
     public City (World world) {
         super(world);
-
-        this.random = new Random();
-
         this.orderedAnimal = null;
         this.orderedAmount = 0;
 
@@ -62,7 +57,7 @@ public class City extends Building<AnimalType, Integer> {
 
     private void newOrder() {
         if (this.deliveredAmount == 0) {
-            int animalId = random.nextInt(1, 10);
+            int animalId = ThreadLocalRandom.current().nextInt(1, 10);
             switch (animalId) {
                 case 1:
                     this.orderedAnimal = AnimalType.BEAR;
@@ -92,7 +87,7 @@ public class City extends Building<AnimalType, Integer> {
                     this.orderedAnimal = AnimalType.SEAHORSE;
                     break;
             }
-            this.orderedAmount = random.nextInt(this.MIN_TO_BE_ORDERED, this.MAX_TO_BE_ORDERED + 1);
+            this.orderedAmount = ThreadLocalRandom.current().nextInt(this.MIN_TO_BE_ORDERED, this.MAX_TO_BE_ORDERED + 1);
             this.daysSinceLastOrder = 0;
         }
     }

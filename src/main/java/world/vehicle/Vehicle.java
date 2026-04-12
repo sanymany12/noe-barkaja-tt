@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Vehicle {
-    protected final World world;
+    transient protected final World world;
 
     protected Point currentPlace;
     protected RoadDirection currentDirection;

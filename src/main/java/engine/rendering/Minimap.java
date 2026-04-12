@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Minimap {
-    private final World world;
+    private World world;
     private final Camera camera;
     private BufferedImage mapImg;
     private int screenWidth;
@@ -102,4 +102,5 @@ public class Minimap {
         g.drawRect(viewX, viewY, viewWidth, viewHeight); // jelenlegi kép kirajzolása
     }
 
+    public void setWorld(World world) { this.world = world;}
 }

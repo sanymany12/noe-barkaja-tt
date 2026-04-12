@@ -6,10 +6,9 @@ import world.vehicle.*;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class World {
-    private Random random;
-
     private final int rows;
     private final int cols;
 
@@ -28,7 +27,6 @@ public class World {
     private final int DAYS_UNTIL_NEW_BUS_ROUTE = 7;
 
     public World(int rows, int cols) {
-        this.random = new Random();
         this.rows = rows;
         this.cols = cols;
         grid = new Tile[rows][cols];
@@ -212,10 +210,10 @@ public class World {
                 for (int i = 0; i < busStops.size(); i++) {
                     listOfIndexes.add(i);
                 }
-                int startInd = random.nextInt(0, listOfIndexes.size());
+                int startInd = ThreadLocalRandom.current().nextInt(0, listOfIndexes.size());
                 listOfIndexes.remove(startInd);
                 busStops.get(startInd).setAsStart();
-                int stopInd = random.nextInt(0, listOfIndexes.size());
+                int stopInd = ThreadLocalRandom.current().nextInt(0, listOfIndexes.size());
                 busStops.get(stopInd).setAsStop();
             }
         }
