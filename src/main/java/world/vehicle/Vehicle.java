@@ -30,6 +30,7 @@ public abstract class Vehicle {
     protected List<Tile> routeStops = new ArrayList<>();
     protected int stopIndex = 0;
     protected boolean movingForward = true;
+    protected boolean isOnTour;
     protected ICargo cargoType;
 
     protected VehicleType type;
@@ -52,6 +53,7 @@ public abstract class Vehicle {
         this.cargoNum = 0;
 
         this.path = new ArrayList<Point>();
+        this.isOnTour = false;
 
         this.type = null;
     }
@@ -71,7 +73,7 @@ public abstract class Vehicle {
 
     public void startRoute()
     {
-        if(this.routeStops.size() >= 2)
+        if (this.routeStops.size() >= 2)
         {
             this.stopIndex = 1;
             this.movingForward = true;
@@ -100,6 +102,10 @@ public abstract class Vehicle {
         return height;
     }
 
+    public RoadDirection getCurrentDirection() {
+        return this.currentDirection;
+    }
+
     public ICargo getCargoType() {
         return this.cargoType;
     }
@@ -125,25 +131,28 @@ public abstract class Vehicle {
     public void move() {
         if (!this.path.isEmpty()) {
             Point nextTile = this.path.removeFirst();
+
+            this.world.get(currentPlace.x, currentPlace.y).getRoad().vehicleLeaves(this, this.currentDirection);
+
             int relativeX = this.currentPlace.x - nextTile.x;
             int relativeY = this.currentPlace.y - nextTile.y;
 
             switch (relativeX) {
                 case -1:
-                    this.currentDirection = RoadDirection.WEST;
+                    this.currentDirection = RoadDirection.EAST;
                     break;
                 case 0:
                     switch (relativeY) {
                         case -1:
-                            this.currentDirection = RoadDirection.NORTH;
+                            this.currentDirection = RoadDirection.SOUTH;
                             break;
                         case 1:
-                            this.currentDirection = RoadDirection.SOUTH;
+                            this.currentDirection = RoadDirection.NORTH;
                             break;
                     }
                     break;
                 case 1:
-                    this.currentDirection = RoadDirection.EAST;
+                    this.currentDirection = RoadDirection.WEST;
                     break;
             }
 
@@ -166,6 +175,7 @@ public abstract class Vehicle {
                     break;
             }
 
+            this.world.get(nextTile.x, nextTile.y).getRoad().vehicleEnters(this, this.currentDirection);
             this.currentPlace = nextTile;
         }
         else if(this.routeStops.size() >= 2)

@@ -124,7 +124,7 @@ public class BuildManager {
         if(newVehicle != null)
         {
             world.spendMoney(cost);
-            t.getRoad().vehicleEnters(newVehicle);
+            t.getRoad().vehicleEnters(newVehicle, newVehicle.getCurrentDirection());
             world.getVehicles().add(newVehicle);
         }
     }
