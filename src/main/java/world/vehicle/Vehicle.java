@@ -2,8 +2,12 @@ package world.vehicle;
 
 import world.World;
 import world.building.Building;
+import world.building.BuildingType;
+import world.building.BusStop;
+import world.building.Station;
 import world.resources.ICargo;
 import world.tile.Point;
+import world.tile.TerrainType;
 import world.tile.Tile;
 import world.tile.road.RoadDirection;
 
@@ -128,15 +132,30 @@ public abstract class Vehicle {
         }
     }
 
-    public void move() {
+    public void move() throws Exception {
         if (!this.path.isEmpty()) {
             Point nextTile = this.path.removeFirst();
 
-            this.world.get(currentPlace.x, currentPlace.y).getRoad().vehicleLeaves(this, this.currentDirection);
+            // Jármű elhagyja a jelenlegi tile-t
+            if (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding() != null) {
+                switch (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding().getBuildingType()) {
+                    case BuildingType.STATION:
+                        ((Station) (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding())).vehicleLeaves();
+                        break;
+                    case BuildingType.BUSSTOP:
+                        ((BusStop) (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding())).vehicleLeaves();
+                        break;
+                    default:
+                        break;
+                }
+            } else if (world.get(currentPlace.x, currentPlace.y).getRoad() != null) {
+                this.world.get(currentPlace.x, currentPlace.y).getRoad().vehicleLeaves(this, this.currentDirection);
+            }
 
             int relativeX = this.currentPlace.x - nextTile.x;
             int relativeY = this.currentPlace.y - nextTile.y;
 
+            // Kiszámoljuk a jármű irányát
             switch (relativeX) {
                 case -1:
                     this.currentDirection = RoadDirection.EAST;
@@ -156,6 +175,7 @@ public abstract class Vehicle {
                     break;
             }
 
+            // Kiszámoljuk a jármű megjelenítésének arányát
             switch (this.currentDirection) {
                 case RoadDirection.NORTH:
                     this.width = 0.5F;
@@ -175,7 +195,23 @@ public abstract class Vehicle {
                     break;
             }
 
-            this.world.get(nextTile.x, nextTile.y).getRoad().vehicleEnters(this, this.currentDirection);
+            // Jármű megérkezik a következő tile-re
+            if (world.get(nextTile.x, nextTile.y).getBuilding() != null) {
+                switch (world.get(nextTile.x, nextTile.y).getBuilding().getBuildingType()) {
+                    case BuildingType.STATION:
+                        ((Station) (world.get(nextTile.x, nextTile.y).getBuilding())).vehicleArrives(this);
+                        break;
+                    case BuildingType.BUSSTOP:
+                        ((BusStop) (world.get(nextTile.x, nextTile.y).getBuilding())).vehicleArrives(this);
+                        break;
+                    default:
+                        break;
+                }
+            } else if (world.get(nextTile.x, nextTile.y).getRoad() != null) {
+                this.world.get(nextTile.x, nextTile.y).getRoad().vehicleEnters(this, this.currentDirection);
+            }
+
+            // Jármű pozíciójának frissítése
             this.currentPlace = nextTile;
         }
         else if(this.routeStops.size() >= 2)

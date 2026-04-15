@@ -102,7 +102,7 @@ public class World {
         this.money = this.money - spending;
     }
 
-    public void newDay() {
+    public void newDay() throws Exception {
         this.elapsedTime = this.elapsedTime + 1;
         for (int i = 0; i < this.vehicles.size(); i++) {
             this.vehicles.get(i).move();

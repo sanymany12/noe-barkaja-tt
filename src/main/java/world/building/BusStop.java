@@ -94,6 +94,10 @@ public class BusStop extends Building<Integer,Integer> {
         }
     }
 
+    public void vehicleLeaves() {
+        this.vehicle = null;
+    }
+
     // Utasok érkeznek
     public void setAsStart() throws Exception {
         if (this.isStop) {
