@@ -115,6 +115,7 @@ public class World {
 
     // ÚTKERESÉS ÚT -> ÚT
     public List<Point> findPathRoad(Tile start, Tile stop) throws Exception {
+        // Ellenőrizzük, hogy útra akarunk-e menni
         if (stop.getTerrainType() != TerrainType.ROAD) {
             throw new Exception("The destination isn't on the road!");
         }
@@ -168,12 +169,14 @@ public class World {
             switch (start.getBuilding().getBuildingType()) {
                 case BuildingType.BUSSTOP:
                     if (((BusStop) (start.getBuilding())).getConnectedRoad() == null) {
-                        throw new Exception("No way to reach destination!");
+                        // Nincs út, amihez kapcsolódna
+                        return null;
                     } else {
                         if (stop.getBuilding().getBuildingType() != BuildingType.BUSSTOP) {
                             throw new Exception("Can only go from bus stop to bus stop!");
                         } else if (((BusStop) (stop.getBuilding())).getConnectedRoad() == null) {
-                            throw new Exception("No way to reach destination!");
+                            // Szintén nincs út, amihez kapcsolódna
+                            return null;
                         } else {
                             Tile startRoad = (((BusStop) (start.getBuilding())).getConnectedRoad());
                             Tile stopRoad = (((BusStop) (stop.getBuilding())).getConnectedRoad());
@@ -185,12 +188,12 @@ public class World {
                     }
                 case BuildingType.STATION:
                     if (((Station) (start.getBuilding())).getConnectedRoad() == null) {
-                        throw new Exception("No way to reach destination!");
+                        return null;
                     } else {
                         if (stop.getBuilding().getBuildingType() != BuildingType.STATION) {
-                            throw new Exception("Can only go from bus stop to bus stop!");
+                            throw new Exception("Can only go from station to station!");
                         } else if (((Station) (stop.getBuilding())).getConnectedRoad() == null) {
-                            throw new Exception("No way to reach destination!");
+                            return null;
                         } else {
                             Tile startRoad = (((Station) (start.getBuilding())).getConnectedRoad());
                             Tile stopRoad = (((Station) (stop.getBuilding())).getConnectedRoad());
