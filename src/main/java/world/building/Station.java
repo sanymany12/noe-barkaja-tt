@@ -12,6 +12,8 @@ public class Station extends Building<Object, Object> {
     private Building building;
     private Vehicle vehicle;
 
+    private Tile connectedRoad;
+
     private RoadDirection direction;
 
     public Station(World world, Building building, RoadDirection dir) {
@@ -21,7 +23,23 @@ public class Station extends Building<Object, Object> {
         this.height = 1;
         this.building = building;
         this.vehicle = null;
+        this.connectedRoad = null;
         this.direction = dir;
+    }
+
+    // getter a megállóhoz tartozó épület irányának
+    public RoadDirection getDirection() {
+        return this.direction;
+    }
+
+    // getter az ehhez tartozó útnak
+    public Tile getConnectedRoad() {
+        return this.connectedRoad;
+    }
+
+    // setter az ehhez tartozó útnak
+    public void setConnectedRoad(Tile t) {
+        this.connectedRoad = t;
     }
 
     public void vehicleArrives(Vehicle vehicle) throws Exception {

@@ -18,7 +18,9 @@ public class BusStop extends Building<Integer,Integer> {
     private boolean isStart;
     private boolean isStop;
 
+    //
     private RoadDirection direction;
+    private Tile connectedRoad;
 
     private final int BUS_TICKET_PRICE = 50;
 
@@ -31,6 +33,8 @@ public class BusStop extends Building<Integer,Integer> {
         this.random = new Random();
 
         this.vehicle = null;
+
+        this.connectedRoad = null;
 
         this.numOfPeople = 0;
         this.isStart = false;
@@ -49,6 +53,19 @@ public class BusStop extends Building<Integer,Integer> {
 
     public int getNumOfPeople() {
         return this.numOfPeople;
+    }
+
+    public RoadDirection getDirection() {
+        return this.direction;
+    }
+
+    public Tile getConnectedRoad() {
+        return this.connectedRoad;
+    }
+
+    // Setter a hozzá kapcsolódó út beállításához, amikor utat kapcsolunk hozzá
+    public void setConnectedRoad(Tile t) {
+        this.connectedRoad = t;
     }
 
     // Segédfüggvény az utasok buszra való feltöltéséhez

@@ -70,7 +70,7 @@ public class Tile {
     }
 
     //TODO üres e a mező? segédfüggvény
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return false;
     }
 
