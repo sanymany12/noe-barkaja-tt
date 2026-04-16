@@ -141,7 +141,7 @@ public class AssetManager {
         loadAsset("animaltruck-w-capybara", "/assets-final/animal-truck-left-side-capybara.png");
         loadAsset("animaltruck-w-cat", "/assets-final/animal-truck-left-side-cat.png");
         loadAsset("animaltruck-w-fish", "/assets-final/animal-truck-left-side-fish.png");
-        loadAsset("animaltruck-w-guineapig", "assets-final/animal-truck-left-side-guineapig");
+        loadAsset("animaltruck-w-guineapig", "assets-final/animal-truck-left-side-guineapig.png");
         loadAsset("animaltruck-w-horse", "/assets-final/animal-truck-left-side-horse.png");
         loadAsset("animaltruck-w-pig", "/assets-final/animal-truck-left-side-pig.png");
         loadAsset("animaltruck-w-racoon", "/assets-final/animal-truck-left-side-racoon.png");
@@ -152,11 +152,23 @@ public class AssetManager {
         loadAsset("animaltruck-e-capybara", "/assets-final/animal-truck-right-side-capybara.png");
         loadAsset("animaltruck-e-cat", "/assets-final/animal-truck-right-side-cat.png");
         loadAsset("animaltruck-e-fish", "/assets-final/animal-truck-right-side-fish.png");
-        loadAsset("animaltruck-e-guineapig", "assets-final/animal-truck-right-side-guineapig");
+        loadAsset("animaltruck-e-guineapig", "assets-final/animal-truck-right-side-guineapig.png");
         loadAsset("animaltruck-e-horse", "/assets-final/animal-truck-right-side-horse.png");
         loadAsset("animaltruck-e-pig", "/assets-final/animal-truck-right-side-pig.png");
         loadAsset("animaltruck-e-racoon", "/assets-final/animal-truck-right-side-racoon.png");
         loadAsset("animaltruck-e-seahorse", "/assets-final/animal-truck-right-side-seahorse.png");
+
+        // ENCLOSURE spriteok betöltése
+        loadAsset("enclosure", "/assets-final/enclosure.png");
+        loadAsset("enclosure-bear", "/assets-final/enclosure-bear.png");
+        loadAsset("enclosure-capybara", "/assets-final/enclosure-capybara.png");
+        loadAsset("enclosure-cat", "/assets-final/enclosure-cat.png");
+        loadAsset("enclosure-fish", "/assets-final/enclosure-fish.png");
+        loadAsset("enclosure-guineapig", "/assets-final/enclosure-guineapig.png");
+        loadAsset("enclosure-horse", "/assets-final/enclosure-horse.png");
+        loadAsset("enclosure-pig", "/assets-final/enclosure-pig.png");
+        loadAsset("enclosure-racoon", "/assets-final/enclosure-racoon.png");
+        loadAsset("enclosure-seahorse", "/assets-final/enclosure-seahorse.png");
 
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella

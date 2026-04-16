@@ -97,7 +97,27 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
 
     @Override
     public String getSpriteName() {
-        // TODO
-        return "spriteName";
+        switch (this.species) {
+            case AnimalType.BEAR:
+                return "enclosure-bear";
+            case AnimalType.CAPYBARA:
+                return "enclosure-capybara";
+            case AnimalType.CAT:
+                return "enclosure-cat";
+            case AnimalType.FISH:
+                return "enclosure-fish";
+            case AnimalType.GUINEAPIG:
+                return "enclosure-guineapig";
+            case AnimalType.HORSE:
+                return "enclosure-horse";
+            case AnimalType.PIG:
+                return "enclosure-pig";
+            case AnimalType.RACOON:
+                return "enclosure-racoon";
+            case AnimalType.SEAHORSE:
+                return "enclosure-racoon";
+            default:
+                return "enclosure";
+        }
     }
 }
