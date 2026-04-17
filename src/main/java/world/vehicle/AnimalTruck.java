@@ -16,7 +16,7 @@ public class AnimalTruck extends Vehicle {
         this.speed = 1;
         this.capacity = 1;
         this.costToOperate = 5;
-        this.cargoType = AnimalType.UNKNOWN;
+        this.cargoType = null;
         this.type = VehicleType.ANIMALTRUCK;
         this.width = 0.5f;
         this.height = 0.5f;
