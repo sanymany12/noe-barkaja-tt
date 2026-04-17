@@ -6,12 +6,12 @@ import world.tile.Tile;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ForestManager {
-    private Random random;
     private int chanceToSpread; //esély százalék
     private int chanceToGrow; //esély százalék
-    private final World world;
+    private World world;
 
     public void setChanceToSpread(int chance) {
         if(chance <= 0 || chance > 100){
@@ -39,7 +39,6 @@ public class ForestManager {
 
     public ForestManager(World world) {
         this.world = world;
-        random = new Random();
         chanceToGrow = 15;
         chanceToSpread = 10;
     }
@@ -59,7 +58,7 @@ public class ForestManager {
                 if(treeCount == 4) {
                     addGrowSpots(tile, spreadTo);
                 }else if(treeCount > 0 && treeCount < 4){ //ha 0 és 4 közötti fát tartalmaz akkor esélye van növekedni még egy fának
-                    if(random.nextInt(100) < chanceToGrow){ // esély kiszámítása: 0-99 közötti szám 100as chance-nél 100% hogy kisebb lesz
+                    if(ThreadLocalRandom.current().nextInt(100) < chanceToGrow){ // esély kiszámítása: 0-99 közötti szám 100as chance-nél 100% hogy kisebb lesz
                        tile.setTreeCount(treeCount+1);
                     }
                 }
@@ -72,7 +71,7 @@ public class ForestManager {
     // erdők terjedése
     private void spreadForests(Set<Tile> spreadTo){
         for (Tile t : spreadTo){
-            if(random.nextInt(100) < chanceToSpread){ // esély kiszámítása: 0-99 közötti szám 100as chance-nél 100% hogy kisebb lesz
+            if(ThreadLocalRandom.current().nextInt(100) < chanceToSpread){ // esély kiszámítása: 0-99 közötti szám 100as chance-nél 100% hogy kisebb lesz
                 t.setTreeCount(1);
             }
         }
@@ -92,4 +91,5 @@ public class ForestManager {
             }
         }
     }
+    public void setWorld(World world) { this.world = world;}
 }

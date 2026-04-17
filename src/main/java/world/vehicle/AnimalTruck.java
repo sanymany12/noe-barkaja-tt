@@ -8,7 +8,7 @@ import world.tile.Point;
 import world.tile.road.RoadDirection;
 
 public class AnimalTruck extends Vehicle {
-    private AnimalType cargoType;
+
 
     public AnimalTruck(World world, Point p) throws Exception {
         super(world, p);
@@ -58,12 +58,12 @@ public class AnimalTruck extends Vehicle {
                 }
                 break;
             case BuildingType.RESEARCHLAB:
-                if (this.cargoType != null && ((ResearchLab) building).receiveAnimal(this.cargoType)) {
+                if (this.cargoType != null && ((ResearchLab) building).receiveAnimal((AnimalType) this.cargoType)) {
                     this.cargoType = null;
                 }
                 break;
             case BuildingType.CLONINGFACILITY:
-                if (this.cargoType != null && ((CloningFacility) building).receiveAnimal(this.cargoType)) {
+                if (this.cargoType != null && ((CloningFacility) building).receiveAnimal((AnimalType) this.cargoType)) {
                     this.cargoType = null;
                 }
                 break;
@@ -122,6 +122,8 @@ public class AnimalTruck extends Vehicle {
                     break;
                 case AnimalType.SEAHORSE:
                     spriteName = spriteName.concat("-seahorse");
+                    break;
+                default:
                     break;
             }
         }

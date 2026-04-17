@@ -58,6 +58,43 @@ public class GameEngine {
         }
     }
 
+    public void saveGame(String fileName) {
+
+        TimeSpeed oldSpeed = this.timeMultiplier; //pause
+        setTimeMultiplier(TimeSpeed.PAUSED);
+
+        SaveManager.saveGame(this.world, fileName); //mentés
+
+        setTimeMultiplier(oldSpeed); //continue
+    }
+
+    public void loadGame(String fileName) {
+
+        setTimeMultiplier(TimeSpeed.PAUSED); //pause
+
+        World loadedWorld = SaveManager.loadGame(fileName);
+
+        if (loadedWorld != null) {
+            //a régi világot és kicseréljük az újra
+            world = loadedWorld;
+
+            renderer.setWorld(world);
+            minimap.setWorld(world);
+            forestManager.setWorld(world);
+
+            buildManager.setWorld(world);
+
+            minimap.generateImage();
+
+            if (listener != null) {
+                listener.onNewDay(world.getElapsedTime()); //GUI frissítése
+            }
+
+        } else {
+            System.out.println("Hiba történt a betöltés során.");
+        }
+    }
+
     public Renderer getRenderer() { return this.renderer; }
 
     public Minimap getMinimap() {return minimap;}
