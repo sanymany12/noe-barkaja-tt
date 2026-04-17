@@ -102,7 +102,7 @@ public class World {
         this.money = this.money - spending;
     }
 
-    public void newDay() {
+    public void newDay() throws Exception {
         this.elapsedTime = this.elapsedTime + 1;
         for (int i = 0; i < this.vehicles.size(); i++) {
             this.vehicles.get(i).move();
@@ -113,7 +113,9 @@ public class World {
         }
     }
 
-    public List<Point> findPath(Tile start, Tile stop) throws Exception {
+    // ÚTKERESÉS ÚT -> ÚT
+    public List<Point> findPathRoad(Tile start, Tile stop) throws Exception {
+        // Ellenőrizzük, hogy útra akarunk-e menni
         if (stop.getTerrainType() != TerrainType.ROAD) {
             throw new Exception("The destination isn't on the road!");
         }
@@ -155,6 +157,57 @@ public class World {
                 // No way to reach destination!
                 return null;
             }
+        }
+    }
+
+    // ÚJ ÚTKERESÉS: MEGÁLLÓ -> MEGÁLLÓ
+    public List<Point> findPath(Tile start, Tile stop) throws Exception {
+        if (start.getTerrainType() != TerrainType.STOP || stop.getTerrainType() != TerrainType.STOP) {
+            throw new Exception("The destination isn't a stop!");
+        }
+        else if (start.getBuilding() != null) {
+            switch (start.getBuilding().getBuildingType()) {
+                case BuildingType.BUSSTOP:
+                    if (((BusStop) (start.getBuilding())).getConnectedRoad() == null) {
+                        // Nincs út, amihez kapcsolódna
+                        return null;
+                    } else {
+                        if (stop.getBuilding().getBuildingType() != BuildingType.BUSSTOP) {
+                            throw new Exception("Can only go from bus stop to bus stop!");
+                        } else if (((BusStop) (stop.getBuilding())).getConnectedRoad() == null) {
+                            // Szintén nincs út, amihez kapcsolódna
+                            return null;
+                        } else {
+                            Tile startRoad = (((BusStop) (start.getBuilding())).getConnectedRoad());
+                            Tile stopRoad = (((BusStop) (stop.getBuilding())).getConnectedRoad());
+                            List<Point> path = findPathRoad(startRoad, stopRoad);
+                            path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
+                            path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            return path;
+                        }
+                    }
+                case BuildingType.STATION:
+                    if (((Station) (start.getBuilding())).getConnectedRoad() == null) {
+                        return null;
+                    } else {
+                        if (stop.getBuilding().getBuildingType() != BuildingType.STATION) {
+                            throw new Exception("Can only go from station to station!");
+                        } else if (((Station) (stop.getBuilding())).getConnectedRoad() == null) {
+                            return null;
+                        } else {
+                            Tile startRoad = (((Station) (start.getBuilding())).getConnectedRoad());
+                            Tile stopRoad = (((Station) (stop.getBuilding())).getConnectedRoad());
+                            List<Point> path = findPathRoad(startRoad, stopRoad);
+                            path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
+                            path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            return path;
+                        }
+                    }
+                default:
+                    return null;
+                }
+        } else {
+            return null;
         }
     }
 

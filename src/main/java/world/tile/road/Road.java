@@ -11,8 +11,10 @@ public class Road {
     private final int COST_TO_REMOVE = 3;
     private final int COST_TO_BUILD = 5;
 
-    private Vehicle rightLane;
-    private Vehicle leftLane;
+    private Vehicle rightLaneV;
+    private Vehicle leftLaneV;
+    private Vehicle rightLaneH;
+    private Vehicle leftLaneH;
 
     private int locationX;
     private int locationY;
@@ -20,8 +22,10 @@ public class Road {
     public Road(int x, int y) {
         this.connections = new ArrayList<RoadDirection>();
 
-        this.rightLane = null;
-        this.leftLane = null;
+        this.rightLaneV = null;
+        this.leftLaneV = null;
+        this.rightLaneH = null;
+        this.leftLaneH = null;
 
         this.locationX = x;
         this.locationY = y;
@@ -31,8 +35,56 @@ public class Road {
         return this.COST_TO_BUILD;
     }
 
-    public Vehicle getRightLane() {
-        return this.rightLane;
+    public Vehicle getRightLaneV() {
+        return this.rightLaneV;
+    }
+
+    public Vehicle getLeftLaneV() {
+        return this.leftLaneV;
+    }
+
+    public Vehicle getRightLaneH() {
+        return this.rightLaneH;
+    }
+
+    public Vehicle getLeftLaneH() {
+        return this.leftLaneH;
+    }
+
+    // Jármű érkezése sávkezeléssel
+    public void vehicleEnters(Vehicle vehicle, RoadDirection vehicleDirection) {
+        switch (vehicleDirection) {
+            case RoadDirection.NORTH:
+                this.rightLaneV = vehicle;
+                break;
+            case RoadDirection.SOUTH:
+                this.leftLaneV = vehicle;
+                break;
+            case RoadDirection.EAST:
+                this.leftLaneH = vehicle;
+                break;
+            case RoadDirection.WEST:
+                this.rightLaneH = vehicle;
+                break;
+        }
+    }
+
+    // Jármű távozása sávkezeléssel
+    public void vehicleLeaves(Vehicle vehicle, RoadDirection vehicleDirection) {
+        switch (vehicleDirection) {
+            case RoadDirection.NORTH:
+                this.rightLaneV = null;
+                break;
+            case RoadDirection.SOUTH:
+                this.leftLaneV = null;
+                break;
+            case RoadDirection.EAST:
+                this.leftLaneH = null;
+                break;
+            case RoadDirection.WEST:
+                this.rightLaneH = null;
+                break;
+        }
     }
 
     public void setConnection(RoadDirection dir) {
@@ -63,10 +115,5 @@ public class Road {
         }
 //        spriteName.concat(".png");
         return spriteName;
-    }
-
-    // kezdetleges, egyelőre mindenképp a jobb sávba kerül, sávkezelés TODO
-    public void vehicleEnters(Vehicle vehicle) {
-        this.rightLane = vehicle;
     }
 }

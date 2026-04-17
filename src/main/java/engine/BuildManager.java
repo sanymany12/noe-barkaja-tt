@@ -2,6 +2,7 @@ package engine;
 
 import world.World;
 import world.building.BuildingType;
+import world.building.BusStop;
 import world.building.Station;
 import world.tile.TerrainType;
 import world.tile.Tile;
@@ -34,28 +35,94 @@ public class BuildManager {
             if (neighbourNorth.getRoad() != null) {
                 t.getRoad().setConnection(RoadDirection.NORTH);
                 neighbourNorth.getRoad().setConnection(RoadDirection.NORTH.getOpposite());
+            } else if (neighbourNorth.getBuilding() != null) {
+                switch (neighbourNorth.getBuilding().getBuildingType()) {
+                    case BuildingType.BUSSTOP:
+                        if (((BusStop) (neighbourNorth.getBuilding())).getDirection() == RoadDirection.NORTH) {
+                            t.getRoad().setConnection(RoadDirection.NORTH);
+                            ((BusStop) (neighbourNorth.getBuilding())).setConnectedRoad(t);
+                        }
+                    case BuildingType.STATION:
+                        if (((Station) (neighbourNorth.getBuilding())).getDirection() == RoadDirection.NORTH) {
+                            t.getRoad().setConnection(RoadDirection.NORTH);
+                            ((Station) (neighbourNorth.getBuilding())).setConnectedRoad(t);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         if (neighbourSouth != null) {
             if (neighbourSouth.getRoad() != null) {
                 t.getRoad().setConnection(RoadDirection.SOUTH);
                 neighbourSouth.getRoad().setConnection(RoadDirection.SOUTH.getOpposite());;
+            } else if (neighbourSouth.getBuilding() != null) {
+                switch (neighbourSouth.getBuilding().getBuildingType()) {
+                    case BuildingType.BUSSTOP:
+                        if (((BusStop) (neighbourSouth.getBuilding())).getDirection() == RoadDirection.SOUTH) {
+                            t.getRoad().setConnection(RoadDirection.SOUTH);
+                            ((BusStop) (neighbourSouth.getBuilding())).setConnectedRoad(t);
+                        }
+                        break;
+                    case BuildingType.STATION:
+                        if (((Station) (neighbourSouth.getBuilding())).getDirection() == RoadDirection.SOUTH) {
+                            t.getRoad().setConnection(RoadDirection.SOUTH);
+                            ((Station) (neighbourSouth.getBuilding())).setConnectedRoad(t);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         if (neighbourEast != null) {
             if (neighbourEast.getRoad() != null) {
                 t.getRoad().setConnection(RoadDirection.EAST);
                 neighbourEast.getRoad().setConnection(RoadDirection.EAST.getOpposite());
+            } else if (neighbourEast.getBuilding() != null) {
+                switch (neighbourEast.getBuilding().getBuildingType()) {
+                    case BuildingType.BUSSTOP:
+                        if (((BusStop) (neighbourEast.getBuilding())).getDirection() == RoadDirection.EAST) {
+                            t.getRoad().setConnection(RoadDirection.EAST);
+                            ((BusStop) (neighbourEast.getBuilding())).setConnectedRoad(t);
+                        }
+                    case BuildingType.STATION:
+                        if (((Station) (neighbourEast.getBuilding())).getDirection() == RoadDirection.EAST) {
+                            t.getRoad().setConnection(RoadDirection.EAST);
+                            ((Station) (neighbourEast.getBuilding())).setConnectedRoad(t);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         if (neighbourWest != null) {
             if (neighbourWest.getRoad() != null) {
                 t.getRoad().setConnection(RoadDirection.WEST);
                 neighbourWest.getRoad().setConnection(RoadDirection.WEST.getOpposite());;
+            } else if (neighbourWest.getBuilding() != null) {
+                switch (neighbourWest.getBuilding().getBuildingType()) {
+                    case BuildingType.BUSSTOP:
+                        if (((BusStop) (neighbourWest.getBuilding())).getDirection() == RoadDirection.WEST) {
+                            t.getRoad().setConnection(RoadDirection.WEST);
+                            ((BusStop) (neighbourWest.getBuilding())).setConnectedRoad(t);
+                        }
+                    case BuildingType.STATION:
+                        if (((Station) (neighbourWest.getBuilding())).getDirection() == RoadDirection.WEST) {
+                            t.getRoad().setConnection(RoadDirection.WEST);
+                            ((Station) (neighbourWest.getBuilding())).setConnectedRoad(t);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
 
+    // Megálló építéséhez írt metódus
     // A direction itt az épület irányára hivatkozik!!!
     public void buildStation(Tile t, RoadDirection dir) {
         Tile buildingTile = null;
@@ -79,16 +146,19 @@ public class BuildManager {
                 break;
         }
         // Ellenőrzés, hogy van-e épület abban az irányban, ahova építeni szeretnénk
-        if (buildingTile != null && buildingTile.getTerrainType() == TerrainType.BUILDING && buildingTile.getBuilding() != null) {
-            // Ellenőrzés, hogy van-e a megállóhoz kapcsolódó út
-            if (roadTile != null && roadTile.getTerrainType() == TerrainType.ROAD && roadTile.getRoad() != null) {
-                // Ellenőrzés, hogy a megálló melletti épület nem buszmegálló / ipari megálló
+        if (buildingTile != null) {
+            if (buildingTile.getTerrainType() == TerrainType.BUILDING && buildingTile.getBuilding() != null) {
+                // Ellenőrzés, hogy az épület NEM ipari megálló / buszmegálló
                 if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
-                    // Ipari megálló "megépítése"
-                    t.setBuilding(new Station(this.world, buildingTile.getBuilding(), dir.getOpposite()));
+                    // Megálló megépítése
+                    t.setBuilding(new Station(this.world, buildingTile.getBuilding(), dir));
                     t.setTerrainType(TerrainType.STOP);
-                    // Út elágazásainak frissítése
-                    this.world.get(roadTile.getCoordinate().x, roadTile.getCoordinate().y).getRoad().setConnection(dir);
+                    // Ellenőrzés, hogy van-e a megállóhoz kapcsolódó út
+                    if (roadTile != null && roadTile.getTerrainType() == TerrainType.ROAD && roadTile.getRoad() != null) {
+                        // Út kapcsolatainak frissítése, amennyiben van, illetve az út beállítása mint idekapcsolt út
+                        this.world.get(roadTile.getCoordinate().x, roadTile.getCoordinate().y).getRoad().setConnection(dir);
+                        ((Station) (t.getBuilding())).setConnectedRoad(roadTile);
+                    }
                 }
             }
         }
@@ -124,7 +194,7 @@ public class BuildManager {
         if(newVehicle != null)
         {
             world.spendMoney(cost);
-            t.getRoad().vehicleEnters(newVehicle);
+            t.getRoad().vehicleEnters(newVehicle, newVehicle.getCurrentDirection());
             world.getVehicles().add(newVehicle);
         }
     }

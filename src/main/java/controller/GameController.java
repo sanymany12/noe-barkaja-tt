@@ -135,7 +135,7 @@ public class GameController implements GameListener {
                 {
                     if(clickedTile != null && clickedTile.getTerrainType() == TerrainType.ROAD && clickedTile.getRoad() != null)
                     {
-                        Vehicle clickedVehicle = clickedTile.getRoad().getRightLane();
+                        Vehicle clickedVehicle = clickedTile.getRoad().getRightLaneV();
 
                         if(clickedVehicle != null)
                         {
