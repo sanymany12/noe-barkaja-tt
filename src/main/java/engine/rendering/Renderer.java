@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Renderer {
     private final Camera camera;
-    private final World world;
+    private World world;
     private final float treeHeight = 1.7f;
 
     public Camera getCamera() {
@@ -178,4 +178,5 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
         }
     }
 
+    public void setWorld(World world) { this.world = world;}
 }

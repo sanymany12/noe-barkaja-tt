@@ -199,4 +199,5 @@ public class BuildManager {
         }
     }
 
+    public void setWorld(World world) { this.world = world;}
 }

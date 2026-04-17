@@ -2,12 +2,13 @@ package world.vehicle;
 
 import world.World;
 import world.building.*;
+import world.resources.ICargo;
 import world.resources.ResourceType;
 import world.tile.Point;
 import world.tile.road.RoadDirection;
 
 public class FoodTruck extends Vehicle {
-    private ResourceType cargoType;
+
 
     private int currentCargoNum;
 
@@ -30,10 +31,6 @@ public class FoodTruck extends Vehicle {
         this.height = 0.5f;
 
         this.currentCargoNum = 0;
-    }
-
-    public ResourceType getCargoType() {
-        return this.cargoType;
     }
 
     public int getCurrentCargoNum() {
@@ -178,6 +175,8 @@ public class FoodTruck extends Vehicle {
                     break;
                 case ResourceType.FOOD:
                     spriteName = spriteName.concat("-food");
+                    break;
+                default:
                     break;
             }
         }

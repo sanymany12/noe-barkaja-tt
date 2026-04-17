@@ -4,7 +4,7 @@ import world.World;
 import world.tile.Tile;
 
 public abstract class Building<In, Out> {
-    protected World world;
+    transient protected World world;
 
     protected int width;
     protected int height;
