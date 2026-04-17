@@ -85,7 +85,7 @@ public class Minimap {
         g.drawImage(mapImg, 0, 0, null);
 
         //jelenlegi nézetet mutató fehér négyzet rajzolása
-        int TILE_SIZE = 16;
+        int TILE_SIZE = camera.getTileWidth();
 
         float totalWorldWidth = (float) (world.getCols() * TILE_SIZE * camera.getZoom());
         float totalWorldHeight = (float) (world.getRows() * TILE_SIZE * camera.getZoom());
