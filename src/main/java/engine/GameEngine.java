@@ -125,7 +125,12 @@ public class GameEngine {
             }
             if (tickCounter == ticksPerDay) {
                 tickCounter = 0;
-                world.newDay();
+                try{
+                    world.newDay();
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
+
                 forestManager.updateForests();
                 if(listener != null)
                 {

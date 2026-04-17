@@ -60,6 +60,9 @@ public class Camera {
         return screenHeight;
     }
 
+    public int getTileHeight(){return TILE_HEIGHT;}
+    public int getTileWidth(){return TILE_WIDTH;}
+
     /*
             Egy world koordinátának pl.: 1,2 számolja ki a képernyőn az elhelyezkedését pixelekben
              */
