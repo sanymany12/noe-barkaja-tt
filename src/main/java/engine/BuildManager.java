@@ -153,6 +153,7 @@ public class BuildManager {
                     // Megálló megépítése
                     t.setBuilding(new Station(this.world, buildingTile.getBuilding(), dir));
                     t.setTerrainType(TerrainType.STOP);
+                    t.setAnchor(true);
                     // Ellenőrzés, hogy van-e a megállóhoz kapcsolódó út
                     if (roadTile != null && roadTile.getTerrainType() == TerrainType.ROAD && roadTile.getRoad() != null) {
                         // Út kapcsolatainak frissítése, amennyiben van, illetve az út beállítása mint idekapcsolt út
@@ -166,11 +167,12 @@ public class BuildManager {
 
     public void buyVehicle(Tile t, VehicleType type) throws Exception
     {
-        if(t.getTerrainType() != TerrainType.ROAD || t.getRoad() == null)
+        if(t.getTerrainType() != TerrainType.STOP || t.getBuilding() == null || t.getBuilding().getBuildingType() != BuildingType.STATION)
         {
             throw new Exception("Ide nem tudsz vasarolni!");
         }
 
+        Station station = (Station) t.getBuilding();
         Vehicle newVehicle = null;
         int cost = 0;
 
@@ -187,14 +189,16 @@ public class BuildManager {
                 newVehicle = bus;
                 break;
             case ANIMALTRUCK:
-                //stb
+                AnimalTruck at = new AnimalTruck(this.world, t.getCoordinate());
+                cost = 500;
+                newVehicle = at;
                 break;
         }
 
         if(newVehicle != null)
         {
             world.spendMoney(cost);
-            t.getRoad().vehicleEnters(newVehicle, newVehicle.getCurrentDirection());
+            station.vehicleArrives(newVehicle);
             world.getVehicles().add(newVehicle);
         }
     }

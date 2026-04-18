@@ -76,10 +76,10 @@ public class AssetManager {
         loadAsset("road-4-nwse", "/assets-final/road-4-nwse.png");
 
         // STATION típusok betöltése
-        loadAsset("industrial-stop-n", "/assets-final/industrial-stop-n.png");
-        loadAsset("industrial-stop-e", "/assets-final/industrial-stop-e.png");
-        loadAsset("industrial-stop-w", "/assets-final/industrial-stop-w.png");
-        loadAsset("industrial-stop-s", "/assets-final/industrial-stop-s.png");
+        loadAsset("industrial-stop-s", "/assets-final/industrial-stop-n.png");
+        loadAsset("industrial-stop-w", "/assets-final/industrial-stop-e.png");
+        loadAsset("industrial-stop-e", "/assets-final/industrial-stop-w.png");
+        loadAsset("industrial-stop-n", "/assets-final/industrial-stop-s.png");
 
         // BUSSTOP típusok betöltése
         loadAsset("bus-stop-n-", "/assets-final/bus-stop-n-.png");

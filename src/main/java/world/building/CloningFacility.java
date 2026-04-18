@@ -89,6 +89,6 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
 
     @Override
     public String getSpriteName() {
-        return "spriteName";
+        return "building";
     }
 }

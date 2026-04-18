@@ -170,7 +170,7 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
             case WATER:
                 graphics.drawImage(AssetManager.get("water"), screenPosition.x, screenPosition.y, width, height, null);
                 break;
-            case BUILDING:
+            case BUILDING, STOP:
                 graphics.drawImage(AssetManager.get("concrete"), screenPosition.x, screenPosition.y, width, height, null);
                 break;
             default:

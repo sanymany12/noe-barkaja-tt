@@ -20,6 +20,8 @@ public class City extends Building<AnimalType, Integer> {
 
     public City (World world) {
         super(world);
+        this.type = BuildingType.CITY;
+
         this.orderedAnimal = null;
         this.orderedAmount = 0;
 
@@ -103,6 +105,6 @@ public class City extends Building<AnimalType, Integer> {
     // TODO
     @Override
     public String getSpriteName() {
-        return "spriteName";
+        return "building";
     }
 }

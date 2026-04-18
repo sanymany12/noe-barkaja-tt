@@ -125,6 +125,6 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
     @Override
     public String getSpriteName() {
         // TODO
-        return "spriteName";
+        return "building";
     }
 }

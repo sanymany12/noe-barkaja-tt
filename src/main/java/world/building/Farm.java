@@ -15,6 +15,7 @@ public class Farm extends Building<Integer,Integer> {
 
     public Farm(World world) {
         super(world);
+        this.type = BuildingType.FARM;
 
         this.grainMade = 0;
     }
@@ -63,6 +64,6 @@ public class Farm extends Building<Integer,Integer> {
     // TODO
     @Override
     public String getSpriteName() {
-        return "spriteName";
+        return "building";
     }
 }

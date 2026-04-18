@@ -2,9 +2,11 @@ package UI;
 
 import engine.rendering.Minimap;
 import engine.rendering.Renderer;
+import world.tile.Tile;
 import world.vehicle.Vehicle;
 import world.vehicle.VehicleType;
 import controller.GameController.VehicleAction;
+import controller.GameController.BuildingAction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,13 +19,16 @@ public class ingameGUI {
     private JLabel dayCounter;
     private JLabel balanceLabel;
     private JButton roadToggle;
-    private JButton vehicleToggle;
+    private JButton stationToggle;
     private JButton speedPaused;
     private JButton speedNormal;
     private JButton speedFast;
     private JButton speedSuperFast;
+
     private VehicleType tempSelectedType = null;
     private VehicleAction tempVehicleAction = VehicleAction.NONE;
+
+    private BuildingAction tempBuildingAction = BuildingAction.NONE;
 
 
     public class GameMapPanel extends JPanel {
@@ -83,11 +88,13 @@ public class ingameGUI {
 
         JPanel buildPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         buildPanel.setBorder(BorderFactory.createTitledBorder("Build Options"));
+
         roadToggle = new JButton("Ut ikon");
         buildPanel.add(roadToggle);
-        buildPanel.add(new JButton("Megálló ikon"));
-        vehicleToggle = new JButton("Jarmu ikon");
-        buildPanel.add(vehicleToggle);
+
+        stationToggle = new JButton("Megálló ikon");
+        buildPanel.add(stationToggle);
+
         buildPanel.add(new JButton("További ikonok"));
         upperPanel.add(buildPanel, BorderLayout.CENTER);
 
@@ -192,6 +199,64 @@ public class ingameGUI {
         return panel;
     }
 
+    public BuildingAction showBuildingInfo(Tile tile)
+    {
+        tempBuildingAction = BuildingAction.NONE;
+
+        JDialog dialog = new JDialog(gameWindow, "Building info", true);
+        dialog.setSize(600, 300);
+        dialog.setLayout(new BorderLayout(10, 10));
+        dialog.setLocationRelativeTo(gameWindow);
+
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Bal panel
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        infoPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+
+        String infoText = "<html><h2 style='text-align:center;'>Információ az épületről</h2><br><center>";
+        if (tile.getBuilding() != null) {
+            infoText += "<b>Típus:</b> " + tile.getBuilding().getBuildingType().name() + "<br>";
+        }
+        infoText += "</center></html>";
+
+        JLabel infoLabel = new JLabel(infoText, SwingConstants.CENTER);
+        infoLabel.setVerticalAlignment(SwingConstants.TOP);
+        infoPanel.add(infoLabel, BorderLayout.CENTER);
+        mainPanel.add(infoPanel, BorderLayout.CENTER);
+
+        // Jobb panel
+        JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
+        rightPanel.setPreferredSize(new Dimension(200, 0));
+
+        JLabel imgLabel = new JLabel("Kép helye", SwingConstants.CENTER);
+        imgLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+        rightPanel.add(imgLabel, BorderLayout.CENTER);
+
+        JPanel actionPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        JLabel typeLabel = new JLabel(tile.getTerrainType().name(), SwingConstants.CENTER);
+        actionPanel.add(typeLabel);
+
+        // Ha megallo, vasarolhato jarmu
+        if (tile.getTerrainType() == world.tile.TerrainType.STOP) {
+            JButton buyVehicleBtn = new JButton("Jármű vásárlása");
+            buyVehicleBtn.addActionListener(e -> {
+                tempBuildingAction = controller.GameController.BuildingAction.BUY_VEHICLE;
+                dialog.dispose(); // Bezárjuk az ablakot, a futás folytatódik
+            });
+            actionPanel.add(buyVehicleBtn);
+        }
+
+        rightPanel.add(actionPanel, BorderLayout.SOUTH);
+        mainPanel.add(rightPanel, BorderLayout.EAST);
+
+        dialog.add(mainPanel);
+        dialog.setVisible(true);
+
+        return tempBuildingAction;
+    }
+
     public VehicleAction showVehicleInfo(Vehicle v)
     {
         tempVehicleAction = VehicleAction.NONE;
@@ -263,15 +328,13 @@ public class ingameGUI {
 
     public JButton getRoadToggle() { return roadToggle; }
 
-    public JButton getVehicleToggle() {
-        return this.vehicleToggle;
-    }
-
     public JButton getSpeedPaused() { return speedPaused; }
 
     public JButton getSpeedNormal() { return speedNormal; }
 
     public JButton getSpeedFast() { return speedFast; }
+
+    public JButton getStationToggle() { return stationToggle; }
 
     public JButton getSpeedSuperFast() { return speedSuperFast; }
 
