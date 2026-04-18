@@ -8,10 +8,6 @@ import world.tile.Point;
 import world.tile.road.RoadDirection;
 
 public class FoodTruck extends Vehicle {
-
-
-    private int currentCargoNum;
-
     private final int CAPACITY = 10;
     private final int COST_TO_BUY = 2000;
     private final int COST_TO_SELL = 1000;
@@ -20,7 +16,7 @@ public class FoodTruck extends Vehicle {
         super(world, p);
 
         this.speed = 1;
-        this.capacity = 5;
+        this.capacity = this.CAPACITY;
         this.costToOperate = 5;
 
         this.cargoType = null;
@@ -30,11 +26,11 @@ public class FoodTruck extends Vehicle {
         this.width = 0.5f;
         this.height = 0.5f;
 
-        this.currentCargoNum = 0;
+        this.cargoNum = 0;
     }
 
     public int getCurrentCargoNum() {
-        return this.currentCargoNum;
+        return this.cargoNum;
     }
 
     public int getCapacity() {
@@ -50,7 +46,7 @@ public class FoodTruck extends Vehicle {
     }
 
     public boolean hasCargo() {
-        if (this.currentCargoNum > 0 && this.cargoType != null) {
+        if (this.cargoNum > 0 && this.cargoType != null) {
             return true;
         } else {
             return false;
@@ -58,7 +54,7 @@ public class FoodTruck extends Vehicle {
     }
 
     private void addCargo(ResourceType type, int n) throws Exception {
-        if (this.currentCargoNum + n > this.CAPACITY) {
+        if (this.cargoNum + n > this.CAPACITY) {
             throw new Exception("Can't take that much cargo!");
         } else {
             if (!this.hasCargo()) {
@@ -67,23 +63,23 @@ public class FoodTruck extends Vehicle {
             if (this.cargoType != type) {
                 throw new Exception("Cargo types are mismatched!");
             } else {
-                this.currentCargoNum = this.currentCargoNum + n;
+                this.cargoNum = this.cargoNum + n;
             }
         }
     }
 
     private void decreaseCargo(int n) throws Exception {
-        if (this.currentCargoNum - n < 0) {
+        if (this.cargoNum - n < 0) {
             throw new Exception("Don't have that much cargo!");
-        } else if (this.currentCargoNum == n) {
+        } else if (this.cargoNum == n) {
             this.emptyCargo();
         } else {
-            this.currentCargoNum = this.currentCargoNum - n;
+            this.cargoNum = this.cargoNum - n;
         }
     }
 
     private void emptyCargo() {
-        this.currentCargoNum = 0;
+        this.cargoNum = 0;
         this.cargoType = null;
     }
 
@@ -92,7 +88,7 @@ public class FoodTruck extends Vehicle {
         switch (building.getBuildingType()) {
             case BuildingType.FARM:
                 if (this.isEmpty() || (!this.isFull() && this.cargoType == ResourceType.GRAIN)) {
-                    int canLoad = this.CAPACITY - this.currentCargoNum;
+                    int canLoad = this.CAPACITY - this.cargoNum;
                     if (canLoad >= ((Farm) building).getGrainMade()) {
                         this.addCargo(ResourceType.GRAIN, ((Farm) building).getGrainMade());
                         ((Farm) building).loadOntoTruck();
@@ -104,7 +100,7 @@ public class FoodTruck extends Vehicle {
                 break;
             case BuildingType.AGRICULTURALPLANT:
                 if (this.isEmpty() || (!this.isFull() && this.cargoType == ResourceType.FOOD)) {
-                    int canLoad = this.CAPACITY - this.currentCargoNum;
+                    int canLoad = this.CAPACITY - this.cargoNum;
                     if (canLoad >= ((AgriculturalPlant) building).getOutgoingFood()) {
                         this.addCargo(ResourceType.FOOD, ((AgriculturalPlant) building).getOutgoingFood());
                         ((AgriculturalPlant) building).loadOntoTruck();
@@ -125,8 +121,8 @@ public class FoodTruck extends Vehicle {
             case BuildingType.AGRICULTURALPLANT:
                 if (!this.isEmpty() && this.cargoType == ResourceType.GRAIN) {
                     int canUnload = ((AgriculturalPlant) building).getRemainingCapacityIn();
-                    if (canUnload >= this.currentCargoNum) {
-                        ((AgriculturalPlant) building).loadFromTruck(this.currentCargoNum);
+                    if (canUnload >= this.cargoNum) {
+                        ((AgriculturalPlant) building).loadFromTruck(this.cargoNum);
                         this.emptyCargo();
                     } else {
                         ((AgriculturalPlant) building).loadFromTruck(canUnload);
@@ -137,8 +133,8 @@ public class FoodTruck extends Vehicle {
             case BuildingType.SILO:
                 if (!this.isEmpty() && this.cargoType == ResourceType.FOOD) {
                     int canUnload = ((Silo) building).getRemainingCapacity();
-                    if (canUnload >= this.currentCargoNum) {
-                        ((Silo) building).loadFromTruck(this.currentCargoNum);
+                    if (canUnload >= this.cargoNum) {
+                        ((Silo) building).loadFromTruck(this.cargoNum);
                         this.emptyCargo();
                     } else {
                         ((Silo) building).loadFromTruck(canUnload);
@@ -168,7 +164,7 @@ public class FoodTruck extends Vehicle {
                 spriteName = spriteName.concat("-w");
                 break;
         }
-        if (this.currentDirection != RoadDirection.SOUTH && this.currentCargoNum != 0) {
+        if (this.currentDirection != RoadDirection.SOUTH && this.cargoNum != 0) {
             switch(this.cargoType) {
                 case ResourceType.GRAIN:
                     spriteName = spriteName.concat("-grain");
