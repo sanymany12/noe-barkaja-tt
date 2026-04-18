@@ -157,7 +157,7 @@ public class GameController implements GameListener {
                             currentState = BuildState.ASSIGN_ROUTE;
                             routingVehicle = clickedVehicle;
                             routingVehicle.clearRoute();
-                            System.out.println("Kattints BAL gombbal az utakra a megállókhoz, majd JOBB KLIKK a befejezéshez");
+                            System.out.println("Kattints BAL gombbal a MEGÁLLÓKRA, majd JOBB KLIKK a befejezéshez");
                         }
                         else if(action == VehicleAction.SELL)
                         {
@@ -198,10 +198,14 @@ public class GameController implements GameListener {
                 //UTVONAL KIJELOLES
                 else if(currentState == BuildState.ASSIGN_ROUTE && SwingUtilities.isLeftMouseButton(e))
                 {
-                    if(clickedTile != null && clickedTile.getTerrainType() == TerrainType.ROAD)
+                    if(clickedTile != null && clickedTile.getTerrainType() == TerrainType.STOP)
                     {
                         routingVehicle.addRouteStop(clickedTile);
                         System.out.println("Megálló hozzáadva a listához");
+                    }
+                    else
+                    {
+                        System.out.println("Kérlek, egy megállóra kattints!");
                     }
                 }
 
