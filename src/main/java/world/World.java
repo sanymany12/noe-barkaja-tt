@@ -1,7 +1,9 @@
 package world;
 
+import engine.BuildManager;
 import world.building.*;
 import world.tile.*;
+import world.tile.road.RoadDirection;
 import world.vehicle.*;
 
 import java.nio.file.Path;
@@ -65,18 +67,72 @@ public class World {
         }
 
         grid[0][0].setTreeCount(1);
+        grid[18][18].setTreeCount(2);
+        grid[19][5].setTreeCount(3);
 
         grid[1][1].setTerrainType(TerrainType.WATER);
         grid[1][2].setTerrainType(TerrainType.WATER);
         grid[2][1].setTerrainType(TerrainType.WATER);
         grid[2][2].setTerrainType(TerrainType.WATER);
 
+        // Varosok
+        grid[4][2].setTerrainType(TerrainType.BUILDING);
+        grid[4][2].setBuilding(new City(this));
+        grid[4][2].setAnchor(true);
+
+        grid[8][2].setTerrainType(TerrainType.BUILDING);
+        grid[8][2].setBuilding(new City(this));
+        grid[8][2].setAnchor(true);
+
+        // Utak varosok kozott
+        BuildManager setupBuilder = new BuildManager(this);
+        for(int x = 4; x <= 8; x++) {
+            setupBuilder.buildRoad(grid[x][3]);
+        }
+
+        // Farm
+        grid[4][10].setTerrainType(TerrainType.BUILDING);
+        grid[4][10].setBuilding(new Farm(this));
+        grid[4][10].setAnchor(true);
+
+        // Silo
+        Silo testSilo = new Silo(this);
+        grid[8][10].setTerrainType(TerrainType.BUILDING);
+        grid[8][10].setBuilding(testSilo);
+        grid[8][10].setAnchor(true);
+
+        // Feldolgozo
+        grid[4][14].setTerrainType(TerrainType.BUILDING);
+        grid[4][14].setBuilding(new AgriculturalPlant(this));
+        grid[4][14].setAnchor(true);
+
+        // Allathely
+        Enclosure testEnclosure = new Enclosure(this, testSilo);
+        grid[12][10].setTerrainType(TerrainType.BUILDING);
+        grid[12][10].setBuilding(testEnclosure);
+        grid[12][10].setAnchor(true);
+
+        grid[13][10].setTerrainType(TerrainType.BUILDING);
+        grid[13][10].setBuilding(testEnclosure);
+        grid[13][10].setAnchor(false);
+
+        // Labor
+        grid[12][14].setTerrainType(TerrainType.BUILDING);
+        grid[12][14].setBuilding(new ResearchLab(this));
+        grid[12][14].setAnchor(true);
+
+        // Klonozo
+        grid[16][14].setTerrainType(TerrainType.BUILDING);
+        grid[16][14].setBuilding(new CloningFacility(this));
+        grid[16][14].setAnchor(true);
+
         try{
-            Vehicle testVehicle = new Bus(this, new Point(5,5));
+            Vehicle testVehicle = new FoodTruck(this, new Point(6,3));
+            grid[6][3].getRoad().vehicleEnters(testVehicle, RoadDirection.EAST);
             vehicles.add(testVehicle);
-        }catch (Exception e){System.err.println("error");}
+        }catch (Exception e){System.err.println("error: " + e.getMessage());}
 
-
+        this.money = 20000;
     }
 
     public Tile get(int x, int y) {

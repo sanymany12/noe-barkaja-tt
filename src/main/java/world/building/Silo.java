@@ -69,6 +69,6 @@ public class Silo extends Building<Integer,Integer> {
 
     @Override
     public String getSpriteName() {
-        return "spriteName";
+        return "building";
     }
 }

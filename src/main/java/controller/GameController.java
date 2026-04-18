@@ -4,9 +4,13 @@ import UI.ingameGUI;
 import engine.GameEngine;
 import engine.GameListener;
 import engine.TimeSpeed;
+import world.building.Building;
+import world.building.BuildingType;
+import world.building.Station;
 import world.tile.Point;
 import world.tile.Tile;
 import world.tile.TerrainType;
+import world.tile.road.RoadDirection;
 import world.vehicle.Vehicle;
 import world.vehicle.VehicleType;
 
@@ -35,8 +39,10 @@ public class GameController implements GameListener {
     private int mapWidthTiles;
     private int mapHeightTiles;
 
-    private enum BuildState { NONE, BUY_VEHICLE, BUILD_ROAD, ASSIGN_ROUTE}
+    private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION }
     public enum VehicleAction { NONE, ASSIGN_ROUTE, SELL }
+    public enum BuildingAction { NONE, BUY_VEHICLE }
+
     private BuildState currentState = BuildState.NONE;
     private VehicleType selectedVehicleType = null;
     private Vehicle routingVehicle = null;
@@ -71,25 +77,18 @@ public class GameController implements GameListener {
             {
                 currentState = BuildState.BUILD_ROAD;
                 view.getRoadToggle().setText("**Ut ikon**");
+                view.getStationToggle().setText("Megálló ikon");
 
             }
         });
-        view.getVehicleToggle().addActionListener(e -> {
-            if(currentState == BuildState.BUY_VEHICLE) {
+        view.getStationToggle().addActionListener(e -> {
+            if(currentState == BuildState.BUILD_STATION) {
                 currentState = BuildState.NONE;
-                view.getRoadToggle().setText("Jarmu ikon");
+                view.getStationToggle().setText("Megálló ikon");
             } else {
-                VehicleType selectedType = view.showVehicleSelector();
-
-                if(selectedType != null)
-                {
-                    currentState = BuildState.BUY_VEHICLE;
-                    this.selectedVehicleType = selectedType;
-
-                    view.getRoadToggle().setText("Ut ikon");
-                    view.getVehicleToggle().setText("**" + selectedVehicleType.name() + "++");
-                }
-
+                currentState = BuildState.BUILD_STATION;
+                view.getStationToggle().setText("**Megálló ikon**");
+                view.getRoadToggle().setText("Ut ikon");
             }
         });
         view.getSpeedPaused().addActionListener(e -> {
@@ -123,8 +122,8 @@ public class GameController implements GameListener {
                     currentState = BuildState.NONE;
                     selectedVehicleType = null;
                     routingVehicle = null;
-                    view.getRoadToggle().setText("Ut ikon");
-                    view.getVehicleToggle().setText("Jarmu ikon");
+                    view.getRoadToggle().setText("Út ikon");
+                    view.getStationToggle().setText("Megálló ikon");
                     return;
                 }
 
@@ -133,27 +132,63 @@ public class GameController implements GameListener {
 
                 if(currentState == BuildState.NONE && SwingUtilities.isLeftMouseButton(e))
                 {
-                    if(clickedTile != null && clickedTile.getTerrainType() == TerrainType.ROAD && clickedTile.getRoad() != null)
+                    Vehicle clickedVehicle = null;
+
+                    // Jarmure kattintas
+                    if(clickedTile != null)
                     {
-                        Vehicle clickedVehicle = clickedTile.getRoad().getRightLaneV();
-
-                        if(clickedVehicle != null)
+                        if(clickedTile.getTerrainType() == TerrainType.ROAD && clickedTile.getRoad() != null)
                         {
-                            VehicleAction action = view.showVehicleInfo(clickedVehicle);
-
-                            if(action == VehicleAction.ASSIGN_ROUTE)
-                            {
-                                currentState = BuildState.ASSIGN_ROUTE;
-                                routingVehicle = clickedVehicle;
-                                routingVehicle.clearRoute();
-                                System.out.println("Kattints BAL gombbal az utakra a megállókhoz, majd JOBB KLIKK a befejezéshez");
-                            }
-                            else if(action == VehicleAction.SELL)
-                            {
-                                // TODO
-                            }
-                            return;
+                            clickedVehicle = clickedTile.getRoad().getRightLaneV();
                         }
+                        else if(clickedTile.getTerrainType() == TerrainType.STOP && clickedTile.getBuilding() != null && clickedTile.getBuilding().getBuildingType() == BuildingType.STATION)
+                        {
+                            Station station = (Station) clickedTile.getBuilding();
+                            clickedVehicle = station.getVehicle();
+                        }
+                    }
+
+                    if(clickedVehicle != null)
+                    {
+                        VehicleAction action = view.showVehicleInfo(clickedVehicle);
+
+                        if(action == VehicleAction.ASSIGN_ROUTE)
+                        {
+                            currentState = BuildState.ASSIGN_ROUTE;
+                            routingVehicle = clickedVehicle;
+                            routingVehicle.clearRoute();
+                            System.out.println("Kattints BAL gombbal az utakra a megállókhoz, majd JOBB KLIKK a befejezéshez");
+                        }
+                        else if(action == VehicleAction.SELL)
+                        {
+                            // TODO
+                        }
+                        return;
+                    }
+
+                    // Epuletre vagy megallora kattintas
+                    if(clickedTile != null && (clickedTile.getTerrainType() == TerrainType.STOP || clickedTile.getTerrainType() == TerrainType.BUILDING))
+                    {
+                        // Info ablak es felhasznalo dontese
+                        BuildingAction action = view.showBuildingInfo(clickedTile);
+
+                        // Ha vasarolni szeretne
+                        if(action == BuildingAction.BUY_VEHICLE)
+                        {
+                            VehicleType selectedType = view.showVehicleSelector();
+
+                            if(selectedType != null)
+                            {
+                                try {
+                                    model.getBuildManager().buyVehicle(clickedTile, selectedType);
+                                    afterSpending(model.getWorld().getMoney());
+                                    view.mapRefresh();
+                                } catch (Exception ex) {
+                                    System.err.println("Hiba (jármű vásárlás): " + ex.getMessage());
+                                }
+                            }
+                        }
+                        return;
                     }
 
                     lastMouseX = e.getX();
@@ -176,14 +211,10 @@ public class GameController implements GameListener {
                     buildRoadAtScreen(e.getX(), e.getY());
                 }
 
-                //JARMU LERAKASA
-                else if(currentState == BuildState.BUY_VEHICLE && SwingUtilities.isLeftMouseButton(e))
+                // Megallo epitese
+                else if(currentState == BuildState.BUILD_STATION && SwingUtilities.isLeftMouseButton(e))
                 {
-                    try {
-                        buyVehicleAtScreen(e.getX(), e.getY(), selectedVehicleType);
-                    } catch (Exception ex) {
-                        System.err.println("Hiba jármű vásárláskor: " + ex.getMessage() );
-                    }
+                    buildStationAtScreen(e.getX(), e.getY());
                 }
             }
 
@@ -227,7 +258,7 @@ public class GameController implements GameListener {
         view.getMapPanel().addMouseWheelListener(mouseAdapter);
     }
 
-    // ESC útvonal kijelölés megszakításához
+    // ESC megszakításokhoz
     private void setupKeyboardControl()
     {
         InputMap inputMap = view.getMapPanel().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -249,8 +280,8 @@ public class GameController implements GameListener {
                     selectedVehicleType = null;
                     routingVehicle = null;
 
-                    view.getRoadToggle().setText("Ut ikon");
-                    view.getVehicleToggle().setText("Jarmu ikon");
+                    view.getRoadToggle().setText("Út ikon");
+                    view.getStationToggle().setText("Megálló ikon");
                 }
             }
         });
@@ -283,6 +314,38 @@ public class GameController implements GameListener {
         }
 
         afterSpending(model.getWorld().getMoney());
+    }
+
+    private void buildStationAtScreen(int screenX, int screenY)
+    {
+        Point gridPos = model.getCamera().screenToWorld(screenX, screenY);
+        Tile tile = model.getWorld().get(gridPos.x, gridPos.y);
+
+        if(tile != null && tile.getTerrainType() == TerrainType.LAND && tile.getBuilding() == null)
+        {
+            RoadDirection buildingDir = null;
+
+            Tile eszak = model.getWorld().get(gridPos.x, gridPos.y - 1);
+            if(eszak != null && eszak.getTerrainType() == TerrainType.BUILDING) buildingDir = RoadDirection.NORTH;
+
+            Tile del = model.getWorld().get(gridPos.x, gridPos.y + 1);
+            if(del != null && del.getTerrainType() == TerrainType.BUILDING) buildingDir = RoadDirection.SOUTH;
+
+            Tile kelet = model.getWorld().get(gridPos.x + 1, gridPos.y);
+            if(kelet != null && kelet.getTerrainType() == TerrainType.BUILDING) buildingDir = RoadDirection.EAST;
+
+            Tile nyugat = model.getWorld().get(gridPos.x - 1, gridPos.y);
+            if(nyugat != null && nyugat.getTerrainType() == TerrainType.BUILDING) buildingDir = RoadDirection.WEST;
+
+            if(buildingDir != null)
+            {
+                model.getBuildManager().buildStation(tile, buildingDir);
+                view.mapRefresh();
+                view.getMinimapPanel().getMinimap().generateImage();
+            } else {
+                System.out.println("Az ipari megállót egy épület mellé kell építeni!");
+            }
+        }
     }
 
     @Override
