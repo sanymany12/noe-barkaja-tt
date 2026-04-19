@@ -78,6 +78,8 @@ public class GameEngine {
             //a régi világot és kicseréljük az újra
             world = loadedWorld;
 
+            world.restoreWorldReferences();
+
             renderer.setWorld(world);
             minimap.setWorld(world);
             forestManager.setWorld(world);

@@ -286,6 +286,26 @@ public class World {
         }
     }
 
+    // Betöltés után world referenciák visszaállítása
+    public void restoreWorldReferences() {
+        for (int y = 0; y < getRows(); y++) {
+            for (int x = 0; x < getCols(); x++) {
+                world.tile.Tile t = get(x, y);
+                if (t != null) {
+                    if (t.getBuilding() != null) {
+                        t.getBuilding().setWorld(this);
+                    }
+                }
+            }
+        }
+
+        if (getVehicles() != null) {
+            for (world.vehicle.Vehicle v : getVehicles()) {
+                v.setWorld(this);
+            }
+        }
+    }
+
     private class PathHelper {
         public int currentMinDistance;
         public Tile currentOrigin;

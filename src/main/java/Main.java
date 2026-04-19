@@ -1,18 +1,35 @@
 import UI.ingameGUI;
+import UI.menu;
 import controller.GameController;
 import engine.GameEngine;
+import engine.AssetManager;
+import javax.swing.SwingUtilities;
 
 public class Main {
     public static void main(String[] args)
     {
-        engine.AssetManager.getInstance();
+        AssetManager.getInstance();
 
-        GameEngine model = new GameEngine();
+        SwingUtilities.invokeLater(() -> {
+            menu mainMenu = new menu();
 
-        ingameGUI view = new ingameGUI();
+            mainMenu.setStartGameListener((String loadFilePath) -> {
 
-        GameController controller = new GameController(model, view);
+                GameEngine model = new GameEngine();
+                ingameGUI view = new ingameGUI();
+                GameController controller = new GameController(model, view);
 
-        view.show();
+                if (loadFilePath != null) {
+                    model.loadGame(loadFilePath);
+                    view.setBalance(model.getWorld().getMoney());
+                    view.setDay(model.getWorld().getElapsedTime());
+                    view.mapRefresh();
+                }
+
+                view.show();
+            });
+
+            mainMenu.showMenu();
+        });
     }
 }
