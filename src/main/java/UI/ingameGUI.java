@@ -23,6 +23,8 @@ public class ingameGUI {
     private JButton roadToggle;
     private JButton stationToggle;
     private JButton speedPaused;
+    private JButton saveBtn;
+    private JButton loadBtn;
     private JButton speedNormal;
     private JButton speedFast;
     private JButton speedSuperFast;
@@ -138,7 +140,13 @@ public class ingameGUI {
         alsoPanel.add(idoPanel, BorderLayout.CENTER);
 
         JPanel lowerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        lowerPanel.add(new JButton("Mentés"));
+
+        saveBtn = new JButton("Mentés");
+        loadBtn = new JButton("Betöltés");
+
+        lowerPanel.add(saveBtn);
+        lowerPanel.add(loadBtn);
+
         JButton exitGomb = new JButton("Kilépés");
         exitGomb.addActionListener(e -> System.exit(0));
         lowerPanel.add(exitGomb);
@@ -399,6 +407,10 @@ public class ingameGUI {
     public JButton getStationToggle() { return stationToggle; }
 
     public JButton getSpeedSuperFast() { return speedSuperFast; }
+
+    public JButton getSaveBtn() { return saveBtn; }
+
+    public JButton getLoadBtn() { return loadBtn; }
 
     public void show() {
         gameWindow.setVisible(true);

@@ -20,6 +20,10 @@ public abstract class Building<In, Out> {
         this.type = null;
     }
 
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
     public BuildingType getBuildingType() {
         return this.type;
     }

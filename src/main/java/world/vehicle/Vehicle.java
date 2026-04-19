@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Vehicle {
-    transient protected final World world;
+    transient protected World world;
 
     protected Point currentPlace;
     protected RoadDirection currentDirection;
@@ -92,6 +92,10 @@ public abstract class Vehicle {
                 System.err.println("Nem található útvonal a kezdéshez: " + e.getMessage());
             }
         }
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
     }
 
     public VehicleType getVehicleType() {

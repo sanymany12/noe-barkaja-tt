@@ -28,6 +28,10 @@ import java.awt.event.MouseWheelEvent;
 import java.util.BitSet;
 import javax.swing.SwingUtilities;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+
 public class GameController implements GameListener {
 
     private final GameEngine model;
@@ -103,6 +107,8 @@ public class GameController implements GameListener {
         view.getSpeedSuperFast().addActionListener(e -> {
             model.setTimeMultiplier(TimeSpeed.SUPERFAST);
         });
+        view.getSaveBtn().addActionListener(e -> handleSaveGame());
+        view.getLoadBtn().addActionListener(e -> handleLoadGame());
     }
 
     private void setupMouseControl()
@@ -289,6 +295,46 @@ public class GameController implements GameListener {
                 }
             }
         });
+    }
+
+    private void handleSaveGame() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Játék mentése");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("JSON fájlok", "json"));
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+
+        int userSelection = fileChooser.showSaveDialog(view.getMapPanel());
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String filePath = fileToSave.getAbsolutePath();
+
+            if (!filePath.toLowerCase().endsWith(".json")) {
+                filePath += ".json";
+            }
+
+            model.saveGame(filePath);
+            System.out.println("Mentés befejezve: " + filePath);
+        }
+    }
+
+    private void handleLoadGame() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Játék betöltése");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("JSON fájlok", "json"));
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+
+        int userSelection = fileChooser.showOpenDialog(view.getMapPanel());
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToLoad = fileChooser.getSelectedFile();
+
+            model.loadGame(fileToLoad.getAbsolutePath());
+
+            view.setBalance(model.getWorld().getMoney());
+            view.setDay(model.getWorld().getElapsedTime());
+            view.mapRefresh();
+        }
     }
 
     private void buildRoadAtScreen(int screenX, int screenY)
