@@ -4,6 +4,7 @@ import engine.rendering.Camera;
 import engine.rendering.Minimap;
 import engine.rendering.Renderer;
 import world.World;
+import world.vehicle.Vehicle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -109,6 +110,16 @@ public class GameEngine {
 
     private void update() {
 
+        if (world != null && world.getVehicles() != null) {
+            for (Vehicle vehicle : world.getVehicles()) {
+                try {
+                    vehicle.update();
+                } catch (Exception ex) {
+                    System.err.println("Hiba a jármű mozgatásakor!");
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
     class TimerListener implements ActionListener {

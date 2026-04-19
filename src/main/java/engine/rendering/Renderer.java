@@ -118,18 +118,23 @@ public class Renderer {
             }
         }
 
-        for(Vehicle vehicle : world.getVehicles()){
+        for(Vehicle vehicle : world.getVehicles()) {
 
-            Point position = vehicle.getCurrentPlace();
-            Point topLeft = camera.worldToScreen(position.x, position.y);
+            // 1. Lekérjük a Jármű hajszálpontos (tizedes) pozícióját
+            double ex = vehicle.getScreenX();
+            double ey = vehicle.getScreenY();
 
-            //jobb alsó sarok
-            Point bottomRight = camera.worldToScreen(position.x +1, position.y+1);
+            // 2. Kiszámoljuk a bal felső sarkot (Már az új Camera metódust hívja!)
+            Point topLeft = camera.worldToScreen(ex, ey);
 
-            //A tényleges szélesség és magasság a két pont különbsége
+            // 3. Kiszámoljuk a jobb alsó sarkot a méretezéshez (+1 cella)
+            Point bottomRight = camera.worldToScreen(ex + 1.0, ey + 1.0);
+
+            // 4. A tényleges szélesség és magasság
             int renderWidth = (int)((bottomRight.x - topLeft.x) * vehicle.getWidth());
-            int renderHeight = (int)((bottomRight.y - topLeft.y) * vehicle.getHeight()); // megnöveljük a cella magasságát
+            int renderHeight = (int)((bottomRight.y - topLeft.y) * vehicle.getHeight());
 
+            // 5. Hozzáadás a renderelési listához
             objectsToRender.add(new RenderObj(AssetManager.get(vehicle.getSpriteName()),
                     topLeft.x, topLeft.y, renderWidth, renderHeight, bottomRight.y));
         }

@@ -76,6 +76,17 @@ public class Camera {
 
         return new Point(screenX, screenY);
     }
+
+    public Point worldToScreen(double worldX, double worldY){
+        double pixelX = worldX * TILE_WIDTH * zoom;
+        double pixelY = worldY * TILE_HEIGHT * zoom;
+
+        //Kamera eltolás (offset) és képernyő közepéhez igazítás
+        int screenX = (int) Math.round(pixelX - offsetX);
+        int screenY = (int) Math.round(pixelY - offsetY);
+
+        return new Point(screenX, screenY);
+    }
     /*
     Az előző metódus inverze. Egy kattintásnál ki lehet számolni melyik mezőt érintettük a rácson.
      */

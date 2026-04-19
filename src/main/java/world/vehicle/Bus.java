@@ -16,7 +16,7 @@ public class Bus extends Vehicle {
     public Bus(World world, Point p) throws Exception {
         super(world, p);
 
-        this.speed = 1;
+
         this.capacity = 10;
         this.costToOperate = 10;
 

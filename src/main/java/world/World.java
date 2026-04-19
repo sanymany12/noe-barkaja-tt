@@ -159,10 +159,6 @@ public class World {
     public void newDay() throws Exception {
         this.elapsedTime = this.elapsedTime + 1;
 
-        for (int i = 0; i < this.vehicles.size(); i++) {
-            this.vehicles.get(i).move();
-        }
-
         Set<Building> updatedBuildings = new HashSet<>();
         for(int i = 0; i < cols; i++)
         {
@@ -255,8 +251,11 @@ public class World {
                             Tile startRoad = (((BusStop) (start.getBuilding())).getConnectedRoad());
                             Tile stopRoad = (((BusStop) (stop.getBuilding())).getConnectedRoad());
                             List<Point> path = findPathRoad(startRoad, stopRoad);
-                            path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
-                            path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            if(path != null){
+                                path.addFirst(new Point(startRoad.getCoordinate().x, startRoad.getCoordinate().y));
+                                path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
+                                path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            }
                             return path;
                         }
                     }
@@ -272,8 +271,11 @@ public class World {
                             Tile startRoad = (((Station) (start.getBuilding())).getConnectedRoad());
                             Tile stopRoad = (((Station) (stop.getBuilding())).getConnectedRoad());
                             List<Point> path = findPathRoad(startRoad, stopRoad);
-                            path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
-                            path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            if(path != null){
+                                path.addFirst(new Point(startRoad.getCoordinate().x, startRoad.getCoordinate().y));
+                                path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
+                                path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            }
                             return path;
                         }
                     }
@@ -297,7 +299,7 @@ public class World {
 
     public boolean isValidTile(int x, int y) {
         if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
-            return true;
+            return false;
         }
         return true;
     }
