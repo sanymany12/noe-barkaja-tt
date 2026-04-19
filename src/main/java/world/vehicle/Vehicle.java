@@ -77,10 +77,13 @@ public abstract class Vehicle {
 
     public void startRoute()
     {
-        if (this.routeStops.size() >= 2)
+        if (!this.routeStops.isEmpty())
         {
-            this.stopIndex = 1;
+            this.stopIndex = 0;
             this.movingForward = true;
+            if (this.routeStops.get(routeStops.size() - 1) == this.world.get(this.currentPlace.x, this.currentPlace.y)) {
+                this.isOnTour = true;
+            }
             try {
                 findPath(this.routeStops.get(this.stopIndex));
             } catch (Exception e)
@@ -133,10 +136,12 @@ public abstract class Vehicle {
     }
 
     public void move() throws Exception {
+        // Úton a következő megállóba
         if (!this.path.isEmpty()) {
             Point nextTile = this.path.removeFirst();
 
             // Jármű elhagyja a jelenlegi tile-t
+            // Amennyiben megállóban van:
             if (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding() != null) {
                 switch (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding().getBuildingType()) {
                     case BuildingType.STATION:
@@ -148,6 +153,7 @@ public abstract class Vehicle {
                     default:
                         break;
                 }
+            // Amennyiben úton van
             } else if (world.get(currentPlace.x, currentPlace.y).getRoad() != null) {
                 this.world.get(currentPlace.x, currentPlace.y).getRoad().vehicleLeaves(this, this.currentDirection);
             }
@@ -213,25 +219,31 @@ public abstract class Vehicle {
 
             // Jármű pozíciójának frissítése
             this.currentPlace = nextTile;
-        }
-        else if(this.routeStops.size() >= 2)
-        {
-            if(movingForward)
-            {
-                stopIndex++;
-                if(stopIndex >= routeStops.size())
-                {
-                    movingForward = false;
-                    stopIndex = routeStops.size() - 2;
-                }
-            } else {
-                stopIndex--;
-                if(stopIndex < 0)
-                {
-                    movingForward = true;
-                    stopIndex = 1;
-                }
+        // Ha elfogyott az út és nem üres a megállók listája
+        } else if (!this.routeStops.isEmpty()) {
+            // Ha van még hátralevő megállónk, léptetjük a stopIndexet
+            if (this.stopIndex + 1 < this.routeStops.size()) {
+                this.stopIndex++;
+            // Ha nincs, de körúton van, visszaállítjuk a StopIndexet az elsőre
+            } else if (this.isOnTour) {
+                this.stopIndex = 0;
             }
+//            if(movingForward)
+//            {
+//                stopIndex++;
+//                if(stopIndex >= routeStops.size())
+//                {
+//                    movingForward = false;
+//                    stopIndex = routeStops.size() - 2;
+//                }
+//            } else {
+//                stopIndex--;
+//                if(stopIndex < 0)
+//                {
+//                    movingForward = true;
+//                    stopIndex = 1;
+//                }
+//            }
 
             try {
                 findPath(this.routeStops.get(stopIndex));

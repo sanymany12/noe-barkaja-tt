@@ -26,7 +26,7 @@ public class World {
     private BusStop stop;
     private int daysSinceBusRoute;
 
-    private final int DAYS_UNTIL_NEW_BUS_ROUTE = 7;
+    private final int DAYS_UNTIL_NEW_BUS_ROUTE = 50;
 
     public World(int rows, int cols) {
         this.rows = rows;
@@ -225,6 +225,7 @@ public class World {
                     Tile newCurrentKey = pathfinder.get(currentKey).currentOrigin;
                     currentKey = newCurrentKey;
                 }
+                path.add(new Point(start.getCoordinate().x, start.getCoordinate().y));
                 Collections.reverse(path);
                 return path;
             } else {
@@ -255,7 +256,7 @@ public class World {
                             Tile startRoad = (((BusStop) (start.getBuilding())).getConnectedRoad());
                             Tile stopRoad = (((BusStop) (stop.getBuilding())).getConnectedRoad());
                             List<Point> path = findPathRoad(startRoad, stopRoad);
-                            path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
+                            // path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
                             path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
                             return path;
                         }
@@ -272,7 +273,7 @@ public class World {
                             Tile startRoad = (((Station) (start.getBuilding())).getConnectedRoad());
                             Tile stopRoad = (((Station) (stop.getBuilding())).getConnectedRoad());
                             List<Point> path = findPathRoad(startRoad, stopRoad);
-                            path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
+                            // path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
                             path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
                             return path;
                         }
