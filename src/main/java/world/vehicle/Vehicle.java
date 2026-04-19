@@ -9,6 +9,7 @@ import world.resources.ICargo;
 import world.tile.Point;
 import world.tile.TerrainType;
 import world.tile.Tile;
+import world.tile.road.Road;
 import world.tile.road.RoadDirection;
 
 import java.awt.*;
@@ -138,87 +139,139 @@ public abstract class Vehicle {
     public void move() throws Exception {
         // Úton a következő megállóba
         if (!this.path.isEmpty()) {
-            Point nextTile = this.path.removeFirst();
-
-            // Jármű elhagyja a jelenlegi tile-t
-            // Amennyiben megállóban van:
-            if (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding() != null) {
-                switch (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding().getBuildingType()) {
+            // Ellenőrizzük, hogy mehet-e előre
+            boolean canGoOn = true;
+            if (this.world.get(this.path.getFirst().x, this.path.getFirst().y).getBuilding() != null) {
+                switch (world.get(this.path.getFirst().x, this.path.getFirst().y).getBuilding().getBuildingType()) {
                     case BuildingType.STATION:
-                        ((Station) (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding())).vehicleLeaves();
+                        if (((Station) world.get(this.path.getFirst().x, this.path.getFirst().y).getBuilding()).isOccupied()) {
+                            canGoOn = false;
+                        }
                         break;
                     case BuildingType.BUSSTOP:
-                        ((BusStop) (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding())).vehicleLeaves();
+                        if (((BusStop) world.get(this.path.getFirst().x, this.path.getFirst().y).getBuilding()).isOccupied()) {
+                            canGoOn = false;
+                        }
                         break;
                     default:
                         break;
                 }
-            // Amennyiben úton van
-            } else if (world.get(currentPlace.x, currentPlace.y).getRoad() != null) {
-                this.world.get(currentPlace.x, currentPlace.y).getRoad().vehicleLeaves(this, this.currentDirection);
+            } else if (this.world.get(this.path.getFirst().x, this.path.getFirst().y).getRoad() != null) {
+                // Kiszámoljuk, milyen irányba halad éppen
+                int relativeX = this.currentPlace.x - this.path.getFirst().x;
+                int relativeY = this.currentPlace.y - this.path.getFirst().y;
+
+                RoadDirection nextDirection = RoadDirection.NORTH;
+
+                // Kiszámoljuk a jármű következő irányát
+                switch (relativeX) {
+                    case -1:
+                        nextDirection = RoadDirection.EAST;
+                        break;
+                    case 0:
+                        switch (relativeY) {
+                            case -1:
+                                nextDirection = RoadDirection.SOUTH;
+                                break;
+                            case 1:
+                                nextDirection = RoadDirection.NORTH;
+                                break;
+                        }
+                        break;
+                    case 1:
+                        nextDirection = RoadDirection.WEST;
+                        break;
+                }
+
+                if (this.world.get(this.path.getFirst().x, this.path.getFirst().y).getRoad().isOccupied(nextDirection)) {
+                    canGoOn = false;
+                }
             }
 
-            int relativeX = this.currentPlace.x - nextTile.x;
-            int relativeY = this.currentPlace.y - nextTile.y;
+            if (canGoOn) {
+                Point nextTile = this.path.removeFirst();
 
-            // Kiszámoljuk a jármű irányát
-            switch (relativeX) {
-                case -1:
-                    this.currentDirection = RoadDirection.EAST;
-                    break;
-                case 0:
-                    switch (relativeY) {
-                        case -1:
-                            this.currentDirection = RoadDirection.SOUTH;
+                // Jármű elhagyja a jelenlegi tile-t
+                // Amennyiben megállóban van:
+                if (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding() != null) {
+                    switch (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding().getBuildingType()) {
+                        case BuildingType.STATION:
+                            ((Station) (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding())).vehicleLeaves();
                             break;
-                        case 1:
-                            this.currentDirection = RoadDirection.NORTH;
+                        case BuildingType.BUSSTOP:
+                            ((BusStop) (world.get(this.currentPlace.x, this.currentPlace.y).getBuilding())).vehicleLeaves();
+                            break;
+                        default:
                             break;
                     }
-                    break;
-                case 1:
-                    this.currentDirection = RoadDirection.WEST;
-                    break;
-            }
+                    // Amennyiben úton van
+                } else if (world.get(currentPlace.x, currentPlace.y).getRoad() != null) {
+                    this.world.get(currentPlace.x, currentPlace.y).getRoad().vehicleLeaves(this, this.currentDirection);
+                }
 
-            // Kiszámoljuk a jármű megjelenítésének arányát
-            switch (this.currentDirection) {
-                case RoadDirection.NORTH:
-                    this.width = 0.5F;
-                    this.height = 0.5F;
-                    break;
-                case RoadDirection.SOUTH:
-                    this.width = 0.5F;
-                    this.height = 0.5F;
-                    break;
-                case RoadDirection.EAST:
-                    this.width = 0.75F;
-                    this.height = 0.5F;
-                    break;
-                case RoadDirection.WEST:
-                    this.width = 0.75F;
-                    this.height = 0.5F;
-                    break;
-            }
+                int relativeX = this.currentPlace.x - nextTile.x;
+                int relativeY = this.currentPlace.y - nextTile.y;
 
-            // Jármű megérkezik a következő tile-re
-            if (world.get(nextTile.x, nextTile.y).getBuilding() != null) {
-                switch (world.get(nextTile.x, nextTile.y).getBuilding().getBuildingType()) {
-                    case BuildingType.STATION:
-                        ((Station) (world.get(nextTile.x, nextTile.y).getBuilding())).vehicleArrives(this);
+                // Kiszámoljuk a jármű irányát
+                switch (relativeX) {
+                    case -1:
+                        this.currentDirection = RoadDirection.EAST;
                         break;
-                    case BuildingType.BUSSTOP:
-                        ((BusStop) (world.get(nextTile.x, nextTile.y).getBuilding())).vehicleArrives(this);
+                    case 0:
+                        switch (relativeY) {
+                            case -1:
+                                this.currentDirection = RoadDirection.SOUTH;
+                                break;
+                            case 1:
+                                this.currentDirection = RoadDirection.NORTH;
+                                break;
+                        }
                         break;
-                    default:
+                    case 1:
+                        this.currentDirection = RoadDirection.WEST;
                         break;
                 }
-            } else if (world.get(nextTile.x, nextTile.y).getRoad() != null) {
-                this.world.get(nextTile.x, nextTile.y).getRoad().vehicleEnters(this, this.currentDirection);
+
+                // Kiszámoljuk a jármű megjelenítésének arányát
+                switch (this.currentDirection) {
+                    case RoadDirection.NORTH:
+                        this.width = 0.5F;
+                        this.height = 0.5F;
+                        break;
+                    case RoadDirection.SOUTH:
+                        this.width = 0.5F;
+                        this.height = 0.5F;
+                        break;
+                    case RoadDirection.EAST:
+                        this.width = 0.75F;
+                        this.height = 0.5F;
+                        break;
+                    case RoadDirection.WEST:
+                        this.width = 0.75F;
+                        this.height = 0.5F;
+                        break;
+                }
+
+                // Jármű megérkezik a következő tile-re
+                if (world.get(nextTile.x, nextTile.y).getBuilding() != null) {
+                    switch (world.get(nextTile.x, nextTile.y).getBuilding().getBuildingType()) {
+                        case BuildingType.STATION:
+                            ((Station) (world.get(nextTile.x, nextTile.y).getBuilding())).vehicleArrives(this);
+                            break;
+                        case BuildingType.BUSSTOP:
+                            ((BusStop) (world.get(nextTile.x, nextTile.y).getBuilding())).vehicleArrives(this);
+                            break;
+                        default:
+                            break;
+                    }
+                } else if (world.get(nextTile.x, nextTile.y).getRoad() != null) {
+                    this.world.get(nextTile.x, nextTile.y).getRoad().vehicleEnters(this, this.currentDirection);
+                }
+
+                // Jármű pozíciójának frissítése
+                this.currentPlace = nextTile;
             }
 
-            // Jármű pozíciójának frissítése
-            this.currentPlace = nextTile;
         // Ha elfogyott az út és nem üres a megállók listája
         } else if (!this.routeStops.isEmpty()) {
             // Ha van még hátralevő megállónk, léptetjük a stopIndexet

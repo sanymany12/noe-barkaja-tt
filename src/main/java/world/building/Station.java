@@ -92,7 +92,7 @@ public class Station extends Building<Object, Object> {
     }
 
     public boolean isOccupied() {
-        return this.vehicle == null;
+        return this.vehicle != null;
     }
 
     public Vehicle getVehicle() {
