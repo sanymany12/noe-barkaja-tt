@@ -44,6 +44,9 @@ public class Station extends Building<Object, Object> {
 
     public void vehicleArrives(Vehicle vehicle) throws Exception {
         this.vehicle = vehicle;
+
+        if(this.vehicle == null) return;
+
         switch (this.vehicle.getVehicleType()) {
             case VehicleType.FOODTRUCK:
                 switch (this.building.getBuildingType()) {
@@ -99,7 +102,10 @@ public class Station extends Building<Object, Object> {
     @Override
     // Újra triggereljük a járműérkezést, ha esetleg valami termelés történt volna???
     public void newDay() throws Exception {
-        this.vehicleArrives(this.vehicle);
+        if(this.vehicle != null)
+        {
+            this.vehicleArrives(this.vehicle);
+        }
     }
 
     @Override

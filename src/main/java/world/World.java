@@ -158,9 +158,29 @@ public class World {
 
     public void newDay() throws Exception {
         this.elapsedTime = this.elapsedTime + 1;
+
         for (int i = 0; i < this.vehicles.size(); i++) {
             this.vehicles.get(i).move();
         }
+
+        Set<Building> updatedBuildings = new HashSet<>();
+        for(int i = 0; i < cols; i++)
+        {
+            for(int j = 0; j < rows; j++)
+            {
+                Tile t = grid[i][j];
+                if(t != null && t.getBuilding() != null)
+                {
+                    Building b = t.getBuilding();
+                    if(!updatedBuildings.contains(b))
+                    {
+                        b.newDay();
+                        updatedBuildings.add(b);
+                    }
+                }
+            }
+        }
+
         this.daysSinceBusRoute++;
         if (this.daysSinceBusRoute >= this.DAYS_UNTIL_NEW_BUS_ROUTE && !(this.start == null && this.stop != null)) {
             //this.setBusRoute();

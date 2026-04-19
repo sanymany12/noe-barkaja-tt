@@ -7,6 +7,8 @@ import world.vehicle.Vehicle;
 import world.vehicle.VehicleType;
 import controller.GameController.VehicleAction;
 import controller.GameController.BuildingAction;
+import world.building.*;
+import world.vehicle.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -217,7 +219,38 @@ public class ingameGUI {
 
         String infoText = "<html><h2 style='text-align:center;'>Információ az épületről</h2><br><center>";
         if (tile.getBuilding() != null) {
-            infoText += "<b>Típus:</b> " + tile.getBuilding().getBuildingType().name() + "<br>";
+            Building b = tile.getBuilding();
+            infoText += "<b>Típus:</b> " + b.getBuildingType().name() + "<br><br>";
+
+            if (b instanceof Farm) {
+                Farm farm = (Farm) b;
+                infoText += "<b>Tárolt gabona:</b> " + farm.getGrainMade() + " / " + farm.getCapacity() + "<br>";
+                infoText += createProgressBar(farm.getGrainMade(), farm.getCapacity());
+            }
+            else if (b instanceof Silo) {
+                Silo silo = (Silo) b;
+                int maxCap = silo.getNumOfFood() + silo.getRemainingCapacity();
+                infoText += "<b>Tárolt étel:</b> " + silo.getNumOfFood() + " / " + maxCap + "<br>";
+                infoText += createProgressBar(silo.getNumOfFood(), maxCap);
+            }
+            else if (b instanceof AgriculturalPlant) {
+                AgriculturalPlant plant = (AgriculturalPlant) b;
+                infoText += "<b>Bemenet (Gabona):</b> " + plant.getIncomingGrain() + " / " + plant.getCapacityIn() + "<br>";
+                infoText += createProgressBar(plant.getIncomingGrain(), plant.getCapacityIn()) + "<br><br>";
+                infoText += "<b>Kimenet (Étel):</b> " + plant.getOutgoingFood() + " / " + plant.getCapacityOut() + "<br>";
+                infoText += createProgressBar(plant.getOutgoingFood(), plant.getCapacityOut());
+            }
+            else if (b instanceof Enclosure) {
+                Enclosure enc = (Enclosure) b;
+                infoText += "<b>Faj:</b> " + (enc.getSpecies() != null ? enc.getSpecies().name() : "Üres") + "<br>";
+                infoText += "<b>Állatok száma:</b> " + enc.getNumOfAnimals() + " / 200<br>";
+                infoText += createProgressBar(enc.getNumOfAnimals(), 200);
+            }
+            else if (b instanceof City) {
+                City city = (City) b;
+                infoText += "<b>Rendelés alatt:</b> " + (city.hasOrder() ? city.getOrderedAmount() + " db " + city.getOrderedAnimal().name() : "Nincs") + "<br>";
+            }
+
         }
         infoText += "</center></html>";
 
@@ -269,10 +302,25 @@ public class ingameGUI {
         leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
 
         String infoText = "<html><h3>Információ a járműről:</h3>"
-                + "Sebesség: " + v.getSpeed() + "<br>"
-                + "Kapacitás: " + v.getCapacity() + "<br>"
-                + (v.getCargoType() != null ? "Rakomány: " + v.getCargoType() : "Rakomány: Üres")
-                + "</html>";
+                + "<b>Sebesség:</b> " + v.getSpeed() + "<br>"
+                + "<b>Kapacitás:</b> " + v.getCapacity() + "<br><br>";
+
+        if (v instanceof FoodTruck) {
+            FoodTruck ft = (FoodTruck) v;
+            infoText += "<b>Rakomány:</b> " + (ft.getCargoType() != null ? ft.getCargoType() : "Üres") + "<br>";
+            infoText += "<b>Mennyiség:</b> " + ft.getCurrentCargoNum() + " / " + ft.getCapacity() + "<br>";
+            infoText += createProgressBar(ft.getCurrentCargoNum(), ft.getCapacity());
+        }
+        else if (v instanceof AnimalTruck) {
+            infoText += "<b>Szállított állat:</b> " + (v.getCargoType() != null ? v.getCargoType() : "Üres") + "<br>";
+            infoText += "<b>Férőhely:</b> " + (v.isEmpty() ? "0" : "1") + " / 1<br>";
+            infoText += createProgressBar(v.isEmpty() ? 0 : 1, 1);
+        }
+        else if (v instanceof Bus) {
+            infoText += "<b>Utasok:</b> " + (v.isEmpty() ? "Üres" : (v.isFull() ? "Tele" : "Van rajta utas")) + "<br>";
+        }
+        infoText += "</html>";
+
         JLabel infoLabel = new JLabel(infoText);
         infoLabel.setVerticalAlignment(SwingConstants.TOP);
         infoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
@@ -312,6 +360,20 @@ public class ingameGUI {
 
         dialog.setVisible(true);
         return tempVehicleAction;
+    }
+
+    private String createProgressBar(int current, int max) {
+        if (max <= 0) return "[Hiba: Max 0]";
+        int bars = 20;
+        int filled = (int) (((double) current / max) * bars);
+
+        StringBuilder sb = new StringBuilder("<span style='font-family: monospace; letter-spacing: 0px;'>[");
+        for (int i = 0; i < bars; i++) {
+            if (i < filled) sb.append("<font color='green'>|</font>");
+            else sb.append("<font color='gray'>.</font>");
+        }
+        sb.append("]</span>");
+        return sb.toString();
     }
 
     public void setDay(int day) {
