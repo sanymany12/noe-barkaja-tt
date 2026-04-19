@@ -141,7 +141,7 @@ public class AssetManager {
         loadAsset("animaltruck-w-capybara", "/assets-final/animal-truck-left-side-capybara.png");
         loadAsset("animaltruck-w-cat", "/assets-final/animal-truck-left-side-cat.png");
         loadAsset("animaltruck-w-fish", "/assets-final/animal-truck-left-side-fish.png");
-        loadAsset("animaltruck-w-guineapig", "assets-final/animal-truck-left-side-guineapig.png");
+        loadAsset("animaltruck-w-guineapig", "/assets-final/animal-truck-left-side-guineapig.png");
         loadAsset("animaltruck-w-horse", "/assets-final/animal-truck-left-side-horse.png");
         loadAsset("animaltruck-w-pig", "/assets-final/animal-truck-left-side-pig.png");
         loadAsset("animaltruck-w-racoon", "/assets-final/animal-truck-left-side-racoon.png");
@@ -152,7 +152,7 @@ public class AssetManager {
         loadAsset("animaltruck-e-capybara", "/assets-final/animal-truck-right-side-capybara.png");
         loadAsset("animaltruck-e-cat", "/assets-final/animal-truck-right-side-cat.png");
         loadAsset("animaltruck-e-fish", "/assets-final/animal-truck-right-side-fish.png");
-        loadAsset("animaltruck-e-guineapig", "assets-final/animal-truck-right-side-guineapig.png");
+        loadAsset("animaltruck-e-guineapig", "/assets-final/animal-truck-right-side-guineapig.png");
         loadAsset("animaltruck-e-horse", "/assets-final/animal-truck-right-side-horse.png");
         loadAsset("animaltruck-e-pig", "/assets-final/animal-truck-right-side-pig.png");
         loadAsset("animaltruck-e-racoon", "/assets-final/animal-truck-right-side-racoon.png");

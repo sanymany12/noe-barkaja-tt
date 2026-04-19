@@ -51,6 +51,37 @@ public class Road {
         return this.leftLaneH;
     }
 
+    public boolean isOccupied (RoadDirection dir) {
+        switch (dir) {
+            case RoadDirection.NORTH:
+                if (!(this.rightLaneV == null && this.rightLaneH == null && this.leftLaneH == null)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case RoadDirection.SOUTH:
+                if (!(this.leftLaneV == null && this.leftLaneH == null && this.rightLaneH == null)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case RoadDirection.EAST:
+                if (!(this.leftLaneH == null && this.rightLaneV == null && this.leftLaneV == null)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case RoadDirection.WEST:
+                if (!(this.rightLaneH == null && this.leftLaneV == null && this.rightLaneV == null)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            default:
+                return true;
+        }
+    }
+
     // Jármű érkezése sávkezeléssel
     public void vehicleEnters(Vehicle vehicle, RoadDirection vehicleDirection) {
         switch (vehicleDirection) {

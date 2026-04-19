@@ -47,6 +47,10 @@ public class BusStop extends Building<Integer,Integer> {
         return this.isStop;
     }
 
+    public boolean isOccupied() {
+        return this.vehicle != null;
+    }
+
     public int getNumOfPeople() {
         return this.numOfPeople;
     }
