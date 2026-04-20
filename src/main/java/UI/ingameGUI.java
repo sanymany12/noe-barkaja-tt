@@ -213,7 +213,7 @@ public class ingameGUI {
     {
         tempBuildingAction = BuildingAction.NONE;
 
-        JDialog dialog = new JDialog(gameWindow, "Building info", true);
+        JDialog dialog = new JDialog(gameWindow, "Épület információk", true);
         dialog.setSize(600, 300);
         dialog.setLayout(new BorderLayout(10, 10));
         dialog.setLocationRelativeTo(gameWindow);
@@ -257,6 +257,49 @@ public class ingameGUI {
             else if (b instanceof City) {
                 City city = (City) b;
                 infoText += "<b>Rendelés alatt:</b> " + (city.hasOrder() ? city.getOrderedAmount() + " db " + city.getOrderedAnimal().name() : "Nincs") + "<br>";
+            }
+            else if (b instanceof CloningFacility) {
+                CloningFacility cf = (CloningFacility) b;
+                String animalName = cf.hasAnimal() ? cf.getAnimalType().name() : "Nincs";
+
+                infoText += "<b>Klónozott faj:</b> " + animalName + "<br>";
+                infoText += "<b>Tárolt klónok:</b> " + cf.getAnimalsMade() + " / " + cf.getCapacity() + "<br>";
+                infoText += createProgressBar(cf.getAnimalsMade(), cf.getCapacity()) + "<br><br>";
+
+                if (cf.isCloning()) {
+                    infoText += "<b>Folyamat:</b> " + cf.getDaysSinceStarted() + " / " + cf.getDaysToClone() + " nap<br>";
+                    infoText += createProgressBar(cf.getDaysSinceStarted(), cf.getDaysToClone());
+                } else {
+                    if(cf.getAnimalsMade() >= cf.getCapacity()) {
+                        infoText += "<b>Állapot:</b> <font color='red'>A tároló megtelt!</font><br>";
+                    } else if (cf.hasAnimal()) {
+                        infoText += "<b>Állapot:</b> Klónozásra kész.<br>";
+                    } else {
+                        infoText += "<b>Állapot:</b> Várakozás DNS mintára<br>";
+                    }
+                }
+            }
+            else if (b instanceof ResearchLab) {
+                ResearchLab rl = (ResearchLab) b;
+                String anim1 = rl.getReceivedAnimal1() != null ? rl.getReceivedAnimal1().name() : "Üres";
+                String anim2 = rl.getReceivedAnimal2() != null ? rl.getReceivedAnimal2().name() : "Üres";
+                String discovered = rl.getDiscoveredAnimal() != null ? rl.getDiscoveredAnimal().name() : "Nincs";
+
+                infoText += "<b>Alany 1:</b> " + anim1 + "<br>";
+                infoText += "<b>Alany 2:</b> " + anim2 + "<br><br>";
+
+                if (rl.isResearchHappening()) {
+                    infoText += "<b>Kutatás folyamatban:</b> " + rl.getDaysSinceResearchStarted() + " / " + rl.getResearchDays() + " nap<br>";
+                    infoText += createProgressBar(rl.getDaysSinceResearchStarted(), rl.getResearchDays()) + "<br><br>";
+                } else {
+                    infoText += "<b>Kutatás állapota:</b> Inaktív<br><br>";
+                }
+
+                if (rl.getDiscoveredAnimal() != null) {
+                    infoText += "<b>Eredmény:</b> <font color='green'>Felfedezve: " + discovered + "</font><br>";
+                } else {
+                    infoText += "<b>Eredmény:</b> Még nincs felfedezés<br>";
+                }
             }
 
         }
