@@ -42,8 +42,11 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
 
     // állat érkezésének lekezelése
     // igaz, ha be tudtuk fogadni az állatot, hamis, ha nem
+    // olyan állatot nem fogad be, amit ő fejlesztett ki
     public boolean receiveAnimal(AnimalType animal) {
-        if (this.receivedAnimal1 == null) {
+        if (animal == AnimalType.CAPYBARA || animal == AnimalType.GUINEAPIG || animal == AnimalType.RACOON || animal == AnimalType.SEAHORSE) {
+            return false;
+        } else if (this.receivedAnimal1 == null) {
             this.receivedAnimal1 = animal;
             return true;
         } else if (this.receivedAnimal1 != animal && this.receivedAnimal2 == null) {
@@ -167,6 +170,7 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
         if (this.daysSinceResearchStarted == this.RESEARCH_DAYS) {
             this.compatibilityTest();
             this.researchHappening = false;
+            this.daysSinceResearchStarted = 0;
         }
     }
 

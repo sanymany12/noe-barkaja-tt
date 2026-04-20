@@ -193,9 +193,9 @@ public class World {
                 if(t != null && t.getBuilding() != null)
                 {
                     Building b = t.getBuilding();
-                    b.newDay();
                     if(!updatedBuildings.contains(b))
                     {
+                        b.newDay();
                         updatedBuildings.add(b);
                     }
                 }
