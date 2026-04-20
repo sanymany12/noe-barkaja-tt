@@ -49,6 +49,7 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
 
     public void newSpeciesArrives(AnimalType a) {
         this.species = a;
+        this.numOfAnimals = 1;
     }
 
     public void receiveAnimal() {
