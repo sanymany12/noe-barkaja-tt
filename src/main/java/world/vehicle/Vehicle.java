@@ -123,7 +123,7 @@ public abstract class Vehicle {
     }
 
     public boolean isEmpty() {
-        if (this.cargoNum == 0) {
+        if (this.cargoNum == 0 && this.cargoType == null) {
             return true;
         }
         else {

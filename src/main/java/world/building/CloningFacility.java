@@ -52,6 +52,7 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
         if (this.receivedAnimal == null) {
             this.receivedAnimal = animal;
             this.animalsMade = 1;
+            this.startCloning();
             return true;
         } else {
             return false;

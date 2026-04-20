@@ -48,6 +48,7 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
             return true;
         } else if (this.receivedAnimal1 != animal && this.receivedAnimal2 == null) {
             this.receivedAnimal2 = animal;
+            this.startResearch();
             return true;
         } else {
             return false;

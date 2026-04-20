@@ -2,6 +2,7 @@ package world;
 
 import engine.BuildManager;
 import world.building.*;
+import world.resources.AnimalType;
 import world.tile.*;
 import world.tile.road.RoadDirection;
 import world.vehicle.*;
@@ -95,6 +96,25 @@ public class World {
         grid[4][10].setBuilding(new Farm(this));
         grid[4][10].setAnchor(true);
 
+        // Másik siló
+        Silo testSilo2 = new Silo(this);
+        grid[11][5].setTerrainType(TerrainType.BUILDING);
+        grid[11][5].setBuilding(testSilo2);
+        grid[11][5].setAnchor(true);
+
+        // Másik enclosure
+        Enclosure testEnclosure2 = new Enclosure(this, testSilo2);
+        testEnclosure2.newSpeciesArrives(AnimalType.BEAR);
+        testEnclosure2.receiveAnimal();
+        testEnclosure2.receiveAnimal();
+        grid[12][5].setTerrainType(TerrainType.BUILDING);
+        grid[12][5].setBuilding(testEnclosure2);
+        grid[12][5].setAnchor(true);
+
+        grid[13][5].setTerrainType(TerrainType.BUILDING);
+        grid[13][5].setBuilding(testEnclosure2);
+        grid[13][5].setAnchor(false);
+
         // Silo
         Silo testSilo = new Silo(this);
         grid[8][10].setTerrainType(TerrainType.BUILDING);
@@ -108,6 +128,7 @@ public class World {
 
         // Allathely
         Enclosure testEnclosure = new Enclosure(this, testSilo);
+        testEnclosure.newSpeciesArrives(AnimalType.CAT);
         grid[12][10].setTerrainType(TerrainType.BUILDING);
         grid[12][10].setBuilding(testEnclosure);
         grid[12][10].setAnchor(true);
@@ -172,9 +193,9 @@ public class World {
                 if(t != null && t.getBuilding() != null)
                 {
                     Building b = t.getBuilding();
+                    b.newDay();
                     if(!updatedBuildings.contains(b))
                     {
-                        b.newDay();
                         updatedBuildings.add(b);
                     }
                 }
