@@ -92,4 +92,24 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
     public String getSpriteName() {
         return "building";
     }
+
+    public int getAnimalsMade() {
+        return this.animalsMade;
+    }
+
+    public int getCapacity() {
+        return this.CAPACITY;
+    }
+
+    public boolean isCloning() {
+        return this.isCloning;
+    }
+
+    public int getDaysSinceStarted() {
+        return this.daysSinceStarted;
+    }
+
+    public int getDaysToClone() {
+        return this.DAYS_TO_CLONE;
+    }
 }

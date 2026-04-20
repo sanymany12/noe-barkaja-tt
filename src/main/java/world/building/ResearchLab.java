@@ -174,4 +174,24 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
     public String getSpriteName() {
         return "building";
     }
+
+    public AnimalType getReceivedAnimal1() {
+        return this.receivedAnimal1;
+    }
+
+    public AnimalType getReceivedAnimal2() {
+        return this.receivedAnimal2;
+    }
+
+    public boolean isResearchHappening() {
+        return this.researchHappening;
+    }
+
+    public int getDaysSinceResearchStarted() {
+        return this.daysSinceResearchStarted;
+    }
+
+    public int getResearchDays() {
+        return this.RESEARCH_DAYS;
+    }
 }
