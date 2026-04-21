@@ -10,6 +10,7 @@ import world.building.Station;
 import world.tile.Point;
 import world.tile.Tile;
 import world.tile.TerrainType;
+import world.tile.road.Road;
 import world.tile.road.RoadDirection;
 import world.vehicle.Vehicle;
 import world.vehicle.VehicleType;
@@ -25,12 +26,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
 import java.util.BitSet;
 import javax.swing.SwingUtilities;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.util.List;
 
 public class GameController implements GameListener {
 
@@ -50,6 +53,7 @@ public class GameController implements GameListener {
     private BuildState currentState = BuildState.NONE;
     private VehicleType selectedVehicleType = null;
     private Vehicle routingVehicle = null;
+    private List<Tile> tempRouteStops = new ArrayList<>();
 
     public GameController(GameEngine model, ingameGUI view)
     {
@@ -121,8 +125,16 @@ public class GameController implements GameListener {
                 {
                     if(currentState == BuildState.ASSIGN_ROUTE && routingVehicle != null)
                     {
-                        routingVehicle.startRoute();
-                        System.out.println("Útvonal véglegesítve");
+                        if (!tempRouteStops.isEmpty()) {
+                            routingVehicle.clearRoute();
+                            for(Tile stop : tempRouteStops) {
+                                routingVehicle.addRouteStop(stop);
+                            }
+                            routingVehicle.startRoute();
+                            System.out.println("Útvonal véglegesítve");
+                        } else {
+                            System.out.println("Útvonal kijelölése megszakadt, a régi útvonal marad.");
+                        }
                     }
 
                     currentState = BuildState.NONE;
@@ -145,7 +157,11 @@ public class GameController implements GameListener {
                     {
                         if(clickedTile.getTerrainType() == TerrainType.ROAD && clickedTile.getRoad() != null)
                         {
-                            clickedVehicle = clickedTile.getRoad().getRightLaneV();
+                            Road r = clickedTile.getRoad();
+                            if (r.getRightLaneV() != null) clickedVehicle = r.getRightLaneV();
+                            else if (r.getLeftLaneV() != null) clickedVehicle = r.getLeftLaneV();
+                            else if (r.getRightLaneH() != null) clickedVehicle = r.getRightLaneH();
+                            else if (r.getLeftLaneH() != null) clickedVehicle = r.getLeftLaneH();
                         }
                         else if(clickedTile.getTerrainType() == TerrainType.STOP && clickedTile.getBuilding() != null && clickedTile.getBuilding().getBuildingType() == BuildingType.STATION)
                         {
@@ -162,7 +178,7 @@ public class GameController implements GameListener {
                         {
                             currentState = BuildState.ASSIGN_ROUTE;
                             routingVehicle = clickedVehicle;
-                            routingVehicle.clearRoute();
+                            tempRouteStops.clear();
                             System.out.println("Kattints BAL gombbal a MEGÁLLÓKRA, majd JOBB KLIKK a befejezéshez");
                         }
                         else if(action == VehicleAction.SELL)
@@ -206,7 +222,7 @@ public class GameController implements GameListener {
                 {
                     if(clickedTile != null && clickedTile.getTerrainType() == TerrainType.STOP)
                     {
-                        routingVehicle.addRouteStop(clickedTile);
+                        tempRouteStops.add(clickedTile);
                         System.out.println("Megálló hozzáadva a listához");
                     }
                     else
@@ -283,7 +299,7 @@ public class GameController implements GameListener {
                     System.out.println("Művelet megszakítva (ESC)");
 
                     if (currentState == BuildState.ASSIGN_ROUTE && routingVehicle != null) {
-                        routingVehicle.clearRoute();
+                        tempRouteStops.clear();
                     }
 
                     currentState = BuildState.NONE;
