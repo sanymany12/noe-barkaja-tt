@@ -21,6 +21,9 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
 
         this.type = BuildingType.AGRICULTURALPLANT;
 
+        this.height = 2;
+        this.width = 4;
+
         this.incomingGrain = 0;
         this.outgoingFood = 0;
     }
@@ -124,7 +127,6 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
 
     @Override
     public String getSpriteName() {
-        // TODO
-        return "building";
+        return "agriculturalplant";
     }
 }

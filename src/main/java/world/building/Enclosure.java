@@ -22,8 +22,8 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
 
         this.silo = silo;
 
-        this.width = 2;
-        this.height = 1;
+        this.width = 4;
+        this.height = 2;
 
         this.species = null;
         this.numOfAnimals = 0;

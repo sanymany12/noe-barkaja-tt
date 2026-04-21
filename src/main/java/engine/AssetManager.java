@@ -170,6 +170,9 @@ public class AssetManager {
         loadAsset("enclosure-racoon", "/assets-final/enclosure-racoon.png");
         loadAsset("enclosure-seahorse", "/assets-final/enclosure-seahorse.png");
 
+        // AGRICULTURALPLANT sprite betöltése
+        loadAsset("agriculturalplant", "/assets-final/agriculturalplant.png");
+
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
     }
