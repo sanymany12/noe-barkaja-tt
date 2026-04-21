@@ -20,6 +20,9 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
 
         this.type = BuildingType.CLONINGFACILITY;
 
+        this.width = 4;
+        this.height = 2;
+
         this.receivedAnimal = null;
         this.animalsMade = 0;
 
@@ -90,7 +93,7 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
 
     @Override
     public String getSpriteName() {
-        return "building";
+        return "cloningfacility";
     }
 
     public int getAnimalsMade() {

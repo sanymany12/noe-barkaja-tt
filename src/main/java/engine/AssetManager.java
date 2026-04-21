@@ -173,6 +173,9 @@ public class AssetManager {
         // AGRICULTURALPLANT sprite betöltése
         loadAsset("agriculturalplant", "/assets-final/agriculturalplant.png");
 
+        // CLONINGFACILITY sprite betöltése
+        loadAsset("cloningfacility", "/assets-final/cloningfacility.png");
+
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
     }
