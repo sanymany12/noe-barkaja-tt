@@ -176,7 +176,7 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
 
     @Override
     public String getSpriteName() {
-        return "building";
+        return "researchlab";
     }
 
     public AnimalType getReceivedAnimal1() {

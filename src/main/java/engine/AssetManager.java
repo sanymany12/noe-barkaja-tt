@@ -176,6 +176,9 @@ public class AssetManager {
         // CLONINGFACILITY sprite betöltése
         loadAsset("cloningfacility", "/assets-final/cloningfacility.png");
 
+        // RESEARCHLAB sprite betöltése
+        loadAsset("researchlab", "/assets-final/researchlab.png");
+
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
     }
