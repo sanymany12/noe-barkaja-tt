@@ -182,6 +182,9 @@ public class AssetManager {
         // FARM sprite betöltése
         loadAsset("farm", "/assets-final/farm.png");
 
+        // SILO sprite betöltése
+        loadAsset("silo", "/assets-final/silo.png");
+
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
     }
