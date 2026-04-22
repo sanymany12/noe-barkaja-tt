@@ -185,6 +185,11 @@ public class AssetManager {
         // SILO sprite betöltése
         loadAsset("silo", "/assets-final/silo.png");
 
+        // CITY spriteok betöltése
+        loadAsset("townhouse-1", "/assets-final/townhouse-1.png");
+        loadAsset("townhouse-2", "/assets-final/townhouse-2.png");
+        loadAsset("townhouse-3", "/assets-final/townhouse-3.png");
+
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
     }
