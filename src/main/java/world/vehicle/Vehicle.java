@@ -284,6 +284,8 @@ public abstract class Vehicle {
             // Ha nincs, de körúton van, visszaállítjuk a StopIndexet az elsőre
             } else if (this.isOnTour) {
                 this.stopIndex = 0;
+            } else if (this.stopIndex == this.routeStops.size() - 1) {
+                this.movingForward = false;
             }
 //            if(movingForward)
 //            {
@@ -302,10 +304,12 @@ public abstract class Vehicle {
 //                }
 //            }
 
-            try {
-                findPath(this.routeStops.get(stopIndex));
-            } catch (Exception e) {
-                System.err.println("Hiba az allomassal: " + e.getMessage());
+            if (movingForward) {
+                try {
+                    findPath(this.routeStops.get(stopIndex));
+                } catch (Exception e) {
+                    System.err.println("Hiba az allomassal: " + e.getMessage());
+                }
             }
         }
     }
