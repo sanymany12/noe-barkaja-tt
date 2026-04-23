@@ -258,9 +258,10 @@ public class World {
 
     // ÚJ ÚTKERESÉS: MEGÁLLÓ -> MEGÁLLÓ
     public List<Point> findPath(Tile start, Tile stop) throws Exception {
-        if (start.getTerrainType() != TerrainType.STOP || stop.getTerrainType() != TerrainType.STOP) {
+        if (stop.getTerrainType() != TerrainType.STOP) {
             throw new Exception("The destination isn't a stop!");
         }
+        // Megállóból való indulás esetén
         else if (start.getBuilding() != null) {
             switch (start.getBuilding().getBuildingType()) {
                 case BuildingType.BUSSTOP:
@@ -302,6 +303,38 @@ public class World {
                 default:
                     return null;
                 }
+        // Útról való indulás esetén
+        } else if (start.getRoad() != null) {
+            if (stop.getBuilding() != null) {
+                switch (stop.getBuilding().getBuildingType()) {
+                    case BuildingType.BUSSTOP:
+                        if (((BusStop) (stop.getBuilding())).getConnectedRoad() == null) {
+                            // Szintén nincs út, amihez kapcsolódna
+                            return null;
+                        } else {
+                            Tile stopRoad = (((BusStop) (stop.getBuilding())).getConnectedRoad());
+                            List<Point> path = findPathRoad(start, stopRoad);
+                            // path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
+                            path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            return path;
+                        }
+                    case BuildingType.STATION:
+                        if (((Station) (stop.getBuilding())).getConnectedRoad() == null) {
+                            // Szintén nincs út, amihez kapcsolódna
+                            return null;
+                        } else {
+                            Tile stopRoad = (((Station) (stop.getBuilding())).getConnectedRoad());
+                            List<Point> path = findPathRoad(start, stopRoad);
+                            // path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
+                            path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            return path;
+                        }
+                    default:
+                        return null;
+                }
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
