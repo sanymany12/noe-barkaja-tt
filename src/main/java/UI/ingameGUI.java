@@ -39,7 +39,7 @@ public class ingameGUI {
         private Renderer renderer;
 
         public GameMapPanel() {
-            setBackground(Color.BLACK);
+            setBackground(new Color(135, 179, 207));
         }
 
         public Renderer getRenderer(){return renderer;}

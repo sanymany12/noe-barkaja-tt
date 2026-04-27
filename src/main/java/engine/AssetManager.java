@@ -32,14 +32,32 @@ public class AssetManager {
 
     private void init(){
 
-        //szarazfold vagy viz tile
-        loadAsset("land", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_125.png"); //land 0 fával
-        loadAsset("tree1", "/assets/CP_V1.0.4_nyknck/tree1.png"); //land 1 fával
-        loadAsset("tree2", "/assets/CP_V1.0.4_nyknck/tree2.png"); //land 2 fával
-        loadAsset("tree3", "/assets/CP_V1.0.4_nyknck/tree3.png"); //land 3 fával
-        loadAsset("tree4", "/assets/CP_V1.0.4_nyknck/tree4.png"); //land 4 fával
+        //Szárazföld és víz mezők + partok
+        //loadAsset("land", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_125.png"); //régi
+        loadAsset("grass0", "/assets/shore/grass01.png");
+        loadAsset("grass1", "/assets/shore/grass02.png");
+        loadAsset("grass2", "/assets/shore/grass03.png");
+        loadAsset("grass3", "/assets/shore/grass04.png");
 
-        loadAsset("water", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_124.png");
+        loadAsset("grass-sand0", "/assets/shore/grass-sand02.png");
+        loadAsset("grass-sand1", "/assets/shore/grass-sand03.png");
+
+        //loadAsset("water", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_124.png"); //régi
+        loadAsset("water0", "/assets/shore/water01.png");
+        loadAsset("water1", "/assets/shore/water02.png");
+        loadAsset("water2", "/assets/shore/water03.png");
+        loadAsset("water3", "/assets/shore/water04.png");
+
+        loadAsset("part0", "/assets/shore/sand-beach01.png");
+        loadAsset("part1", "/assets/shore/sand-beach02.png");
+        loadAsset("part2", "/assets/shore/sand-beach03.png");
+        loadAsset("part3", "/assets/shore/sand-beach04.png");
+
+        //fa textúrák
+        loadAsset("tree1", "/assets/trees/tree1.png");
+        loadAsset("tree2", "/assets/trees/tree2.png");
+        loadAsset("tree3", "/assets/trees/tree3.png");
+        loadAsset("tree4", "/assets/trees/tree4.png");
 
         //road tipusok (road + NORTH EAST SOUTH WEST) amerre nyitott
         //loadAsset("roadN", "/assets/landscapeTiles_117.png"); régi assetek

@@ -1,7 +1,11 @@
 package world.tile;
 
+import engine.AssetManager;
 import world.building.Building;
 import world.tile.road.Road;
+
+import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Tile {
     private Point coordinate;
@@ -10,6 +14,7 @@ public class Tile {
     private Road road;
     private Building<?,?> building;
     private boolean isAnchor; //Az épület bal alsó cellája (horgony)
+    private final int randomValue = ThreadLocalRandom.current().nextInt(4);
 
     public Tile(Point coordinate, TerrainType terrainType, int treeCount, Road road, Building<?, ?> building, boolean isAnchor) {
         this.coordinate = coordinate;
@@ -74,4 +79,12 @@ public class Tile {
         return false;
     }
 
+    public String getSpriteName(){
+        return switch (terrainType) {
+            case LAND, ROAD -> "grass" + randomValue;
+            case WATER -> "water" + randomValue;
+            case BUILDING, STOP -> "concrete";
+            default -> "part0";
+        };
+    }
 }
