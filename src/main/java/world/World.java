@@ -28,7 +28,7 @@ public class World {
     private int daysSinceBusRoute;
 
     private int tickCounter = 0;
-    private final int TICKS_PER_DAY = 100;
+    private final static int TICKS_PER_DAY = 100;
     private final int DAYS_UNTIL_NEW_BUS_ROUTE = 50;
 
     public World(int rows, int cols) {
