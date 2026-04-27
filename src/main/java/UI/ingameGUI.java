@@ -12,6 +12,8 @@ import world.vehicle.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ingameGUI {
 
@@ -72,6 +74,7 @@ public class ingameGUI {
                 minimap.render(g);
             }
         }
+
     }
 
     public ingameGUI() {
@@ -87,6 +90,20 @@ public class ingameGUI {
         minimapPanel = new MinimapPanel();
         minimapPanel.setPreferredSize(new Dimension(200, 120));
         minimapPanel.setBorder(BorderFactory.createTitledBorder("Minimap"));
+        minimapPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                minimapPanel.getMinimap().jumpCameraTo(e.getX(), e.getY());
+                mapRefresh();
+            }
+        });
+        minimapPanel.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                minimapPanel.getMinimap().jumpCameraTo(e.getX(), e.getY());
+                mapRefresh();
+            }
+        });
 
         upperPanel.add(minimapPanel, BorderLayout.WEST);
 

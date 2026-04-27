@@ -134,4 +134,9 @@ A kamera pozícióját clampeljük, hogy ne lehessen ki görgetni a világból.
         offsetY += dY;
         clampCamera(gridWidth, gridHeight);
     }
+    public void setLocation(double dX, double dY, int gridWidth, int gridHeight){
+        offsetX = dX;
+        offsetY = dY;
+        clampCamera(gridWidth, gridHeight);
+    }
 }
