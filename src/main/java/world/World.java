@@ -350,6 +350,11 @@ public class World {
                 if (t != null) {
                     if (t.getBuilding() != null) {
                         t.getBuilding().setWorld(this);
+                        if(t.getBuilding() instanceof BusStop bs){
+                            bs.initAfterLoad();
+                        } else if (t.getBuilding() instanceof Station st) {
+                            st.initAfterLoad();
+                        }
                     }
                 }
             }
@@ -357,7 +362,7 @@ public class World {
 
         if (getVehicles() != null) {
             for (world.vehicle.Vehicle v : getVehicles()) {
-                v.setWorld(this);
+                v.initAfterLoad(this);
             }
         }
     }

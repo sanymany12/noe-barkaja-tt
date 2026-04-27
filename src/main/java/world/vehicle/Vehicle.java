@@ -32,7 +32,8 @@ public abstract class Vehicle {
     protected int cargoNum;
     protected List<Point> path;
 
-    protected List<Tile> routeStops;
+    transient protected List<Tile> routeStops;
+    protected List<Point> savedRouteStops;
     protected int stopIndex = 0;
     protected boolean movingForward = true;
     protected boolean isOnTour;
@@ -59,6 +60,7 @@ public abstract class Vehicle {
 
         this.path = new ArrayList<Point>();
         this.routeStops = new ArrayList<Tile>();
+        this.savedRouteStops = new ArrayList<Point>();
         this.isOnTour = false;
 
         this.type = null;
@@ -76,6 +78,7 @@ public abstract class Vehicle {
     public void addRouteStop(Tile stop)
     {
         this.routeStops.add(stop);
+        this.savedRouteStops.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
     }
 
     public void startRoute()
@@ -94,6 +97,39 @@ public abstract class Vehicle {
             {
                 System.err.println("Nem található útvonal a kezdéshez: " + e.getMessage());
             }
+        }
+    }
+
+    public void initAfterLoad(World loadedWorld) {
+        this.world = loadedWorld;
+
+        this.routeStops = new ArrayList<>();
+        if (this.savedRouteStops != null) {
+            for (Point p : this.savedRouteStops) {
+                this.routeStops.add(this.world.get(p.x, p.y));
+            }
+        }
+
+        Tile currentTile = world.get(this.currentPlace.x, this.currentPlace.y);
+
+        if (currentTile.getBuilding() != null) {
+            //Visszajegyezzük az autót a megállóba
+            if(currentTile.getBuilding() instanceof BusStop busStop){
+                try{
+                    busStop.vehicleArrives(this);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else if (currentTile.getBuilding() instanceof Station station) {
+                try{
+                    station.vehicleArrives(this);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        } else if (currentTile.getRoad() != null) {
+            // Ha úton állunk, bejegyezzük magunkat a sávba
+            currentTile.getRoad().vehicleEnters(this, this.currentDirection);
         }
     }
 
