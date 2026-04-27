@@ -2,6 +2,7 @@ package engine.rendering;
 
 import engine.AssetManager;
 import world.World;
+import world.building.Station;
 import world.tile.Point;
 import world.tile.TerrainType;
 import world.tile.Tile;
@@ -94,8 +95,13 @@ public class Renderer {
                         // Az y koordinátán eltoljuk felfelé
                         int drawY = bottomRight.y - renderHeight;
 
-                        objectsToRender.add(new RenderObj(buildingImg,
-                                topLeft.x, drawY, renderWidth, renderHeight, bottomRight.y));
+                        if(tile.getBuilding() instanceof Station){
+                            objectsToRender.add(new RenderObj(buildingImg,
+                                    topLeft.x, drawY, renderWidth, renderHeight, topLeft.y));
+                        }else{
+                            objectsToRender.add(new RenderObj(buildingImg,
+                                    topLeft.x, drawY, renderWidth, renderHeight, bottomRight.y));
+                        }
                     }
 
                     if(tile.getTerrainType() == TerrainType.ROAD){
@@ -120,17 +126,17 @@ public class Renderer {
         }
 
         for(Vehicle vehicle : world.getVehicles()){
+            double eX = vehicle.getExactX();
+            double eY = vehicle.getExactY();
 
-            Point position = vehicle.getCurrentPlace();
-            Point topLeft = camera.worldToScreen(position.x, position.y);
+            Point topLeft = camera.worldToScreen(eX, eY);
 
             //jobb alsó sarok
-            Point bottomRight = camera.worldToScreen(position.x +1, position.y+1);
+            Point bottomRight = camera.worldToScreen(eX + vehicle.getWidth(), eY + vehicle.getHeight());
 
             //A tényleges szélesség és magasság a két pont különbsége
             int renderWidth = (int)((bottomRight.x - topLeft.x) * vehicle.getWidth());
             int renderHeight = (int)((bottomRight.y - topLeft.y) * vehicle.getHeight()); // megnöveljük a cella magasságát
-
             objectsToRender.add(new RenderObj(AssetManager.get(vehicle.getSpriteName()),
                     topLeft.x, topLeft.y, renderWidth, renderHeight, bottomRight.y));
         }
