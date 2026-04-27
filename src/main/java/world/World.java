@@ -148,8 +148,8 @@ public class World {
         grid[16][14].setAnchor(true);
 
         try{
-            Vehicle testVehicle = new FoodTruck(this, new Point(6,3));
-            grid[6][3].getRoad().vehicleEnters(testVehicle, RoadDirection.EAST);
+            Vehicle testVehicle = new FoodTruck(this, new Point(6, 3));
+            grid[6][3].getRoad().vehicleEnters(testVehicle, testVehicle.getCurrentDirection());
             vehicles.add(testVehicle);
         }catch (Exception e){System.err.println("error: " + e.getMessage());}
 
@@ -316,6 +316,7 @@ public class World {
                             List<Point> path = findPathRoad(start, stopRoad);
                             // path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
                             path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            path.removeFirst();
                             return path;
                         }
                     case BuildingType.STATION:
@@ -327,6 +328,7 @@ public class World {
                             List<Point> path = findPathRoad(start, stopRoad);
                             // path.addFirst(new Point(start.getCoordinate().x, start.getCoordinate().y));
                             path.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
+                            path.removeFirst();
                             return path;
                         }
                     default:
