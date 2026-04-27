@@ -39,6 +39,7 @@ public abstract class Vehicle {
     protected ICargo cargoType;
 
     protected int tickCount;
+    protected int ticksPerMove;
 
     protected VehicleType type;
 
@@ -64,11 +65,17 @@ public abstract class Vehicle {
         this.isOnTour = false;
 
         this.type = null;
+
+        this.tickCount = 0;
     }
 
-    public void increaseTickCount() {
+    public void increaseTickCount() throws Exception {
         if (this.movingForward) {
             this.tickCount++;
+            if (this.tickCount == this.ticksPerMove) {
+                this.move();
+                this.tickCount = 0;
+            }
         }
     }
 

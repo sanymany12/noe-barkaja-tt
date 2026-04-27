@@ -21,6 +21,7 @@ public class Bus extends Vehicle {
 
         this.type = VehicleType.BUS;
         this.speed = VehicleType.BUS.getBaseSpeed();
+        this.ticksPerMove = this.world.getTicksPerDay() / this.speed;
 
         this.width = 0.5f;
         this.height = 0.5f;

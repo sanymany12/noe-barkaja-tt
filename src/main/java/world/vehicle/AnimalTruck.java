@@ -17,6 +17,7 @@ public class AnimalTruck extends Vehicle {
 
         this.type = VehicleType.ANIMALTRUCK;
         this.speed = VehicleType.ANIMALTRUCK.getBaseSpeed();
+        this.ticksPerMove = this.world.getTicksPerDay() / this.speed;
 
         this.width = 0.5f;
         this.height = 0.5f;

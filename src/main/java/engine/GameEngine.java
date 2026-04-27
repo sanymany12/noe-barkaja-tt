@@ -27,20 +27,14 @@ public class GameEngine {
     private GameListener listener; //Milán: MVC módosítás
 
     private int delay;
-    private final int ticksPerDay = 100;
 
-    private int busMovedCount;
-    private int animalTruckMovedCount;
-    private int foodTruckMovedCount;
-
-    private final int BUS_MOVES = this.ticksPerDay / VehicleType.BUS.getBaseSpeed();
-    private final int ANIMALTRUCK_MOVES = this.ticksPerDay / VehicleType.ANIMALTRUCK.getBaseSpeed();
-    private final int FOODTRUCK_MOVES = this.ticksPerDay / VehicleType.FOODTRUCK.getBaseSpeed();
+    private int ticksPerDay;
 
     public void start(GameListener listener) {
         this.listener = listener;
         this.world = new World(20, 20);
         world.initWorld();
+        this.ticksPerDay = this.world.getTicksPerDay();
         this.camera = new Camera(0, 0, 2.0, 1000, 750);
         this.renderer = new Renderer(camera, world);
         this.minimap = new Minimap(world, camera, 200, 120);
@@ -51,10 +45,6 @@ public class GameEngine {
         this.forestManager = new ForestManager(world);
         this.buildManager = new BuildManager(world);
         this.timer = new Timer(delay * timeMultiplier.getMultiplier(), new TimerListener());
-
-        this.busMovedCount = 1;
-        this.animalTruckMovedCount = 1;
-        this.foodTruckMovedCount = 1;
     }
 
     public void setTimeMultiplier(TimeSpeed ts) {
@@ -132,46 +122,19 @@ public class GameEngine {
             if (isRunning) {
                 update();
                 tickCounter++;
+                try {
+                    world.increaseTickCounter();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
 
                 if(listener != null)
                 {
                     listener.onTick();
                 }
             }
-            if (tickCounter == BUS_MOVES * busMovedCount) {
-                busMovedCount++;
-                try {
-                    world.busesMove();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            if (tickCounter == ANIMALTRUCK_MOVES * animalTruckMovedCount) {
-                animalTruckMovedCount++;
-                try {
-                    world.animalTrucksMove();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            if (tickCounter == FOODTRUCK_MOVES * animalTruckMovedCount) {
-                animalTruckMovedCount++;
-                try {
-                    world.foodTrucksMove();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
             if (tickCounter == ticksPerDay) {
                 tickCounter = 0;
-                busMovedCount = 1;
-                animalTruckMovedCount = 1;
-                foodTruckMovedCount = 1;
-                try{
-                    world.newDay();
-                }catch (Exception ex){
-                    ex.printStackTrace();
-                }
 
                 forestManager.updateForests();
                 if(listener != null)

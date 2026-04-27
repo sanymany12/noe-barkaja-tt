@@ -27,7 +27,7 @@ public class World {
     private BusStop stop;
     private int daysSinceBusRoute;
 
-    private final int tickCounter = 0;
+    private int tickCounter = 0;
     private final int TICKS_PER_DAY = 100;
     private final int DAYS_UNTIL_NEW_BUS_ROUTE = 50;
 
@@ -59,6 +59,19 @@ public class World {
 
     public int getCols() {
         return cols;
+    }
+
+    public void increaseTickCounter() throws Exception {
+        this.tickCounter++;
+        this.moveVehicles();
+        if (this.tickCounter == this.TICKS_PER_DAY) {
+            this.newDay();
+            this.tickCounter = 0;
+        }
+    }
+
+    public int getTicksPerDay() {
+        return this.TICKS_PER_DAY;
     }
 
     //TODO itt kellene beolvasni a meghatározott világot
@@ -200,6 +213,12 @@ public class World {
             if (this.vehicles.get(i).getVehicleType() == VehicleType.FOODTRUCK && this.vehicles.get(i).getSpeed() == VehicleType.FOODTRUCK.getBaseSpeed()) {
                 this.vehicles.get(i).move();
             }
+        }
+    }
+
+    public void moveVehicles() throws Exception {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            this.vehicles.get(i).increaseTickCount();
         }
     }
 
