@@ -16,6 +16,9 @@ public class Silo extends Building<Integer,Integer> {
         this.type = BuildingType.SILO;
 
         this.numOfFood = STARTING_STOCK;
+
+        this.width = 2;
+        this.height = 2;
     }
 
     // getter az itt tárolt étel mennyiségére
@@ -69,6 +72,6 @@ public class Silo extends Building<Integer,Integer> {
 
     @Override
     public String getSpriteName() {
-        return "building";
+        return "silo";
     }
 }
