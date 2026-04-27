@@ -9,20 +9,18 @@ import world.tile.Point;
 import world.tile.road.RoadDirection;
 
 public class Bus extends Vehicle {
-
-
     private Point destination;
 
     public Bus(World world, Point p) throws Exception {
         super(world, p);
 
-        this.speed = 1;
         this.capacity = 10;
         this.costToOperate = 10;
 
         this.cargoType = null;
 
         this.type = VehicleType.BUS;
+        this.speed = VehicleType.BUS.getBaseSpeed();
 
         this.width = 0.5f;
         this.height = 0.5f;

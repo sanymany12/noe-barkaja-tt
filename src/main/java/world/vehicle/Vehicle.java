@@ -25,7 +25,7 @@ public abstract class Vehicle {
     protected float width;  //1.0 = 1 cella
     protected float height; //1.0 = 1 cella
 
-    protected double speed;
+    protected int speed;
     protected int capacity;
     protected int costToOperate;
 
@@ -37,6 +37,8 @@ public abstract class Vehicle {
     protected boolean movingForward = true;
     protected boolean isOnTour;
     protected ICargo cargoType;
+
+    protected int tickCount;
 
     protected VehicleType type;
 
@@ -62,6 +64,16 @@ public abstract class Vehicle {
         this.isOnTour = false;
 
         this.type = null;
+    }
+
+    public void increaseTickCount() {
+        if (this.movingForward) {
+            this.tickCount++;
+        }
+    }
+
+    public void resetTickCount() {
+        tickCount = 0;
     }
 
     public void clearRoute()

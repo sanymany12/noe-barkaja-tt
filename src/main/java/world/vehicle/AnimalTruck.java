@@ -8,16 +8,16 @@ import world.tile.Point;
 import world.tile.road.RoadDirection;
 
 public class AnimalTruck extends Vehicle {
-
-
     public AnimalTruck(World world, Point p) throws Exception {
         super(world, p);
 
-        this.speed = 1;
         this.capacity = 1;
         this.costToOperate = 5;
         this.cargoType = null;
+
         this.type = VehicleType.ANIMALTRUCK;
+        this.speed = VehicleType.ANIMALTRUCK.getBaseSpeed();
+
         this.width = 0.5f;
         this.height = 0.5f;
     }

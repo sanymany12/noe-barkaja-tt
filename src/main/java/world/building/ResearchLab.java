@@ -29,6 +29,9 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
 
         this.researchHappening = false;
         this.daysSinceResearchStarted = 0;
+
+        this.width = 3;
+        this.height = 3;
     }
 
     // getter a kutatás árára
