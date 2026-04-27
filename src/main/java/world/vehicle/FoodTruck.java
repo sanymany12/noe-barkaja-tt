@@ -15,13 +15,14 @@ public class FoodTruck extends Vehicle {
     public FoodTruck(World world, Point p) throws Exception {
         super(world, p);
 
-        this.speed = 1;
         this.capacity = this.CAPACITY;
         this.costToOperate = 5;
 
         this.cargoType = null;
 
         this.type = VehicleType.FOODTRUCK;
+        this.speed = VehicleType.FOODTRUCK.getBaseSpeed();
+        this.ticksPerMove = this.world.getTicksPerDay() / this.speed;
 
         this.width = 0.5f;
         this.height = 0.5f;

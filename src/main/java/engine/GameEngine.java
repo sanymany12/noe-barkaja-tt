@@ -4,6 +4,7 @@ import engine.rendering.Camera;
 import engine.rendering.Minimap;
 import engine.rendering.Renderer;
 import world.World;
+import world.vehicle.VehicleType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,12 +27,14 @@ public class GameEngine {
     private GameListener listener; //Milán: MVC módosítás
 
     private int delay;
-    private final int ticksPerDay = 100;
+
+    private int ticksPerDay;
 
     public void start(GameListener listener) {
         this.listener = listener;
         this.world = new World(20, 20);
         world.initWorld();
+        this.ticksPerDay = this.world.getTicksPerDay();
         this.camera = new Camera(0, 0, 2.0, 1000, 750);
         this.renderer = new Renderer(camera, world);
         this.minimap = new Minimap(world, camera, 200, 120);
@@ -119,6 +122,11 @@ public class GameEngine {
             if (isRunning) {
                 update();
                 tickCounter++;
+                try {
+                    world.increaseTickCounter();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
 
                 if(listener != null)
                 {
@@ -127,11 +135,6 @@ public class GameEngine {
             }
             if (tickCounter == ticksPerDay) {
                 tickCounter = 0;
-                try{
-                    world.newDay();
-                }catch (Exception ex){
-                    ex.printStackTrace();
-                }
 
                 forestManager.updateForests();
                 if(listener != null)

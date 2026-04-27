@@ -25,7 +25,7 @@ public abstract class Vehicle {
     protected float width;  //1.0 = 1 cella
     protected float height; //1.0 = 1 cella
 
-    protected double speed;
+    protected int speed;
     protected int capacity;
     protected int costToOperate;
 
@@ -38,6 +38,11 @@ public abstract class Vehicle {
     protected boolean movingForward = true;
     protected boolean isOnTour;
     protected ICargo cargoType;
+
+    protected int tickCount;
+    protected int ticksPerMove;
+
+    protected double movedPercentage;
 
     protected VehicleType type;
 
@@ -63,7 +68,28 @@ public abstract class Vehicle {
         this.savedRouteStops = new ArrayList<Point>();
         this.isOnTour = false;
 
+        this.movingForward = false;
+        this.movedPercentage = 0;
+
         this.type = null;
+
+        this.tickCount = 0;
+    }
+
+    public void increaseTickCount() throws Exception {
+        if (this.movingForward) {
+            this.tickCount++;
+            this.movedPercentage = (double) this.tickCount / this.ticksPerMove;
+            // System.out.println("A jármű előrehaladása a következő tile felé: " + this.movedPercentage * 100 + "%");
+            if (this.tickCount == this.ticksPerMove) {
+                this.move();
+                this.tickCount = 0;
+            }
+        }
+    }
+
+    public void resetTickCount() {
+        tickCount = 0;
     }
 
     public void clearRoute()

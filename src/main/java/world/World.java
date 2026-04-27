@@ -27,6 +27,8 @@ public class World {
     private BusStop stop;
     private int daysSinceBusRoute;
 
+    private int tickCounter = 0;
+    private final static int TICKS_PER_DAY = 100;
     private final int DAYS_UNTIL_NEW_BUS_ROUTE = 50;
 
     public World(int rows, int cols) {
@@ -57,6 +59,19 @@ public class World {
 
     public int getCols() {
         return cols;
+    }
+
+    public void increaseTickCounter() throws Exception {
+        this.tickCounter++;
+        this.moveVehicles();
+        if (this.tickCounter == this.TICKS_PER_DAY) {
+            this.newDay();
+            this.tickCounter = 0;
+        }
+    }
+
+    public int getTicksPerDay() {
+        return this.TICKS_PER_DAY;
     }
 
     //TODO itt kellene beolvasni a meghatározott világot
@@ -147,11 +162,11 @@ public class World {
         grid[16][14].setBuilding(new CloningFacility(this));
         grid[16][14].setAnchor(true);
 
-        try{
-            Vehicle testVehicle = new FoodTruck(this, new Point(6, 3));
-            grid[6][3].getRoad().vehicleEnters(testVehicle, testVehicle.getCurrentDirection());
-            vehicles.add(testVehicle);
-        }catch (Exception e){System.err.println("error: " + e.getMessage());}
+//        try{
+//            Vehicle testVehicle = new FoodTruck(this, new Point(grid[6][3].getCoordinate().x, grid[6][3].getCoordinate().y));
+//            grid[6][3].getRoad().vehicleEnters(testVehicle, testVehicle.getCurrentDirection());
+//            vehicles.add(testVehicle);
+//        }catch (Exception e){System.err.println("error: " + e.getMessage());}
 
         this.money = 20000;
     }
@@ -177,12 +192,43 @@ public class World {
         this.money = this.money - spending;
     }
 
+    public void busesMove() throws Exception {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            if (this.vehicles.get(i).getVehicleType() == VehicleType.BUS && this.vehicles.get(i).getSpeed() == VehicleType.BUS.getBaseSpeed()) {
+                this.vehicles.get(i).move();
+            }
+        }
+    }
+
+    public void animalTrucksMove() throws Exception {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            if (this.vehicles.get(i).getVehicleType() == VehicleType.ANIMALTRUCK && this.vehicles.get(i).getSpeed() == VehicleType.ANIMALTRUCK.getBaseSpeed()) {
+                this.vehicles.get(i).move();
+            }
+        }
+    }
+
+    public void foodTrucksMove() throws Exception {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            if (this.vehicles.get(i).getVehicleType() == VehicleType.FOODTRUCK && this.vehicles.get(i).getSpeed() == VehicleType.FOODTRUCK.getBaseSpeed()) {
+                this.vehicles.get(i).move();
+            }
+        }
+    }
+
+    public void moveVehicles() throws Exception {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            this.vehicles.get(i).increaseTickCount();
+        }
+    }
+
     public void newDay() throws Exception {
         this.elapsedTime = this.elapsedTime + 1;
 
-        for (int i = 0; i < this.vehicles.size(); i++) {
-            this.vehicles.get(i).move();
-        }
+        // Régi move hívás
+//        for (int i = 0; i < this.vehicles.size(); i++) {
+//            this.vehicles.get(i).move();
+//        }
 
         Set<Building> updatedBuildings = new HashSet<>();
         for(int i = 0; i < cols; i++)
