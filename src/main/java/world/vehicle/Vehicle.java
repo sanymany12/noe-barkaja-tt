@@ -32,7 +32,7 @@ public abstract class Vehicle {
     protected int cargoNum;
     protected List<Point> path;
 
-    protected List<Tile> routeStops = new ArrayList<>();
+    protected List<Tile> routeStops;
     protected int stopIndex = 0;
     protected boolean movingForward = true;
     protected boolean isOnTour;
@@ -58,6 +58,7 @@ public abstract class Vehicle {
         this.cargoNum = 0;
 
         this.path = new ArrayList<Point>();
+        this.routeStops = new ArrayList<Tile>();
         this.isOnTour = false;
 
         this.type = null;
@@ -69,6 +70,7 @@ public abstract class Vehicle {
         this.path.clear();
         this.stopIndex = 0;
         this.movingForward = true;
+        System.out.println("Jármű útvonala törölve.");
     }
 
     public void addRouteStop(Tile stop)
@@ -87,6 +89,7 @@ public abstract class Vehicle {
             }
             try {
                 findPath(this.routeStops.get(this.stopIndex));
+                System.out.println("Útvonal megtalálva.");
             } catch (Exception e)
             {
                 System.err.println("Nem található útvonal a kezdéshez: " + e.getMessage());
@@ -190,9 +193,11 @@ public abstract class Vehicle {
                 if (this.world.get(this.path.getFirst().x, this.path.getFirst().y).getRoad().isOccupied(nextDirection)) {
                     canGoOn = false;
                 }
+                System.out.println("A jármű következő iránya: " + nextDirection);
             }
 
             if (canGoOn) {
+                System.out.println("A jármű halad tovább.");
                 Point nextTile = this.path.removeFirst();
 
                 // Jármű elhagyja a jelenlegi tile-t
@@ -274,6 +279,8 @@ public abstract class Vehicle {
 
                 // Jármű pozíciójának frissítése
                 this.currentPlace = nextTile;
+            } else {
+                System.out.println("Can't go on.");
             }
 
         // Ha elfogyott az út és nem üres a megállók listája
