@@ -41,6 +41,8 @@ public abstract class Vehicle {
     protected int tickCount;
     protected int ticksPerMove;
 
+    protected double movedPercentage;
+
     protected VehicleType type;
 
     public Vehicle(World world, Point p) throws Exception {
@@ -64,6 +66,9 @@ public abstract class Vehicle {
         this.routeStops = new ArrayList<Tile>();
         this.isOnTour = false;
 
+        this.movingForward = false;
+        this.movedPercentage = 0;
+
         this.type = null;
 
         this.tickCount = 0;
@@ -72,6 +77,8 @@ public abstract class Vehicle {
     public void increaseTickCount() throws Exception {
         if (this.movingForward) {
             this.tickCount++;
+            this.movedPercentage = (double) this.tickCount / this.ticksPerMove;
+            // System.out.println("A jármű előrehaladása a következő tile felé: " + this.movedPercentage * 100 + "%");
             if (this.tickCount == this.ticksPerMove) {
                 this.move();
                 this.tickCount = 0;
