@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Renderer {
     private final Camera camera;
@@ -163,19 +164,7 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
 
 //Talaj rajzolása
     private void drawTile(Graphics graphics, Tile tile, Point screenPosition, int width, int height){
-        switch(tile.getTerrainType()){
-            case LAND, ROAD:
-                graphics.drawImage(AssetManager.get("land"), screenPosition.x, screenPosition.y, width, height, null);
-                break;
-            case WATER:
-                graphics.drawImage(AssetManager.get("water"), screenPosition.x, screenPosition.y, width, height, null);
-                break;
-            case BUILDING, STOP:
-                graphics.drawImage(AssetManager.get("concrete"), screenPosition.x, screenPosition.y, width, height, null);
-                break;
-            default:
-                System.err.println("Nem található ilyen TerrainType");
-        }
+        graphics.drawImage(AssetManager.get(tile.getSpriteName()), screenPosition.x, screenPosition.y, width, height, null);
     }
 
     public void setWorld(World world) { this.world = world;}
