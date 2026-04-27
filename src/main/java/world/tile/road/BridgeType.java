@@ -14,4 +14,16 @@ public enum BridgeType {
         this.maxlength = maxlength;
         this.speedlimit = speedlimit;
     }
+
+    public int getCost() {
+        return this.cost;
+    }
+
+    public int getMaxLength() {
+        return this.maxlength;
+    }
+
+    public int getSpeedLimit() {
+        return this.speedlimit;
+    }
 }
