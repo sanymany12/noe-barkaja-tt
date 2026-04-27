@@ -2,6 +2,7 @@ package world.building;
 
 import world.resources.ResourceType;
 import world.World;
+import world.tile.Point;
 import world.tile.Tile;
 import world.vehicle.Vehicle;
 import world.vehicle.VehicleType;
@@ -12,8 +13,8 @@ public class Station extends Building<Object, Object> {
     private Building building;
     private Vehicle vehicle;
 
-    private Tile connectedRoad;
-
+    transient private Tile connectedRoad;
+    private Point savedConnectedRoad;
     private RoadDirection direction;
 
     public Station(World world, Building building, RoadDirection dir) {
@@ -24,9 +25,13 @@ public class Station extends Building<Object, Object> {
         this.building = building;
         this.vehicle = null;
         this.connectedRoad = null;
+        this.savedConnectedRoad = null;
         this.direction = dir;
     }
-
+    //connectedRoad és vehicle visszaállítása
+    public void initAfterLoad(){
+        connectedRoad = world.get(savedConnectedRoad.x, savedConnectedRoad.y);
+    }
     // getter a megállóhoz tartozó épület irányának
     public RoadDirection getDirection() {
         return this.direction;
@@ -40,6 +45,7 @@ public class Station extends Building<Object, Object> {
     // setter az ehhez tartozó útnak
     public void setConnectedRoad(Tile t) {
         this.connectedRoad = t;
+        this.savedConnectedRoad = connectedRoad.getCoordinate();
     }
 
     public void vehicleArrives(Vehicle vehicle) throws Exception {

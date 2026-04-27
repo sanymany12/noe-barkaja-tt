@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 public class Minimap {
     private World world;
     private final Camera camera;
-    private BufferedImage mapImg;
+    private final BufferedImage mapImg;
     private int screenWidth;
     private int screenHeight;
 
@@ -103,4 +103,25 @@ public class Minimap {
     }
 
     public void setWorld(World world) { this.world = world;}
+
+    public void jumpCameraTo(int mouseX, int mouseY) {
+        double TILE_SIZE = camera.getTileWidth();
+
+        // Kiszámoljuk a világ teljes méretét pixelekben
+        double totalWorldWidth = world.getCols() * TILE_SIZE * camera.getZoom();
+        double totalWorldHeight = world.getRows() * TILE_SIZE * camera.getZoom();
+
+        double ratioX = (double) screenWidth / totalWorldWidth;
+        double ratioY = (double) screenHeight / totalWorldHeight;
+
+        //kattintásból visszaszámoljuk a world-pixelt
+        double worldPixelX = mouseX / ratioX;
+        double worldPixelY = mouseY / ratioY;
+
+        //Kiszámoljuk a kamera új eltolását úgy, hogy a kattintás a képernyő közepére essen
+        double newOffsetX = worldPixelX - (camera.getScreenWidth() / 2.0);
+        double newOffsetY = worldPixelY - (camera.getScreenHeight() / 2.0);
+
+        camera.setLocation(newOffsetX, newOffsetY, world.getCols(), world.getRows());
+    }
 }

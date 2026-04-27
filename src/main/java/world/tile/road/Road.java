@@ -11,10 +11,10 @@ public class Road {
     private final int COST_TO_REMOVE = 3;
     private final int COST_TO_BUILD = 5;
 
-    private Vehicle rightLaneV;
-    private Vehicle leftLaneV;
-    private Vehicle rightLaneH;
-    private Vehicle leftLaneH;
+    transient private Vehicle rightLaneV;
+    transient private Vehicle leftLaneV;
+    transient private Vehicle rightLaneH;
+    transient private Vehicle leftLaneH;
 
     private int locationX;
     private int locationY;

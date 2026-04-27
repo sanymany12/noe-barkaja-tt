@@ -1,6 +1,7 @@
 package world.building;
 
 import world.World;
+import world.tile.Point;
 import world.tile.road.RoadDirection;
 import world.vehicle.Bus;
 import world.vehicle.Vehicle;
@@ -10,7 +11,7 @@ import world.vehicle.VehicleType;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BusStop extends Building<Integer,Integer> {
-    private Vehicle vehicle;
+    transient private Vehicle vehicle;
 
     private int numOfPeople;
     private boolean isStart;
@@ -18,7 +19,8 @@ public class BusStop extends Building<Integer,Integer> {
 
     //
     private RoadDirection direction;
-    private Tile connectedRoad;
+    private Point savedConnectedRoad;
+    transient private Tile connectedRoad;
 
     private final int BUS_TICKET_PRICE = 50;
 
@@ -31,12 +33,16 @@ public class BusStop extends Building<Integer,Integer> {
         this.vehicle = null;
 
         this.connectedRoad = null;
-
+        this.savedConnectedRoad = null;
         this.numOfPeople = 0;
         this.isStart = false;
         this.isStop = false;
 
         this.direction = dir;
+    }
+    //connectedRoad és vehicle visszaállítása
+    public void initAfterLoad(){
+        connectedRoad = world.get(savedConnectedRoad.x, savedConnectedRoad.y);
     }
 
     public boolean isStart() {
@@ -66,6 +72,7 @@ public class BusStop extends Building<Integer,Integer> {
     // Setter a hozzá kapcsolódó út beállításához, amikor utat kapcsolunk hozzá
     public void setConnectedRoad(Tile t) {
         this.connectedRoad = t;
+        this.savedConnectedRoad = connectedRoad.getCoordinate();
     }
 
     // Segédfüggvény az utasok buszra való feltöltéséhez

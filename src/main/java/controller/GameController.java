@@ -424,6 +424,7 @@ public class GameController implements GameListener {
     public void onNewDay(int currentDay)
     {
         view.setDay(currentDay);
+        view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
     }
 
     @Override
