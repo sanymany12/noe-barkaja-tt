@@ -240,4 +240,11 @@ kep betoltese a mapbe input streammel
         }
         return textures.get(name);
     }
+
+    public static void clearForTesting() {
+        if (textures != null) {
+            textures.clear();
+        }
+        instance = null;
+    }
 }
