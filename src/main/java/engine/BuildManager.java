@@ -6,6 +6,8 @@ import world.building.BusStop;
 import world.building.Station;
 import world.tile.TerrainType;
 import world.tile.Tile;
+import world.tile.road.Bridge;
+import world.tile.road.BridgeType;
 import world.tile.road.Road;
 import world.tile.road.RoadDirection;
 import world.vehicle.FoodTruck;
@@ -163,6 +165,166 @@ public class BuildManager {
                 }
             }
         }
+    }
+
+    public void buildBridge(Tile start, Tile end, BridgeType type) throws Exception {
+        boolean matchingCoordinateIsX = false;
+        RoadDirection startDirection = null;
+
+        Tile startNeighbour = null;
+        Tile endNeighbour = null;
+
+        int bridgesBuilt = 0;
+
+        // Ellenőrzés, hogy nem csak egy cellára akarunk hidat építeni
+        if (start == end) {
+            throw new Exception("A híd legalább 2 cella hosszú kell, hogy legyen!");
+        // Ellenőrzés, hogy végig vízre akarunk-e építeni és hogy a kezdő- és végpont egy sorban/oszlopban van-e
+        // Ellenőrzés, hogy megegyezik-e az oszlop koordinátája
+        } else if (start.getCoordinate().x == end.getCoordinate().x) {
+            matchingCoordinateIsX = true;
+            if (start.getCoordinate().y > end.getCoordinate().y) {
+                startDirection = RoadDirection.SOUTH;
+                startNeighbour = world.get(start.getCoordinate().x, start.getCoordinate().y + 1);
+                endNeighbour = world.get(end.getCoordinate().x, end.getCoordinate().y - 1);
+                if (startNeighbour != null && endNeighbour != null) {
+                    if (!(startNeighbour.getTerrainType() == TerrainType.LAND || startNeighbour.getTerrainType() == TerrainType.ROAD) || !(endNeighbour.getTerrainType() == TerrainType.LAND || endNeighbour.getTerrainType() == TerrainType.ROAD)) {
+                        throw new Exception("A kezdő és végpont mellet földnek / útnak kell lennie!");
+                    }
+                } else {
+                    throw new Exception("A kezdő és végpont mellet földnek / útnak kell lennie!");
+                }
+                for (int i = start.getCoordinate().y; i < end.getCoordinate().y + 1; i++) {
+                    if (this.world.get(start.getCoordinate().x, i) != null) {
+                        if (this.world.get(start.getCoordinate().x, i).getTerrainType() != TerrainType.WATER) {
+                            throw new Exception("A híd csak vízre építhető!");
+                        }
+                    } else {
+                        throw new Exception("Hiba a mezővel a kezdőpont és végpont között!");
+                    }
+                }
+            } else {
+                startDirection = RoadDirection.NORTH;
+                startNeighbour = world.get(start.getCoordinate().x, start.getCoordinate().y - 1);
+                endNeighbour = world.get(end.getCoordinate().x, end.getCoordinate().y + 1);
+                if (startNeighbour != null && endNeighbour != null) {
+                    if (!(startNeighbour.getTerrainType() == TerrainType.LAND || startNeighbour.getTerrainType() == TerrainType.ROAD) || !(endNeighbour.getTerrainType() == TerrainType.LAND || endNeighbour.getTerrainType() == TerrainType.ROAD)) {
+                        throw new Exception("A kezdő és végpont mellet földnek / útnak kell lennie!");
+                    }
+                } else {
+                    throw new Exception("A kezdő és végpont mellet földnek / útnak kell lennie!");
+                }
+                for (int i = end.getCoordinate().y; i < start.getCoordinate().y + 1; i++) {
+                    if (this.world.get(start.getCoordinate().x, i) != null) {
+                        if (this.world.get(start.getCoordinate().x, i).getTerrainType() != TerrainType.WATER) {
+                            throw new Exception("A híd csak vízre építhető!");
+                        }
+                    } else {
+                        throw new Exception("Hiba a mezővel a kezdőpont és végpont között!");
+                    }
+                }
+            }
+        // Ellenőrzés, hogy megegyezik-e a sorkoodináta
+        } else if (start.getCoordinate().y == end.getCoordinate().y) {
+            matchingCoordinateIsX = false;
+            if (start.getCoordinate().x > end.getCoordinate().x) {
+                startDirection = RoadDirection.EAST;
+                startNeighbour = world.get(start.getCoordinate().x + 1, start.getCoordinate().y);
+                endNeighbour = world.get(end.getCoordinate().x - 1, end.getCoordinate().y);
+                if (startNeighbour != null && endNeighbour != null) {
+                    if (!(startNeighbour.getTerrainType() == TerrainType.LAND || startNeighbour.getTerrainType() == TerrainType.ROAD) || !(endNeighbour.getTerrainType() == TerrainType.LAND || endNeighbour.getTerrainType() == TerrainType.ROAD)) {
+                        throw new Exception("A kezdő és végpont mellet földnek / útnak kell lennie!");
+                    }
+                } else {
+                    throw new Exception("A kezdő és végpont mellet földnek / útnak kell lennie!");
+                }
+                for (int i = start.getCoordinate().x; i < end.getCoordinate().x + 1; i++) {
+                    if (this.world.get(i, start.getCoordinate().y) != null) {
+                        if (this.world.get(i, start.getCoordinate().y).getTerrainType() != TerrainType.WATER) {
+                            throw new Exception("A híd csak vízre építhető!");
+                        }
+                    } else {
+                        throw new Exception("Hiba a mezővel a kezdőpont és végpont között!");
+                    }
+                }
+            } else {
+                startDirection = RoadDirection.WEST;
+                startNeighbour = world.get(start.getCoordinate().x - 1, start.getCoordinate().y);
+                endNeighbour = world.get(end.getCoordinate().x + 1, end.getCoordinate().y);
+                if (startNeighbour != null && endNeighbour != null) {
+                    if (!(startNeighbour.getTerrainType() == TerrainType.LAND || startNeighbour.getTerrainType() == TerrainType.ROAD) || !(endNeighbour.getTerrainType() == TerrainType.LAND || endNeighbour.getTerrainType() == TerrainType.ROAD)) {
+                        throw new Exception("A kezdő és végpont mellet földnek / útnak kell lennie!");
+                    }
+                } else {
+                    throw new Exception("A kezdő és végpont mellet földnek / útnak kell lennie!");
+                }
+                for (int i = end.getCoordinate().x; i < start.getCoordinate().x + 1; i++) {
+                    if (this.world.get(i, start.getCoordinate().y) != null) {
+                        if (this.world.get(i, start.getCoordinate().y).getTerrainType() != TerrainType.WATER) {
+                            throw new Exception("A híd csak vízre építhető!");
+                        }
+                    } else {
+                        throw new Exception("Hiba a mezővel a kezdőpont és végpont között!");
+                    }
+                }
+            }
+        } else {
+            throw new Exception("A híd csak egyenes vonalban építhető!");
+        }
+
+        // Ha minden feltételnek megfelelt
+        if (matchingCoordinateIsX) {
+            Bridge startBridge = new Bridge(start.getCoordinate().x, start.getCoordinate().y, type, startDirection, true);
+            start.setRoad(startBridge);
+            start.setTerrainType(TerrainType.BRIDGE);
+            bridgesBuilt++;
+            if (startNeighbour.getTerrainType() == TerrainType.ROAD && startNeighbour.getRoad() != null) {
+                start.getRoad().setConnection(startDirection);
+                startNeighbour.getRoad().setConnection(startDirection.getOpposite());
+            }
+            for (int i = start.getCoordinate().y + 1; i < end.getCoordinate().y; i++) {
+                Bridge newBridge = new Bridge(start.getCoordinate().x, i, type, RoadDirection.NORTH, false);
+                newBridge.setConnection(RoadDirection.NORTH);
+                newBridge.setConnection(RoadDirection.SOUTH);
+                bridgesBuilt++;
+                world.get(start.getCoordinate().x, i).setRoad(newBridge);
+                world.get(start.getCoordinate().x, i).setTerrainType(TerrainType.BRIDGE);
+            }
+            Bridge endBridge = new Bridge(end.getCoordinate().x, end.getCoordinate().y, type, startDirection.getOpposite(), true);
+            end.setRoad(endBridge);
+            end.setTerrainType(TerrainType.BRIDGE);
+            bridgesBuilt++;
+            if (endNeighbour.getTerrainType() == TerrainType.ROAD && endNeighbour.getRoad() != null) {
+                end.getRoad().setConnection(startDirection.getOpposite());
+                endNeighbour.getRoad().setConnection(startDirection);
+            }
+        } else {
+            Bridge startBridge = new Bridge(start.getCoordinate().x, start.getCoordinate().y, type, startDirection, true);
+            start.setRoad(startBridge);
+            start.setTerrainType(TerrainType.BRIDGE);
+            bridgesBuilt++;
+            if (startNeighbour.getTerrainType() == TerrainType.ROAD && startNeighbour.getRoad() != null) {
+                start.getRoad().setConnection(startDirection);
+                startNeighbour.getRoad().setConnection(startDirection.getOpposite());
+            }
+            for (int i = start.getCoordinate().x + 1; i < end.getCoordinate().x; i++) {
+                Bridge newBridge = new Bridge(i, start.getCoordinate().y, type, RoadDirection.WEST, false);
+                newBridge.setConnection(RoadDirection.WEST);
+                newBridge.setConnection(RoadDirection.EAST);
+                bridgesBuilt++;
+                world.get(i, start.getCoordinate().y).setRoad(newBridge);
+                world.get(i, start.getCoordinate().y).setTerrainType(TerrainType.BRIDGE);
+            }
+            Bridge endBridge = new Bridge(end.getCoordinate().x, end.getCoordinate().y, type, startDirection.getOpposite(), true);
+            end.setRoad(endBridge);
+            end.setTerrainType(TerrainType.BRIDGE);
+            bridgesBuilt++;
+            if (endNeighbour.getTerrainType() == TerrainType.ROAD && endNeighbour.getRoad() != null) {
+                end.getRoad().setConnection(startDirection.getOpposite());
+                endNeighbour.getRoad().setConnection(startDirection);
+            }
+        }
+        world.spendMoney(type.getCost() * bridgesBuilt);
     }
 
     public void buyVehicle(Tile t, VehicleType type) throws Exception
