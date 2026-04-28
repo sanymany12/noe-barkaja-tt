@@ -9,6 +9,7 @@ import world.resources.ICargo;
 import world.tile.Point;
 import world.tile.TerrainType;
 import world.tile.Tile;
+import world.tile.road.Bridge;
 import world.tile.road.Road;
 import world.tile.road.RoadDirection;
 
@@ -337,6 +338,19 @@ public abstract class Vehicle {
                     }
                 } else if (world.get(nextTile.x, nextTile.y).getRoad() != null) {
                     this.world.get(nextTile.x, nextTile.y).getRoad().vehicleEnters(this, this.currentDirection);
+                    // Hídra lépés esetén sebesség frissítése
+                    if (world.get(nextTile.x, nextTile.y).getRoad().getIsBridge()) {
+                        if (this.speed > ((Bridge) world.get(nextTile.x, nextTile.y).getRoad()).getType().getSpeedLimit()) {
+                            this.speed = ((Bridge) world.get(nextTile.x, nextTile.y).getRoad()).getType().getSpeedLimit();
+                            this.ticksPerMove = this.world.getTicksPerDay() / this.speed;
+                        }
+                        // Ha ismét sima úton megyünk, sebesség visszaállítása alapsebességre
+                    } else {
+                        if (this.speed < this.type.getBaseSpeed()) {
+                            this.speed = this.type.getBaseSpeed();
+                            this.ticksPerMove = this.world.getTicksPerDay() / this.speed;
+                        }
+                    }
                 }
 
                 // Jármű pozíciójának frissítése

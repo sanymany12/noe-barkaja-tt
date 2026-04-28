@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Road {
-    private List<RoadDirection> connections;
+    protected List<RoadDirection> connections;
 
     private final int COST_TO_REMOVE = 3;
     private final int COST_TO_BUILD = 5;
@@ -16,8 +16,10 @@ public class Road {
     transient private Vehicle rightLaneH;
     transient private Vehicle leftLaneH;
 
-    private int locationX;
-    private int locationY;
+    protected int locationX;
+    protected int locationY;
+
+    protected boolean isBridge;
 
     public Road(int x, int y) {
         this.connections = new ArrayList<RoadDirection>();
@@ -29,6 +31,8 @@ public class Road {
 
         this.locationX = x;
         this.locationY = y;
+
+        this.isBridge = false;
     }
 
     public int getCostToBuild() {
@@ -49,6 +53,10 @@ public class Road {
 
     public Vehicle getLeftLaneH() {
         return this.leftLaneH;
+    }
+
+    public boolean getIsBridge() {
+        return this.isBridge;
     }
 
     public boolean isOccupied (RoadDirection dir) {
