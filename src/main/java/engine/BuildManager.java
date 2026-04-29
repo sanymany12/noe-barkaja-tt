@@ -184,7 +184,7 @@ public class BuildManager {
         } else if (start.getCoordinate().x == end.getCoordinate().x) {
             matchingCoordinateIsX = true;
             if (start.getCoordinate().y > end.getCoordinate().y) {
-                startDirection = RoadDirection.SOUTH;
+                startDirection = RoadDirection.NORTH;
                 startNeighbour = world.get(start.getCoordinate().x, start.getCoordinate().y + 1);
                 endNeighbour = world.get(end.getCoordinate().x, end.getCoordinate().y - 1);
                 if (startNeighbour != null && endNeighbour != null) {
@@ -204,7 +204,7 @@ public class BuildManager {
                     }
                 }
             } else {
-                startDirection = RoadDirection.NORTH;
+                startDirection = RoadDirection.SOUTH;
                 startNeighbour = world.get(start.getCoordinate().x, start.getCoordinate().y - 1);
                 endNeighbour = world.get(end.getCoordinate().x, end.getCoordinate().y + 1);
                 if (startNeighbour != null && endNeighbour != null) {
@@ -308,7 +308,7 @@ public class BuildManager {
                 startNeighbour.getRoad().setConnection(startDirection.getOpposite());
             }
             for (int i = start.getCoordinate().x + 1; i < end.getCoordinate().x; i++) {
-                Bridge newBridge = new Bridge(i, start.getCoordinate().y, type, RoadDirection.WEST, false);
+                Bridge newBridge = new Bridge(i, start.getCoordinate().y, type, RoadDirection.EAST, false);
                 newBridge.setConnection(RoadDirection.WEST);
                 newBridge.setConnection(RoadDirection.EAST);
                 bridgesBuilt++;

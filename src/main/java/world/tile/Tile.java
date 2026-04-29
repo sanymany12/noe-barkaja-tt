@@ -79,12 +79,26 @@ public class Tile {
         return false;
     }
 
-    public String getSpriteName(){
-        return switch (terrainType) {
-            case LAND, ROAD -> "grass" + randomValue;
-            case WATER -> "water" + randomValue;
-            case BUILDING, STOP -> "concrete";
-            default -> "part0";
-        };
+    public String getSpriteName() {
+        switch (terrainType) {
+            case LAND, ROAD, BUILDING, STOP:
+                if (this.coordinate.x % 2 == 0) {
+                    if (this.coordinate.y % 2 == 0) {
+                        return "land-1";
+                    } else {
+                        return "land-2";
+                    }
+                } else {
+                    if (this.coordinate.y % 2 == 0) {
+                        return "land-2";
+                    } else {
+                        return "land-1";
+                    }
+                }
+            case WATER:
+                return "water";
+            default:
+                return "land-edge";
+        }
     }
 }
