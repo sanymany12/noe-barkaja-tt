@@ -18,15 +18,15 @@ public class CameraTest {
     @Test
     public void testZoomLimits() {
         // Teszteljük, hogy a zoom nem mehet-e a MIN_ZOOM (0.5) alá
-        camera.setZoom(0.1, 20, 20);
+        camera.setZoom(0.1, 0,0,20, 20);
         assertEquals(0.5, camera.getZoom(), "A zoomnak meg kell állnia a MIN_ZOOM (0.5) értéknél!");
 
         // Teszteljük, hogy a zoom nem mehet-e a MAX_ZOOM (4.0) fölé
-        camera.setZoom(5.0, 20, 20);
+        camera.setZoom(5.0, 0,0,20, 20);
         assertEquals(4.0, camera.getZoom(), "A zoomnak meg kell állnia a MAX_ZOOM (4.0) értéknél!");
 
         // Teszteljük a normál értéket
-        camera.setZoom(2.0, 20, 20);
+        camera.setZoom(2.0, 0,0,20, 20);
         assertEquals(2.0, camera.getZoom(), "A zoomnak be kell állnia a megadott helyes értékre!");
     }
 
