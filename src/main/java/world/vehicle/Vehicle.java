@@ -458,7 +458,7 @@ public abstract class Vehicle {
 
     public void updateExactCoordinates() {
         double mid = 0.5;
-        double dist = 0.25; // Távolság a cella közepétől
+        double dist = 0.20; // Távolság a cella közepétől
 
         double offsetX = 0.0;
         double offsetY = 0.0;
@@ -466,20 +466,20 @@ public abstract class Vehicle {
         // Kiszámoljuk az eltolást az irány alapján
         switch (this.currentDirection) {
             case RoadDirection.NORTH:
-                offsetX = (mid + dist) - (this.width / 2.0) + 0.1;  // Jobb sáv
+                offsetX = (mid + dist) - (this.width / 2.0);  // Jobb sáv
                 offsetY = mid - (this.height / 2.0);          // Függőlegesen középen tartjuk
                 break;
             case RoadDirection.SOUTH:
-                offsetX = (mid - dist) - (this.width / 2.0) + 0.2;  // Bal sáv
+                offsetX = (mid - dist) - (this.width / 2.0);  // Bal sáv
                 offsetY = mid - (this.height / 2.0);
                 break;
             case RoadDirection.EAST:
                 offsetX = mid - (this.width / 2.0);           // Vízszintesen középen tartjuk
-                offsetY = (mid + dist) - (this.height / 2.0); // Alsó sáv
+                offsetY = (mid + dist) - (this.height / 2.0) -0.1; // Alsó sáv
                 break;
             case RoadDirection.WEST:
                 offsetX = mid - (this.width / 2.0);
-                offsetY = (mid - dist) - (this.height / 2.0) + 0.2; // Felső sáv
+                offsetY = (mid - dist) - (this.height / 2.0) -0.1; // Felső sáv
                 break;
         }
 
