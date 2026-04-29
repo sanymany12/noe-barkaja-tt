@@ -454,6 +454,7 @@ public abstract class Vehicle {
             if (movingForward) {
                 try {
                     findPath(this.routeStops.get(stopIndex));
+                    this.move();
                 } catch (Exception e) {
                     System.err.println("Hiba az allomassal: " + e.getMessage());
                 }
