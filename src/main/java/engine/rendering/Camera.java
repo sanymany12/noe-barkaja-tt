@@ -35,8 +35,24 @@ public class Camera {
         this.screenHeight = screenHeight;
     }
 
-    public void setZoom(double newZoom, int mapWidthTiles, int mapHeightTiles) {
-        this.zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
+    public void setZoom(double newZoom, int mouseX, int mouseY, int mapWidthTiles, int mapHeightTiles) {
+        double oldZoom = this.zoom;
+        double clampedZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
+
+        if (oldZoom == clampedZoom) return;
+
+        double absolutePixelX = mouseX + this.offsetX;
+        double absolutePixelY = mouseY + this.offsetY;
+
+        this.zoom = clampedZoom;
+
+        double scaleRatio = clampedZoom / oldZoom;
+        double newAbsolutePixelX = absolutePixelX * scaleRatio;
+        double newAbsolutePixelY = absolutePixelY * scaleRatio;
+
+        this.offsetX = newAbsolutePixelX - mouseX;
+        this.offsetY = newAbsolutePixelY - mouseY;
+
         clampCamera(mapWidthTiles, mapHeightTiles);
     }
 

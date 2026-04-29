@@ -273,7 +273,7 @@ public class GameController implements GameListener {
                 double currentZoom = model.getCamera().getZoom();
                 double newZoom = currentZoom - (e.getWheelRotation() * zoomSensitivity);
 
-                model.getCamera().setZoom(newZoom, mapWidthTiles, mapHeightTiles);
+                model.getCamera().setZoom(newZoom, e.getX(), e.getY(), mapWidthTiles, mapHeightTiles);
 
                 view.mapRefresh();
             }

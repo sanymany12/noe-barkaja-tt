@@ -6,5 +6,7 @@ public enum TerrainType {
     ROAD,
     BRIDGE,
     STOP,
-    BUILDING
+    BUILDING,
+    CLIFF,
+    VOID
 }
