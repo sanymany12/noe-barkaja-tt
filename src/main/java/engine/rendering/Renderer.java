@@ -135,8 +135,8 @@ public class Renderer {
             Point bottomRight = camera.worldToScreen(eX + vehicle.getWidth(), eY + vehicle.getHeight());
 
             //A tényleges szélesség és magasság a két pont különbsége
-            int renderWidth = (int)((bottomRight.x - topLeft.x) * vehicle.getWidth());
-            int renderHeight = (int)((bottomRight.y - topLeft.y) * vehicle.getHeight()); // megnöveljük a cella magasságát
+            int renderWidth = (bottomRight.x - topLeft.x);
+            int renderHeight = (bottomRight.y - topLeft.y);
             objectsToRender.add(new RenderObj(AssetManager.get(vehicle.getSpriteName()),
                     topLeft.x, topLeft.y, renderWidth, renderHeight, bottomRight.y));
         }
@@ -154,6 +154,9 @@ pálya kirajzolása cellánként, TODO: culling (nincs szükség minden cellát 
     private void renderGround(Graphics graphics){
         for (int i = 0; i < world.getCols(); i++) {
             for (int j = 0; j < world.getRows(); j++) {
+
+                Tile tile = world.get(i,j);
+                if(tile.getTerrainType() == TerrainType.VOID){continue;}
                 //Kiszámoljuk a csempe bal felső sarkát
                 Point topLeft = camera.worldToScreen(i, j);
 

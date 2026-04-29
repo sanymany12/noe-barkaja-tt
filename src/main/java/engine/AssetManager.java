@@ -56,7 +56,7 @@ public class AssetManager {
         // LAND assetek betöltése
         loadAsset("land-1", "/assets-final/land-1.png");
         loadAsset("land-2", "/assets-final/land-2.png");
-        loadAsset("land-edge", "/assets-final/land-edge.png");
+        loadAsset("cliff", "/assets-final/land-edge.png");
         loadAsset("water", "/assets-final/water.png");
 
         // FA assetek betöltése

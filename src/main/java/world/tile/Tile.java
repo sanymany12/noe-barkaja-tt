@@ -97,8 +97,12 @@ public class Tile {
                 }
             case WATER:
                 return "water";
+            case CLIFF:
+                return "cliff";
+            case VOID:
+                return "cliff";
             default:
-                return "land-edge";
+                return "none";
         }
     }
 }
