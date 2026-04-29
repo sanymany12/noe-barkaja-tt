@@ -122,7 +122,7 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
                 case AnimalType.RACOON:
                     return "enclosure-racoon";
                 case AnimalType.SEAHORSE:
-                    return "enclosure-racoon";
+                    return "enclosure-seahorse";
                 default:
                     return "enclosure";
             }

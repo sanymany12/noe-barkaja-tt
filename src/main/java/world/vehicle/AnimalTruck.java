@@ -60,7 +60,10 @@ public class AnimalTruck extends Vehicle {
     public void unloadTo(Building building) {
         switch (building.getBuildingType()) {
             case BuildingType.ENCLOSURE:
-                if (this.cargoType != null && this.cargoType == ((Enclosure) building).getSpecies()) {
+                if (this.cargoType != null && !((Enclosure) building).hasAnimals()) {
+                    ((Enclosure) building).newSpeciesArrives((AnimalType) this.cargoType);
+                    this.cargoType = null;
+                } else if (this.cargoType != null && this.cargoType == ((Enclosure) building).getSpecies()) {
                     this.cargoType = null;
                     ((Enclosure) building).receiveAnimal();
                 }
