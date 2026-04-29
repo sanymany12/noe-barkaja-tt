@@ -77,7 +77,7 @@ public abstract class Vehicle {
         this.isOnTour = false;
 
         this.movingForward = false;
-        this.movedPercentage = 0;
+        this.movedPercentage = 1;
 
         this.type = null;
 
@@ -129,12 +129,17 @@ public abstract class Vehicle {
     public void increaseTickCount() throws Exception {
         if (this.movingForward) {
             this.tickCount++;
-            this.movedPercentage = (double) this.tickCount / this.ticksPerMove;
             // System.out.println("A jármű előrehaladása a következő tile felé: " + this.movedPercentage * 100 + "%");
             if (this.tickCount == this.ticksPerMove) {
                 this.move();
                 this.tickCount = 0;
             }
+            if (this.movingForward) {
+                this.movedPercentage = (double) this.tickCount / this.ticksPerMove;
+            } else {
+                this.movedPercentage = 1;
+            }
+            this.updateExactCoordinates();
         }
     }
 
@@ -169,6 +174,7 @@ public abstract class Vehicle {
             try {
                 findPath(this.routeStops.get(this.stopIndex));
                 System.out.println("Útvonal megtalálva.");
+                this.move();
             } catch (Exception e)
             {
                 System.err.println("Nem található útvonal a kezdéshez: " + e.getMessage());
@@ -381,8 +387,6 @@ public abstract class Vehicle {
                         break;
                 }
 
-                this.updateExactCoordinates();
-
                 // Jármű megérkezik a következő tile-re
                 if (world.get(nextTile.x, nextTile.y).getBuilding() != null) {
                     switch (world.get(nextTile.x, nextTile.y).getBuilding().getBuildingType()) {
@@ -414,6 +418,7 @@ public abstract class Vehicle {
 
                 // Jármű pozíciójának frissítése
                 this.currentPlace = nextTile;
+                // this.updateExactCoordinates();
             } else {
                 System.out.println("Can't go on.");
             }
@@ -463,22 +468,39 @@ public abstract class Vehicle {
         double offsetX = 0.0;
         double offsetY = 0.0;
 
+//        if (this.world.get(currentPlace.x, currentPlace.y).getBuilding() != null) {
+//            switch (this.currentDirection) {
+//                case RoadDirection.EAST:
+//                    offsetX = mid - (this.width / 2.0);
+//                    offsetY = mid - (this.height / 2.0) - 0.1;
+//                case RoadDirection.WEST:
+//                    offsetX = mid - (this.width / 2.0);
+//                    offsetY = mid - (this.height / 2.0) + 0.1;
+//                case RoadDirection.NORTH:
+//                    offsetX = mid - (this.width / 2.0) + 0.1;
+//                    offsetY = mid - (this.height / 2.0);
+//                case RoadDirection.SOUTH:
+//                    offsetX = mid - (this.width / 2.0) - 0.1;
+//                    offsetY = mid - (this.height / 2.0);
+//            }
+//        }
+
         // Kiszámoljuk az eltolást az irány alapján
         switch (this.currentDirection) {
             case RoadDirection.NORTH:
                 offsetX = (mid + dist) - (this.width / 2.0);  // Jobb sáv
-                offsetY = mid - (this.height / 2.0);          // Függőlegesen középen tartjuk
+                offsetY = mid - (this.height / 2.0) + 1 - this.movedPercentage;          // Függőlegesen középen tartjuk
                 break;
             case RoadDirection.SOUTH:
                 offsetX = (mid - dist) - (this.width / 2.0);  // Bal sáv
-                offsetY = mid - (this.height / 2.0);
+                offsetY = mid - (this.height / 2.0) - 1 + this.movedPercentage;
                 break;
             case RoadDirection.EAST:
-                offsetX = mid - (this.width / 2.0);           // Vízszintesen középen tartjuk
-                offsetY = (mid + dist) - (this.height / 2.0) -0.1; // Alsó sáv
+                offsetX = mid - (this.width / 2.0) - 1 + this.movedPercentage;           // Vízszintesen középen tartjuk
+                offsetY = (mid + dist) - (this.height / 2.0) - 0.1; // Alsó sáv
                 break;
             case RoadDirection.WEST:
-                offsetX = mid - (this.width / 2.0);
+                offsetX = mid - (this.width / 2.0) + 1 - this.movedPercentage;
                 offsetY = (mid - dist) - (this.height / 2.0) -0.1; // Felső sáv
                 break;
         }
