@@ -46,12 +46,16 @@ public abstract class Vehicle {
     protected double movedPercentage;
 
     protected VehicleType type;
+    protected double exactX;
+    protected double exactY;
 
     public Vehicle(World world, Point p) throws Exception {
         this.world = world;
 
         if (this.world.isValidTile(p.x, p.y)) {
             this.currentPlace = p;
+            this.exactX = currentPlace.x;
+            this.exactY = currentPlace.y;
         } else {
             throw new Exception("Invalid tile!");
         }
@@ -75,6 +79,7 @@ public abstract class Vehicle {
         this.type = null;
 
         this.tickCount = 0;
+        this.updateExactCoordinates();
     }
 
     public void increaseTickCount() throws Exception {
@@ -206,6 +211,14 @@ public abstract class Vehicle {
         }
     }
 
+    public double getExactX() {
+        return exactX;
+    }
+
+    public double getExactY() {
+        return exactY;
+    }
+
     public void move() throws Exception {
         // Úton a következő megállóba
         if (!this.path.isEmpty()) {
@@ -324,6 +337,8 @@ public abstract class Vehicle {
                         break;
                 }
 
+                this.updateExactCoordinates();
+
                 // Jármű megérkezik a következő tile-re
                 if (world.get(nextTile.x, nextTile.y).getBuilding() != null) {
                     switch (world.get(nextTile.x, nextTile.y).getBuilding().getBuildingType()) {
@@ -395,6 +410,38 @@ public abstract class Vehicle {
                 }
             }
         }
+    }
+
+    public void updateExactCoordinates() {
+        double mid = 0.5;
+        double dist = 0.25; // Távolság a cella közepétől
+
+        double offsetX = 0.0;
+        double offsetY = 0.0;
+
+        // Kiszámoljuk az eltolást az irány alapján
+        switch (this.currentDirection) {
+            case RoadDirection.NORTH:
+                offsetX = (mid + dist) - (this.width / 2.0) + 0.1;  // Jobb sáv
+                offsetY = mid - (this.height / 2.0);          // Függőlegesen középen tartjuk
+                break;
+            case RoadDirection.SOUTH:
+                offsetX = (mid - dist) - (this.width / 2.0) + 0.2;  // Bal sáv
+                offsetY = mid - (this.height / 2.0);
+                break;
+            case RoadDirection.EAST:
+                offsetX = mid - (this.width / 2.0);           // Vízszintesen középen tartjuk
+                offsetY = (mid + dist) - (this.height / 2.0); // Alsó sáv
+                break;
+            case RoadDirection.WEST:
+                offsetX = mid - (this.width / 2.0);
+                offsetY = (mid - dist) - (this.height / 2.0) + 0.2; // Felső sáv
+                break;
+        }
+
+        // Hozzáadjuk az eltolást a csempe logikai koordinátájához
+        this.exactX = this.currentPlace.x + offsetX;
+        this.exactY = this.currentPlace.y + offsetY;
     }
 
     public void findPath(Tile destination) throws Exception {
