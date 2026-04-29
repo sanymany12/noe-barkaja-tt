@@ -53,27 +53,11 @@ public class AssetManager {
         loadAsset("part2", "/assets/shore/sand-beach03.png");
         loadAsset("part3", "/assets/shore/sand-beach04.png");
 
-        //fa textúrák
-        loadAsset("tree1", "/assets/trees/tree1.png");
-        loadAsset("tree2", "/assets/trees/tree2.png");
-        loadAsset("tree3", "/assets/trees/tree3.png");
-        loadAsset("tree4", "/assets/trees/tree4.png");
-
-        //road tipusok (road + NORTH EAST SOUTH WEST) amerre nyitott
-        //loadAsset("roadN", "/assets/landscapeTiles_117.png"); régi assetek
-        //loadAsset("roadE", "/assets/landscapeTiles_112.png");
-        //loadAsset("roadS", "/assets/landscapeTiles_111.png");
-        //loadAsset("roadW", "/assets/landscapeTiles_105.png");
-
-        //loadAsset("roadNS", "/assets/landscapeTiles_082.png");
-        //loadAsset("roadEW", "/assets/landscapeTiles_074.png");
-
-        //loadAsset("roadNES", "/assets/landscapeTiles_089.png");
-        //loadAsset("roadNEW", "/assets/landscapeTiles_104.png");
-        //loadAsset("roadNSW", "/assets/landscapeTiles_096.png");
-        //loadAsset("roadESW", "/assets/landscapeTiles_097.png");
-
-        //loadAsset("roadNESW", "/assets/landscapeTiles_090.png");
+        // FA assetek betöltése
+        loadAsset("tree1", "/assets-final/trees1.png");
+        loadAsset("tree2", "/assets-final/trees2.png");
+        loadAsset("tree3", "/assets-final/trees3.png");
+        loadAsset("tree4", "/assets-final/trees4.png");
 
         // ROAD típusok betöltése
         loadAsset("road-0-", "/assets-final/road-0-.png");
