@@ -184,6 +184,11 @@ public class World {
 
     public int getElapsedTime() { return this.elapsedTime; }
 
+    public void sellVehicle(Vehicle vehicle) {
+        this.receiveMoney(vehicle.getCostToSell());
+        this.vehicles.remove(vehicle);
+    }
+
     public void receiveMoney(int income) {
         this.money = this.money + income;
     }

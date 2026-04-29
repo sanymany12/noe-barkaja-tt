@@ -11,11 +11,19 @@ import world.tile.road.RoadDirection;
 public class Bus extends Vehicle {
     private Point destination;
 
+    private int CAPACITY = 30;
+
+    private final int COST_TO_BUY = 3000;
+    private final int SELLING_PRICE = 1200;
+    private final int COST_TO_OPERATE = 8;
+
     public Bus(World world, Point p) throws Exception {
         super(world, p);
 
-        this.capacity = 10;
-        this.costToOperate = 10;
+        this.capacity = this.CAPACITY;
+        this.costToBuy = this.COST_TO_BUY;
+        this.sellingPrice = this.SELLING_PRICE;
+        this.costToOperate = this.COST_TO_OPERATE;
 
         this.cargoType = null;
 

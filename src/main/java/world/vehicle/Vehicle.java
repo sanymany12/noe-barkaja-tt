@@ -28,7 +28,6 @@ public abstract class Vehicle {
 
     protected int speed;
     protected int capacity;
-    protected int costToOperate;
 
     protected int cargoNum;
     protected List<Point> path;
@@ -46,6 +45,10 @@ public abstract class Vehicle {
     protected double movedPercentage;
 
     protected VehicleType type;
+
+    protected int costToBuy;
+    protected int sellingPrice;
+    protected int costToOperate;
 
     public Vehicle(World world, Point p) throws Exception {
         this.world = world;
@@ -75,6 +78,47 @@ public abstract class Vehicle {
         this.type = null;
 
         this.tickCount = 0;
+    }
+
+    public int getCurrentCargoNum() {
+        return this.cargoNum;
+    }
+
+    public int getCostToBuy() {
+        return this.costToBuy;
+    }
+
+    public int getCostToSell() {
+        return this.sellingPrice;
+    }
+
+    public int getCostToOperate() {
+        return this.costToOperate;
+    }
+
+    public void sellVehicle() {
+        if (world.get(this.currentPlace.x, this.currentPlace.y) != null) {
+            Tile currentPosition = world.get(this.currentPlace.x, this.currentPlace.y);
+            switch (currentPosition.getTerrainType()) {
+                case TerrainType.ROAD, TerrainType.BRIDGE:
+                    if (currentPosition.getRoad() != null) {
+                        currentPosition.getRoad().vehicleLeaves(this, this.currentDirection);
+                    }
+                    break;
+                case TerrainType.STOP:
+                    if (currentPosition.getBuilding() != null) {
+                        if (currentPosition.getBuilding().getBuildingType() == BuildingType.BUSSTOP) {
+                            ((BusStop) (currentPosition.getBuilding())).vehicleLeaves();
+                        } else if (currentPosition.getBuilding().getBuildingType() == BuildingType.STATION) {
+                            ((Station) (currentPosition.getBuilding())).vehicleLeaves();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        this.world.sellVehicle(this);
     }
 
     public void increaseTickCount() throws Exception {
