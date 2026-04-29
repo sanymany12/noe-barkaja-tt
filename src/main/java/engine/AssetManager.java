@@ -77,6 +77,32 @@ public class AssetManager {
         loadAsset("road-3-wse", "/assets-final/road-3-wse.png");
         loadAsset("road-4-nwse", "/assets-final/road-4-nwse.png");
 
+        // BRIDGE típusok betöltése
+        loadAsset("bridge-wood-end-n", "/assets-final/wooden-bridge-end-n.png");
+        loadAsset("bridge-wood-end-s", "/assets-final/wooden-bridge-end-s.png");
+        loadAsset("bridge-wood-end-w", "/assets-final/wooden-bridge-end-w.png");
+        loadAsset("bridge-wood-end-e", "/assets-final/wooden-bridge-end-e.png");
+        loadAsset("bridge-wood-n", "/assets-final/wooden-bridge-middle-vertical.png");
+        loadAsset("bridge-wood-s", "/assets-final/wooden-bridge-middle-vertical.png");
+        loadAsset("bridge-wood-e", "/assets-final/wooden-bridge-middle-horizontal.png");
+        loadAsset("bridge-wood-w", "/assets-final/wooden-bridge-middle-horizontal.png");
+        loadAsset("bridge-stone-end-n", "/assets-final/stone-bridge-end-n.png");
+        loadAsset("bridge-stone-end-s", "/assets-final/stone-bridge-end-s.png");
+        loadAsset("bridge-stone-end-w", "/assets-final/stone-bridge-end-w.png");
+        loadAsset("bridge-stone-end-e", "/assets-final/stone-bridge-end-e.png");
+        loadAsset("bridge-stone-n", "/assets-final/stone-bridge-middle-vertical.png");
+        loadAsset("bridge-stone-s", "/assets-final/stone-bridge-middle-vertical.png");
+        loadAsset("bridge-stone-e", "/assets-final/stone-bridge-middle-horizontal.png");
+        loadAsset("bridge-stone-w", "/assets-final/stone-bridge-middle-horizontal.png");
+        loadAsset("bridge-glass-end-n", "/assets-final/glass-bridge-end-n.png");
+        loadAsset("bridge-glass-end-s", "/assets-final/glass-bridge-end-s.png");
+        loadAsset("bridge-glass-end-w", "/assets-final/glass-bridge-end-w.png");
+        loadAsset("bridge-glass-end-e", "/assets-final/glass-bridge-end-e.png");
+        loadAsset("bridge-glass-n", "/assets-final/glass-bridge-middle-vertical.png");
+        loadAsset("bridge-glass-s", "/assets-final/glass-bridge-middle-vertical.png");
+        loadAsset("bridge-glass-e", "/assets-final/glass-bridge-middle-horizontal.png");
+        loadAsset("bridge-glass-w", "/assets-final/glass-bridge-middle-horizontal.png");
+
         // STATION típusok betöltése
         loadAsset("industrial-stop-s", "/assets-final/industrial-stop-n.png");
         loadAsset("industrial-stop-w", "/assets-final/industrial-stop-e.png");
