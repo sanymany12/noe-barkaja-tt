@@ -53,6 +53,12 @@ public class AssetManager {
         loadAsset("part2", "/assets/shore/sand-beach03.png");
         loadAsset("part3", "/assets/shore/sand-beach04.png");
 
+        // LAND assetek betöltése
+        loadAsset("land-1", "/assets-final/land-1.png");
+        loadAsset("land-2", "/assets-final/land-2.png");
+        loadAsset("land-edge", "/assets-final/land-edge.png");
+        loadAsset("water", "/assets-final/water.png");
+
         // FA assetek betöltése
         loadAsset("tree1", "/assets-final/trees1.png");
         loadAsset("tree2", "/assets-final/trees2.png");
