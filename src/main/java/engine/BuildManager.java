@@ -365,5 +365,20 @@ public class BuildManager {
         }
     }
 
+    public void buildTile(Tile from, Tile to){
+        from.setTerrainType(to.getTerrainType());
+        from.setBuilding(to.getBuilding());
+        from.setRoad(to.getRoad());
+        from.setAnchor(to.isAnchor());
+        from.setTreeCount(to.getTreeCount());
+    }
+
+    public void addTreeToTile(Tile tile){
+        if(tile.getTerrainType() == TerrainType.LAND && tile.getTreeCount() <= 3){
+            tile.setTreeCount(tile.getTreeCount() + 1);
+        }
+    }
+
+
     public void setWorld(World world) { this.world = world;}
 }

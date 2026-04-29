@@ -81,7 +81,7 @@ public class World {
                 grid[i][j] = new Tile(new Point(i,j), TerrainType.LAND, 0, null, null, false);
             }
         }
-
+/*
         grid[0][0].setTreeCount(1);
         grid[18][18].setTreeCount(2);
         grid[19][5].setTreeCount(3);
@@ -160,7 +160,7 @@ public class World {
         // Klonozo
         grid[16][14].setTerrainType(TerrainType.BUILDING);
         grid[16][14].setBuilding(new CloningFacility(this));
-        grid[16][14].setAnchor(true);
+        grid[16][14].setAnchor(true);*/
 
 //        try{
 //            Vehicle testVehicle = new FoodTruck(this, new Point(grid[6][3].getCoordinate().x, grid[6][3].getCoordinate().y));

@@ -24,6 +24,8 @@ public class ingameGUI {
     private JLabel balanceLabel;
     private JButton roadToggle;
     private JButton stationToggle;
+    private JButton tileToggle;
+    private JButton treeToggle;
     private JButton speedPaused;
     private JButton saveBtn;
     private JButton loadBtn;
@@ -77,6 +79,10 @@ public class ingameGUI {
 
     }
 
+    public JButton getTreeToggle() {
+        return treeToggle;
+    }
+
     public ingameGUI() {
         gameWindow = new JFrame("Noé bárkája");
         gameWindow.setSize(1000, 750);
@@ -116,9 +122,13 @@ public class ingameGUI {
         stationToggle = new JButton("Megálló ikon");
         buildPanel.add(stationToggle);
 
-        buildPanel.add(new JButton("További ikonok"));
-        upperPanel.add(buildPanel, BorderLayout.CENTER);
+        tileToggle = new JButton("Build tile");
+        buildPanel.add(tileToggle);
 
+        treeToggle = new JButton("Add trees");
+        buildPanel.add(treeToggle);
+
+        upperPanel.add(buildPanel, BorderLayout.CENTER);
         JPanel napPanel = new JPanel(new BorderLayout());
         napPanel.setPreferredSize(new Dimension(100, 100));
         napPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -465,6 +475,7 @@ public class ingameGUI {
     public JButton getSpeedFast() { return speedFast; }
 
     public JButton getStationToggle() { return stationToggle; }
+    public JButton getTileToggle() { return tileToggle; }
 
     public JButton getSpeedSuperFast() { return speedSuperFast; }
 

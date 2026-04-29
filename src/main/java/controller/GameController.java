@@ -46,7 +46,7 @@ public class GameController implements GameListener {
     private int mapWidthTiles;
     private int mapHeightTiles;
 
-    private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION }
+    private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION, BUILD_TILE, BUILD_TREE }
     public enum VehicleAction { NONE, ASSIGN_ROUTE, SELL }
     public enum BuildingAction { NONE, BUY_VEHICLE }
 
@@ -54,6 +54,7 @@ public class GameController implements GameListener {
     private VehicleType selectedVehicleType = null;
     private Vehicle routingVehicle = null;
     private List<Tile> tempRouteStops = new ArrayList<>();
+    private TerrainType currentTileType = TerrainType.VOID;
 
     public GameController(GameEngine model, ingameGUI view)
     {
@@ -86,7 +87,32 @@ public class GameController implements GameListener {
                 currentState = BuildState.BUILD_ROAD;
                 view.getRoadToggle().setText("**Ut ikon**");
                 view.getStationToggle().setText("Megálló ikon");
+                view.getTreeToggle().setText("Add tree");
+                view.getTileToggle().setText("Build Tile");
+            }
+        });
+        view.getTileToggle().addActionListener(e -> {
+            if(currentState == BuildState.BUILD_TILE) {
+                currentState = BuildState.NONE;
+                view.getTileToggle().setText("Build tile");
+            } else {
+                currentState = BuildState.BUILD_TILE;
+                view.getTileToggle().setText("**Build tile**");
+                view.getRoadToggle().setText("Ut ikon");
+                view.getTreeToggle().setText("Add tree");
 
+            }
+
+        });
+        view.getTreeToggle().addActionListener(e -> {
+            if(currentState == BuildState.BUILD_TREE) {
+                currentState = BuildState.NONE;
+                view.getTreeToggle().setText("Add tree");
+            } else {
+                currentState = BuildState.BUILD_TREE;
+                view.getTreeToggle().setText("**Add tree**");
+                view.getRoadToggle().setText("Ut ikon");
+                view.getTileToggle().setText("Build Tile");
             }
         });
         view.getStationToggle().addActionListener(e -> {
@@ -97,6 +123,8 @@ public class GameController implements GameListener {
                 currentState = BuildState.BUILD_STATION;
                 view.getStationToggle().setText("**Megálló ikon**");
                 view.getRoadToggle().setText("Ut ikon");
+                view.getTreeToggle().setText("Add tree");
+                view.getTileToggle().setText("Build Tile");
             }
         });
         view.getSpeedPaused().addActionListener(e -> {
@@ -236,11 +264,19 @@ public class GameController implements GameListener {
                 {
                     buildRoadAtScreen(e.getX(), e.getY());
                 }
+                //Tile építés
+                else if(currentState == BuildState.BUILD_TILE && SwingUtilities.isLeftMouseButton(e))
+                {
+                    buildTileAtScreen(e.getX(), e.getY());
+                }
 
                 // Megallo epitese
                 else if(currentState == BuildState.BUILD_STATION && SwingUtilities.isLeftMouseButton(e))
                 {
                     buildStationAtScreen(e.getX(), e.getY());
+                }else if(currentState == BuildState.BUILD_TREE && SwingUtilities.isLeftMouseButton(e))
+                {
+                    addTree(e.getX(), e.getY());
                 }
             }
 
@@ -262,6 +298,13 @@ public class GameController implements GameListener {
                     lastMouseY = e.getY();
 
                     view.mapRefresh();
+                }else if(currentState == BuildState.BUILD_TILE && SwingUtilities.isLeftMouseButton(e))
+                {
+                    buildTileAtScreen(e.getX(), e.getY());
+
+                }else if(currentState == BuildState.BUILD_TREE && SwingUtilities.isLeftMouseButton(e))
+                {
+                    addTree(e.getX(), e.getY());
                 }
 
             }
@@ -292,6 +335,11 @@ public class GameController implements GameListener {
 
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "cancelAction");
 
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0), "selectGrassTile"); //tile building options
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "selectWaterTile");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0), "selectCliffTile");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, 0), "selectVoidTile");
+
         actionMap.put("cancelAction", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -309,6 +357,30 @@ public class GameController implements GameListener {
                     view.getRoadToggle().setText("Út ikon");
                     view.getStationToggle().setText("Megálló ikon");
                 }
+            }
+        });
+        actionMap.put("selectGrassTile", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentTileType = TerrainType.LAND;
+            }
+        });
+        actionMap.put("selectWaterTile", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentTileType = TerrainType.WATER;
+            }
+        });
+        actionMap.put("selectCliffTile", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentTileType = TerrainType.CLIFF;
+            }
+        });
+        actionMap.put("selectVoidTile", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentTileType = TerrainType.VOID;
             }
         });
     }
@@ -351,6 +423,27 @@ public class GameController implements GameListener {
             view.setDay(model.getWorld().getElapsedTime());
             view.mapRefresh();
         }
+    }
+
+    private void buildTileAtScreen(int screenX, int screenY)
+    {
+        Point gridPos = model.getCamera().screenToWorld(screenX, screenY);
+        Tile current = model.getWorld().get(gridPos.x, gridPos.y);
+
+        Tile to = new Tile(gridPos, currentTileType, 0, null, null, false);
+        model.getBuildManager().buildTile(current, to);
+        view.mapRefresh();
+        view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
+    }
+
+    private void addTree(int screenX, int screenY)
+    {
+        Point gridPos = model.getCamera().screenToWorld(screenX, screenY);
+        Tile current = model.getWorld().get(gridPos.x, gridPos.y);
+
+        model.getBuildManager().addTreeToTile(current);
+        view.mapRefresh();
+        view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
     }
 
     private void buildRoadAtScreen(int screenX, int screenY)
