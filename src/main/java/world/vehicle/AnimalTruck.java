@@ -8,11 +8,18 @@ import world.tile.Point;
 import world.tile.road.RoadDirection;
 
 public class AnimalTruck extends Vehicle {
+    private final int COST_TO_BUY = 2500;
+    private final int SELLING_PRICE = 1000;
+    private final int COST_TO_OPERATE = 5;
+
     public AnimalTruck(World world, Point p) throws Exception {
         super(world, p);
 
         this.capacity = 1;
-        this.costToOperate = 5;
+        this.costToOperate = this.COST_TO_OPERATE;
+        this.costToBuy = this.COST_TO_BUY;
+        this.sellingPrice = this.SELLING_PRICE;
+
         this.cargoType = null;
 
         this.type = VehicleType.ANIMALTRUCK;
@@ -53,7 +60,10 @@ public class AnimalTruck extends Vehicle {
     public void unloadTo(Building building) {
         switch (building.getBuildingType()) {
             case BuildingType.ENCLOSURE:
-                if (this.cargoType != null && this.cargoType == ((Enclosure) building).getSpecies()) {
+                if (this.cargoType != null && !((Enclosure) building).hasAnimals()) {
+                    ((Enclosure) building).newSpeciesArrives((AnimalType) this.cargoType);
+                    this.cargoType = null;
+                } else if (this.cargoType != null && this.cargoType == ((Enclosure) building).getSpecies()) {
                     this.cargoType = null;
                     ((Enclosure) building).receiveAnimal();
                 }

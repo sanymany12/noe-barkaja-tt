@@ -9,14 +9,18 @@ import world.tile.road.RoadDirection;
 
 public class FoodTruck extends Vehicle {
     private final int CAPACITY = 10;
+
     private final int COST_TO_BUY = 2000;
-    private final int COST_TO_SELL = 1000;
+    private final int SELLING_PRICE = 1000;
+    private final int COST_TO_OPERATE = 10;
 
     public FoodTruck(World world, Point p) throws Exception {
         super(world, p);
 
         this.capacity = this.CAPACITY;
-        this.costToOperate = 5;
+        this.costToBuy = this.COST_TO_BUY;
+        this.sellingPrice = this.SELLING_PRICE;
+        this.costToOperate = this.COST_TO_OPERATE;
 
         this.cargoType = null;
 
@@ -28,22 +32,6 @@ public class FoodTruck extends Vehicle {
         this.height = 0.5f;
 
         this.cargoNum = 0;
-    }
-
-    public int getCurrentCargoNum() {
-        return this.cargoNum;
-    }
-
-    public int getCapacity() {
-        return this.CAPACITY;
-    }
-
-    public int getCostToBuy() {
-        return this.COST_TO_BUY;
-    }
-
-    public int getCostToSell() {
-        return this.COST_TO_SELL;
     }
 
     public boolean hasCargo() {
