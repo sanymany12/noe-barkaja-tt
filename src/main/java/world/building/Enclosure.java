@@ -47,6 +47,11 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
         return this.numOfAnimals == this.CAPACITY;
     }
 
+    public void sellAnimal() {
+        this.world.receiveMoney(this.species.getValue());
+        this.numOfAnimals--;
+    }
+
     public void newSpeciesArrives(AnimalType a) {
         this.species = a;
         this.numOfAnimals = 1;
