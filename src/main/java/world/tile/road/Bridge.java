@@ -7,15 +7,17 @@ public class Bridge extends Road {
 
     private RoadDirection direction;
     private boolean isEnd;
+    private boolean isPreBuilt;
 
-    public Bridge(int x, int y, BridgeType type, RoadDirection dir, boolean isEnd) {
-        super(x, y);
+    public Bridge(int x, int y, BridgeType type, RoadDirection dir, boolean isEnd, boolean isPreBuilt) {
+        super(x, y, isPreBuilt);
 
         this.isBridge = true;
 
         this.type = type;
         this.direction = dir;
         this.isEnd = isEnd;
+        this.isPreBuilt = isPreBuilt;
     }
 
     public BridgeType getType() {

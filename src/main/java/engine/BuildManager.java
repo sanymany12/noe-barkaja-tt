@@ -174,7 +174,7 @@ public class BuildManager {
         }
     }
 
-    public void buildBridge(Tile start, Tile end, BridgeType type) throws Exception {
+    public void buildBridge(Tile start, Tile end, BridgeType type, boolean isPreBuilt) throws Exception {
         boolean matchingCoordinateIsX = false;
         RoadDirection startDirection = null;
 
@@ -281,7 +281,7 @@ public class BuildManager {
 
         // Ha minden feltételnek megfelelt
         if (matchingCoordinateIsX) {
-            Bridge startBridge = new Bridge(start.getCoordinate().x, start.getCoordinate().y, type, startDirection, true);
+            Bridge startBridge = new Bridge(start.getCoordinate().x, start.getCoordinate().y, type, startDirection, true, isPreBuilt);
             start.setRoad(startBridge);
             start.setTerrainType(TerrainType.BRIDGE);
             bridgesBuilt++;
@@ -290,14 +290,14 @@ public class BuildManager {
                 startNeighbour.getRoad().setConnection(startDirection.getOpposite());
             }
             for (int i = start.getCoordinate().y + 1; i < end.getCoordinate().y; i++) {
-                Bridge newBridge = new Bridge(start.getCoordinate().x, i, type, RoadDirection.NORTH, false);
+                Bridge newBridge = new Bridge(start.getCoordinate().x, i, type, RoadDirection.NORTH, false, isPreBuilt);
                 newBridge.setConnection(RoadDirection.NORTH);
                 newBridge.setConnection(RoadDirection.SOUTH);
                 bridgesBuilt++;
                 world.get(start.getCoordinate().x, i).setRoad(newBridge);
                 world.get(start.getCoordinate().x, i).setTerrainType(TerrainType.BRIDGE);
             }
-            Bridge endBridge = new Bridge(end.getCoordinate().x, end.getCoordinate().y, type, startDirection.getOpposite(), true);
+            Bridge endBridge = new Bridge(end.getCoordinate().x, end.getCoordinate().y, type, startDirection.getOpposite(), true, isPreBuilt);
             end.setRoad(endBridge);
             end.setTerrainType(TerrainType.BRIDGE);
             bridgesBuilt++;
@@ -306,7 +306,7 @@ public class BuildManager {
                 endNeighbour.getRoad().setConnection(startDirection);
             }
         } else {
-            Bridge startBridge = new Bridge(start.getCoordinate().x, start.getCoordinate().y, type, startDirection, true);
+            Bridge startBridge = new Bridge(start.getCoordinate().x, start.getCoordinate().y, type, startDirection, true, isPreBuilt);
             start.setRoad(startBridge);
             start.setTerrainType(TerrainType.BRIDGE);
             bridgesBuilt++;
@@ -315,14 +315,14 @@ public class BuildManager {
                 startNeighbour.getRoad().setConnection(startDirection.getOpposite());
             }
             for (int i = start.getCoordinate().x + 1; i < end.getCoordinate().x; i++) {
-                Bridge newBridge = new Bridge(i, start.getCoordinate().y, type, RoadDirection.EAST, false);
+                Bridge newBridge = new Bridge(i, start.getCoordinate().y, type, RoadDirection.EAST, false, isPreBuilt);
                 newBridge.setConnection(RoadDirection.WEST);
                 newBridge.setConnection(RoadDirection.EAST);
                 bridgesBuilt++;
                 world.get(i, start.getCoordinate().y).setRoad(newBridge);
                 world.get(i, start.getCoordinate().y).setTerrainType(TerrainType.BRIDGE);
             }
-            Bridge endBridge = new Bridge(end.getCoordinate().x, end.getCoordinate().y, type, startDirection.getOpposite(), true);
+            Bridge endBridge = new Bridge(end.getCoordinate().x, end.getCoordinate().y, type, startDirection.getOpposite(), true, isPreBuilt);
             end.setRoad(endBridge);
             end.setTerrainType(TerrainType.BRIDGE);
             bridgesBuilt++;
