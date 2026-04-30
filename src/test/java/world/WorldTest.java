@@ -76,9 +76,9 @@ public class WorldTest {
         Tile t2 = world.get(0, 1);
         Tile t3 = world.get(0, 2);
 
-        buildManager.buildRoad(t1);
-        buildManager.buildRoad(t2);
-        buildManager.buildRoad(t3);
+        buildManager.buildRoad(t1, false);
+        buildManager.buildRoad(t2, false);
+        buildManager.buildRoad(t3, false);
 
         List<Point> path = world.findPathRoad(t1, t3);
 
@@ -92,8 +92,8 @@ public class WorldTest {
         Tile t1 = world.get(5, 5);
         Tile t2 = world.get(7, 7);
 
-        buildManager.buildRoad(t1);
-        buildManager.buildRoad(t2);
+        buildManager.buildRoad(t1, false);
+        buildManager.buildRoad(t2, false);
 
         List<Point> path = world.findPathRoad(t1, t2);
 

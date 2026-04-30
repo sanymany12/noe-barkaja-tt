@@ -24,9 +24,12 @@ public class BuildManager {
     }
 
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
-    public void buildRoad(Tile t) {
-        Road newRoad = new Road(t.getCoordinate().x, t.getCoordinate().y);
-        world.spendMoney(newRoad.getCostToBuild() + t.getTreeCount() * 5);
+    // TODO: több ellenőrzés?
+    public void buildRoad(Tile t, boolean isPreBuilt) {
+        Road newRoad = new Road(t.getCoordinate().x, t.getCoordinate().y, isPreBuilt);
+        if (!isPreBuilt) {
+            world.spendMoney(newRoad.getCostToBuild() + t.getTreeCount() * world.getCostToCutTree());
+        }
         t.setRoad(newRoad);
         t.setTerrainType(TerrainType.ROAD);
         Tile neighbourNorth = this.world.get(t.getCoordinate().x, t.getCoordinate().y-1);
@@ -126,7 +129,7 @@ public class BuildManager {
 
     // Megálló építéséhez írt metódus
     // A direction itt az épület irányára hivatkozik!!!
-    public void buildStation(Tile t, RoadDirection dir) {
+    public void buildStation(Tile t, RoadDirection dir, boolean isPreBuilt) {
         Tile buildingTile = null;
         Tile roadTile = null;
         switch(dir) {
@@ -153,7 +156,11 @@ public class BuildManager {
                 // Ellenőrzés, hogy az épület NEM ipari megálló / buszmegálló
                 if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
                     // Megálló megépítése
-                    t.setBuilding(new Station(this.world, buildingTile.getBuilding(), dir));
+                    Station newStation = new Station(this.world, buildingTile.getBuilding(), dir, isPreBuilt);
+                    t.setBuilding(newStation);
+                    if (!isPreBuilt) {
+                        world.spendMoney(newStation.getCostToBuild() + t.getTreeCount() * world.getCostToCutTree());
+                    }
                     t.setTerrainType(TerrainType.STOP);
                     t.setAnchor(true);
                     // Ellenőrzés, hogy van-e a megállóhoz kapcsolódó út
@@ -362,6 +369,29 @@ public class BuildManager {
             world.spendMoney(cost);
             station.vehicleArrives(newVehicle);
             world.getVehicles().add(newVehicle);
+        }
+    }
+
+    public void destroy(Tile t) {
+        if (!t.isEmpty()) {
+            if (t.getBuilding() != null) {
+                if (t.getBuilding().getBuildingType() == BuildingType.STATION) {
+                    if (!((Station) (t.getBuilding())).getIsPreBuilt()) {
+                        if (((Station) (t.getBuilding())).isOccupied()) {
+                            ((Station) (t.getBuilding())).getVehicle().sellVehicle();
+                            t.removeStation();
+                        }
+                    }
+                }
+            } else if (t.getRoad() != null) {
+                if (!t.getRoad().getIsPreBuilt()) {
+                    t.getRoad().getsDestroyed();
+                    t.removeRoad();
+                }
+            } else if (t.getTreeCount() > 0) {
+                world.spendMoney(t.getTreeCount() * world.getCostToCutTree());
+                t.setTreeCount(0);
+            }
         }
     }
 

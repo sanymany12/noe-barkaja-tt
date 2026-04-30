@@ -31,6 +31,8 @@ public class World {
     private final static int TICKS_PER_DAY = 100;
     private final int DAYS_UNTIL_NEW_BUS_ROUTE = 50;
 
+    private final int COST_TO_CUT_TREE = 5;
+
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
@@ -59,6 +61,10 @@ public class World {
 
     public int getCols() {
         return cols;
+    }
+
+    public int getCostToCutTree() {
+        return this.COST_TO_CUT_TREE;
     }
 
     public void increaseTickCounter() throws Exception {
@@ -103,7 +109,7 @@ public class World {
         // Utak varosok kozott
         BuildManager setupBuilder = new BuildManager(this);
         for(int x = 4; x <= 8; x++) {
-            setupBuilder.buildRoad(grid[x][3]);
+            setupBuilder.buildRoad(grid[x][3], true);
         }
 
         // Farm

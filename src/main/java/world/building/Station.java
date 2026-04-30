@@ -17,7 +17,11 @@ public class Station extends Building<Object, Object> {
     private Point savedConnectedRoad;
     private RoadDirection direction;
 
-    public Station(World world, Building building, RoadDirection dir) {
+    private boolean isPreBuilt;
+
+    private final int COST_TO_BUILD = 300;
+
+    public Station(World world, Building building, RoadDirection dir, boolean isPreBuilt) {
         super(world);
         this.type = BuildingType.STATION;
         this.width = 1;
@@ -27,6 +31,7 @@ public class Station extends Building<Object, Object> {
         this.connectedRoad = null;
         this.savedConnectedRoad = null;
         this.direction = dir;
+        this.isPreBuilt = isPreBuilt;
     }
     //connectedRoad és vehicle visszaállítása
     public void initAfterLoad(){
@@ -40,6 +45,14 @@ public class Station extends Building<Object, Object> {
     // getter az ehhez tartozó útnak
     public Tile getConnectedRoad() {
         return this.connectedRoad;
+    }
+
+    public int getCostToBuild() {
+        return this.COST_TO_BUILD;
+    }
+
+    public boolean getIsPreBuilt() {
+        return this.isPreBuilt;
     }
 
     // setter az ehhez tartozó útnak

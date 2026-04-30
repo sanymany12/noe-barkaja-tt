@@ -360,7 +360,7 @@ public class GameController implements GameListener {
 
         if(tile != null && tile.getTerrainType() == TerrainType.LAND && tile.getBuilding() == null)
         {
-            model.getBuildManager().buildRoad(tile);
+            model.getBuildManager().buildRoad(tile, false);
             view.mapRefresh();
             view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
         }
@@ -405,7 +405,7 @@ public class GameController implements GameListener {
 
             if(buildingDir != null)
             {
-                model.getBuildManager().buildStation(tile, buildingDir);
+                model.getBuildManager().buildStation(tile, buildingDir, false);
                 view.mapRefresh();
                 view.getMinimapPanel().getMinimap().generateImage();
             } else {
