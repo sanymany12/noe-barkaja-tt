@@ -373,6 +373,7 @@ public class BuildManager {
         }
     }
 
+    // TODO: reroute Vehicles, remove connections where needed
     public void destroy(Tile t) {
         boolean didDamage = false;
         if (!t.isEmpty()) {
@@ -381,9 +382,14 @@ public class BuildManager {
                     if (!((Station) (t.getBuilding())).getIsPreBuilt()) {
                         if (((Station) (t.getBuilding())).isOccupied()) {
                             ((Station) (t.getBuilding())).getVehicle().sellVehicle();
-                            t.removeStation();
-                            didDamage = true;
                         }
+                        if (((Station) (t.getBuilding())).getConnectedRoad() != null) {
+                            if (((Station) (t.getBuilding())).getConnectedRoad().getRoad() != null) {
+                                ((Station) (t.getBuilding())).getConnectedRoad().getRoad().destroyConnection(((Station) (t.getBuilding())).getDirection());
+                            }
+                        }
+                        t.removeStation();
+                        didDamage = true;
                     }
                 }
             } else if (t.getRoad() != null) {

@@ -102,6 +102,12 @@ public class Road {
         this.leftLaneV.sellVehicle();
     }
 
+    public void destroyConnection(RoadDirection dir) {
+        if (this.connections.contains(dir)) {
+            this.connections.remove(dir);
+        }
+    }
+
     // Jármű érkezése sávkezeléssel
     public void vehicleEnters(Vehicle vehicle, RoadDirection vehicleDirection) {
         switch (vehicleDirection) {
