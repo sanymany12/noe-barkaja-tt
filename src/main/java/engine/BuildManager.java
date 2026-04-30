@@ -373,7 +373,7 @@ public class BuildManager {
         }
     }
 
-    // TODO: reroute Vehicles, remove connections where needed
+    // TODO: reroute Vehicles
     public void destroy(Tile t) {
         boolean didDamage = false;
         if (!t.isEmpty()) {
@@ -389,13 +389,16 @@ public class BuildManager {
                             }
                         }
                         t.removeStation();
+                        world.rerouteVehiclesStation(t);
                         didDamage = true;
                     }
                 }
             } else if (t.getRoad() != null) {
                 if (!t.getRoad().getIsPreBuilt()) {
                     t.getRoad().getsDestroyed();
+                    this.unlinkConnectingRoads(t);
                     t.removeRoad();
+                    world.rerouteVehiclesRoad(t);
                     didDamage = true;
                 }
             } else if (t.getTreeCount() > 0) {
@@ -405,6 +408,26 @@ public class BuildManager {
         }
         if (didDamage) {
             world.spendMoney(world.getCostToDestroy());
+        }
+    }
+
+    private void unlinkConnectingRoads(Tile t) {
+        Tile northNeighbour = this.world.get(t.getCoordinate().x, t.getCoordinate().y - 1);
+        Tile southNeighbour = this.world.get(t.getCoordinate().x, t.getCoordinate().y + 1);
+        Tile eastNeighbour = this.world.get(t.getCoordinate().x + 1, t.getCoordinate().y);
+        Tile westNeighbour = this.world.get(t.getCoordinate().x - 1, t.getCoordinate().y);
+
+        if (northNeighbour != null && northNeighbour.getTerrainType() == TerrainType.ROAD && northNeighbour.getRoad() != null) {
+            northNeighbour.getRoad().destroyConnection(RoadDirection.NORTH.getOpposite());
+        }
+        if (southNeighbour != null && southNeighbour.getTerrainType() == TerrainType.ROAD && southNeighbour.getRoad() != null) {
+            southNeighbour.getRoad().destroyConnection(RoadDirection.SOUTH.getOpposite());
+        }
+        if (eastNeighbour != null && eastNeighbour.getTerrainType() == TerrainType.ROAD && eastNeighbour.getRoad() != null) {
+            eastNeighbour.getRoad().destroyConnection(RoadDirection.EAST.getOpposite());
+        }
+        if (westNeighbour != null && westNeighbour.getTerrainType() == TerrainType.ROAD && westNeighbour.getRoad() != null) {
+            westNeighbour.getRoad().destroyConnection(RoadDirection.WEST.getOpposite());
         }
     }
 

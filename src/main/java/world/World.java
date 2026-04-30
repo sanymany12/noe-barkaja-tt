@@ -470,6 +470,18 @@ public class World {
         return neighbourRoads;
     }
 
+    public void rerouteVehiclesStation(Tile t) {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            this.vehicles.get(i).rerouteStops(t);
+        }
+    }
+
+    public void rerouteVehiclesRoad(Tile t) {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            this.vehicles.get(i).reroutePath(t);
+        }
+    }
+
     public void startedBusRoute() {
         this.start = null;
     }

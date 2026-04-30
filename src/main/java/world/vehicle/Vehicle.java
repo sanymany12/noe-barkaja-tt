@@ -157,6 +157,45 @@ public abstract class Vehicle {
         this.savedRouteStops.add(new Point(stop.getCoordinate().x, stop.getCoordinate().y));
     }
 
+    public void rerouteStop(Tile stop) {
+        if (movingForward) {
+            if (this.routeStops.contains(stop)) {
+                if (this.routeStops.get(stopIndex) == stop) {
+                    if (this.stopIndex + 1 < this.routeStops.size()) {
+                        this.stopIndex++;
+                        // Ha nincs, de körúton van, visszaállítjuk a StopIndexet az elsőre
+                    } else if (this.isOnTour) {
+                        this.stopIndex = 0;
+                    } else if (this.stopIndex == this.routeStops.size() - 1) {
+                        this.movingForward = false;
+                    }
+                    if (movingForward) {
+                        try {
+                            findPath(this.routeStops.get(stopIndex));
+                        } catch (Exception e) {
+                            this.movingForward = false;
+                            System.err.println("Hiba az allomassal: " + e.getMessage());
+                        }
+                    }
+                }
+                this.routeStops.remove(stop);
+            }
+        }
+    }
+
+    public void reroutePath(Tile road) {
+        if (movingForward) {
+            if (this.path.contains(road)) {
+                try {
+                    findPath(this.routeStops.get(stopIndex));
+                } catch (Exception e) {
+                    this.movingForward = false;
+                    System.err.println("Hiba az allomassal: " + e.getMessage());
+                }
+            }
+        }
+    }
+
     public void startRoute()
     {
         if (!this.routeStops.isEmpty())
@@ -429,22 +468,6 @@ public abstract class Vehicle {
             } else if (this.stopIndex == this.routeStops.size() - 1) {
                 this.movingForward = false;
             }
-//            if(movingForward)
-//            {
-//                stopIndex++;
-//                if(stopIndex >= routeStops.size())
-//                {
-//                    movingForward = false;
-//                    stopIndex = routeStops.size() - 2;
-//                }
-//            } else {
-//                stopIndex--;
-//                if(stopIndex < 0)
-//                {
-//                    movingForward = true;
-//                    stopIndex = 1;
-//                }
-//            }
 
             if (movingForward) {
                 try {

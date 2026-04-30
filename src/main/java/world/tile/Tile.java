@@ -77,11 +77,13 @@ public class Tile {
     public void removeStation() {
         if (this.building.getBuildingType() == BuildingType.STATION) {
             this.building = null;
+            this.terrainType = TerrainType.LAND;
         }
     }
 
     public void removeRoad() {
         this.road = null;
+        this.terrainType = TerrainType.ROAD;
     }
 
     public String getSpriteName() {
