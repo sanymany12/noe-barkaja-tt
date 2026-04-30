@@ -32,6 +32,7 @@ public class World {
     private final int DAYS_UNTIL_NEW_BUS_ROUTE = 50;
 
     private final int COST_TO_CUT_TREE = 5;
+    private final int COST_TO_DESTROY = 200;
 
     public World(int rows, int cols) {
         this.rows = rows;
@@ -65,6 +66,10 @@ public class World {
 
     public int getCostToCutTree() {
         return this.COST_TO_CUT_TREE;
+    }
+
+    public int getCostToDestroy() {
+        return this.COST_TO_DESTROY;
     }
 
     public void increaseTickCounter() throws Exception {

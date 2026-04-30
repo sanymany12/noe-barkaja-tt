@@ -373,6 +373,7 @@ public class BuildManager {
     }
 
     public void destroy(Tile t) {
+        boolean didDamage = false;
         if (!t.isEmpty()) {
             if (t.getBuilding() != null) {
                 if (t.getBuilding().getBuildingType() == BuildingType.STATION) {
@@ -380,6 +381,7 @@ public class BuildManager {
                         if (((Station) (t.getBuilding())).isOccupied()) {
                             ((Station) (t.getBuilding())).getVehicle().sellVehicle();
                             t.removeStation();
+                            didDamage = true;
                         }
                     }
                 }
@@ -387,11 +389,15 @@ public class BuildManager {
                 if (!t.getRoad().getIsPreBuilt()) {
                     t.getRoad().getsDestroyed();
                     t.removeRoad();
+                    didDamage = true;
                 }
             } else if (t.getTreeCount() > 0) {
                 world.spendMoney(t.getTreeCount() * world.getCostToCutTree());
                 t.setTreeCount(0);
             }
+        }
+        if (didDamage) {
+            world.spendMoney(world.getCostToDestroy());
         }
     }
 
