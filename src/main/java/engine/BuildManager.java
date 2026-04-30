@@ -24,104 +24,105 @@ public class BuildManager {
     }
 
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
-    // TODO: több ellenőrzés?
     public void buildRoad(Tile t, boolean isPreBuilt) {
-        Road newRoad = new Road(t.getCoordinate().x, t.getCoordinate().y, isPreBuilt);
-        if (!isPreBuilt) {
-            world.spendMoney(newRoad.getCostToBuild() + t.getTreeCount() * world.getCostToCutTree());
-        }
-        t.setRoad(newRoad);
-        t.setTerrainType(TerrainType.ROAD);
-        Tile neighbourNorth = this.world.get(t.getCoordinate().x, t.getCoordinate().y-1);
-        Tile neighbourWest = this.world.get(t.getCoordinate().x-1, t.getCoordinate().y);
-        Tile neighbourEast = this.world.get(t.getCoordinate().x+1, t.getCoordinate().y);
-        Tile neighbourSouth = this.world.get(t.getCoordinate().x, t.getCoordinate().y+1);
-        if (neighbourNorth != null) {
-            if (neighbourNorth.getRoad() != null) {
-                t.getRoad().setConnection(RoadDirection.NORTH);
-                neighbourNorth.getRoad().setConnection(RoadDirection.NORTH.getOpposite());
-            } else if (neighbourNorth.getBuilding() != null) {
-                switch (neighbourNorth.getBuilding().getBuildingType()) {
-                    case BuildingType.BUSSTOP:
-                        if (((BusStop) (neighbourNorth.getBuilding())).getDirection() == RoadDirection.NORTH) {
-                            t.getRoad().setConnection(RoadDirection.NORTH);
-                            ((BusStop) (neighbourNorth.getBuilding())).setConnectedRoad(t);
-                        }
-                    case BuildingType.STATION:
-                        if (((Station) (neighbourNorth.getBuilding())).getDirection() == RoadDirection.NORTH) {
-                            t.getRoad().setConnection(RoadDirection.NORTH);
-                            ((Station) (neighbourNorth.getBuilding())).setConnectedRoad(t);
-                        }
-                        break;
-                    default:
-                        break;
+        if (t.getTerrainType() == TerrainType.LAND && t.getBuilding() == null && t.getRoad() == null) {
+            Road newRoad = new Road(t.getCoordinate().x, t.getCoordinate().y, isPreBuilt);
+            if (!isPreBuilt) {
+                world.spendMoney(newRoad.getCostToBuild() + t.getTreeCount() * world.getCostToCutTree());
+            }
+            t.setRoad(newRoad);
+            t.setTerrainType(TerrainType.ROAD);
+            Tile neighbourNorth = this.world.get(t.getCoordinate().x, t.getCoordinate().y-1);
+            Tile neighbourWest = this.world.get(t.getCoordinate().x-1, t.getCoordinate().y);
+            Tile neighbourEast = this.world.get(t.getCoordinate().x+1, t.getCoordinate().y);
+            Tile neighbourSouth = this.world.get(t.getCoordinate().x, t.getCoordinate().y+1);
+            if (neighbourNorth != null) {
+                if (neighbourNorth.getRoad() != null) {
+                    t.getRoad().setConnection(RoadDirection.NORTH);
+                    neighbourNorth.getRoad().setConnection(RoadDirection.NORTH.getOpposite());
+                } else if (neighbourNorth.getBuilding() != null) {
+                    switch (neighbourNorth.getBuilding().getBuildingType()) {
+                        case BuildingType.BUSSTOP:
+                            if (((BusStop) (neighbourNorth.getBuilding())).getDirection() == RoadDirection.NORTH) {
+                                t.getRoad().setConnection(RoadDirection.NORTH);
+                                ((BusStop) (neighbourNorth.getBuilding())).setConnectedRoad(t);
+                            }
+                        case BuildingType.STATION:
+                            if (((Station) (neighbourNorth.getBuilding())).getDirection() == RoadDirection.NORTH) {
+                                t.getRoad().setConnection(RoadDirection.NORTH);
+                                ((Station) (neighbourNorth.getBuilding())).setConnectedRoad(t);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-        }
-        if (neighbourSouth != null) {
-            if (neighbourSouth.getRoad() != null) {
-                t.getRoad().setConnection(RoadDirection.SOUTH);
-                neighbourSouth.getRoad().setConnection(RoadDirection.SOUTH.getOpposite());;
-            } else if (neighbourSouth.getBuilding() != null) {
-                switch (neighbourSouth.getBuilding().getBuildingType()) {
-                    case BuildingType.BUSSTOP:
-                        if (((BusStop) (neighbourSouth.getBuilding())).getDirection() == RoadDirection.SOUTH) {
-                            t.getRoad().setConnection(RoadDirection.SOUTH);
-                            ((BusStop) (neighbourSouth.getBuilding())).setConnectedRoad(t);
-                        }
-                        break;
-                    case BuildingType.STATION:
-                        if (((Station) (neighbourSouth.getBuilding())).getDirection() == RoadDirection.SOUTH) {
-                            t.getRoad().setConnection(RoadDirection.SOUTH);
-                            ((Station) (neighbourSouth.getBuilding())).setConnectedRoad(t);
-                        }
-                        break;
-                    default:
-                        break;
+            if (neighbourSouth != null) {
+                if (neighbourSouth.getRoad() != null) {
+                    t.getRoad().setConnection(RoadDirection.SOUTH);
+                    neighbourSouth.getRoad().setConnection(RoadDirection.SOUTH.getOpposite());;
+                } else if (neighbourSouth.getBuilding() != null) {
+                    switch (neighbourSouth.getBuilding().getBuildingType()) {
+                        case BuildingType.BUSSTOP:
+                            if (((BusStop) (neighbourSouth.getBuilding())).getDirection() == RoadDirection.SOUTH) {
+                                t.getRoad().setConnection(RoadDirection.SOUTH);
+                                ((BusStop) (neighbourSouth.getBuilding())).setConnectedRoad(t);
+                            }
+                            break;
+                        case BuildingType.STATION:
+                            if (((Station) (neighbourSouth.getBuilding())).getDirection() == RoadDirection.SOUTH) {
+                                t.getRoad().setConnection(RoadDirection.SOUTH);
+                                ((Station) (neighbourSouth.getBuilding())).setConnectedRoad(t);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-        }
-        if (neighbourEast != null) {
-            if (neighbourEast.getRoad() != null) {
-                t.getRoad().setConnection(RoadDirection.EAST);
-                neighbourEast.getRoad().setConnection(RoadDirection.EAST.getOpposite());
-            } else if (neighbourEast.getBuilding() != null) {
-                switch (neighbourEast.getBuilding().getBuildingType()) {
-                    case BuildingType.BUSSTOP:
-                        if (((BusStop) (neighbourEast.getBuilding())).getDirection() == RoadDirection.EAST) {
-                            t.getRoad().setConnection(RoadDirection.EAST);
-                            ((BusStop) (neighbourEast.getBuilding())).setConnectedRoad(t);
-                        }
-                    case BuildingType.STATION:
-                        if (((Station) (neighbourEast.getBuilding())).getDirection() == RoadDirection.EAST) {
-                            t.getRoad().setConnection(RoadDirection.EAST);
-                            ((Station) (neighbourEast.getBuilding())).setConnectedRoad(t);
-                        }
-                        break;
-                    default:
-                        break;
+            if (neighbourEast != null) {
+                if (neighbourEast.getRoad() != null) {
+                    t.getRoad().setConnection(RoadDirection.EAST);
+                    neighbourEast.getRoad().setConnection(RoadDirection.EAST.getOpposite());
+                } else if (neighbourEast.getBuilding() != null) {
+                    switch (neighbourEast.getBuilding().getBuildingType()) {
+                        case BuildingType.BUSSTOP:
+                            if (((BusStop) (neighbourEast.getBuilding())).getDirection() == RoadDirection.EAST) {
+                                t.getRoad().setConnection(RoadDirection.EAST);
+                                ((BusStop) (neighbourEast.getBuilding())).setConnectedRoad(t);
+                            }
+                        case BuildingType.STATION:
+                            if (((Station) (neighbourEast.getBuilding())).getDirection() == RoadDirection.EAST) {
+                                t.getRoad().setConnection(RoadDirection.EAST);
+                                ((Station) (neighbourEast.getBuilding())).setConnectedRoad(t);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-        }
-        if (neighbourWest != null) {
-            if (neighbourWest.getRoad() != null) {
-                t.getRoad().setConnection(RoadDirection.WEST);
-                neighbourWest.getRoad().setConnection(RoadDirection.WEST.getOpposite());;
-            } else if (neighbourWest.getBuilding() != null) {
-                switch (neighbourWest.getBuilding().getBuildingType()) {
-                    case BuildingType.BUSSTOP:
-                        if (((BusStop) (neighbourWest.getBuilding())).getDirection() == RoadDirection.WEST) {
-                            t.getRoad().setConnection(RoadDirection.WEST);
-                            ((BusStop) (neighbourWest.getBuilding())).setConnectedRoad(t);
-                        }
-                    case BuildingType.STATION:
-                        if (((Station) (neighbourWest.getBuilding())).getDirection() == RoadDirection.WEST) {
-                            t.getRoad().setConnection(RoadDirection.WEST);
-                            ((Station) (neighbourWest.getBuilding())).setConnectedRoad(t);
-                        }
-                        break;
-                    default:
-                        break;
+            if (neighbourWest != null) {
+                if (neighbourWest.getRoad() != null) {
+                    t.getRoad().setConnection(RoadDirection.WEST);
+                    neighbourWest.getRoad().setConnection(RoadDirection.WEST.getOpposite());;
+                } else if (neighbourWest.getBuilding() != null) {
+                    switch (neighbourWest.getBuilding().getBuildingType()) {
+                        case BuildingType.BUSSTOP:
+                            if (((BusStop) (neighbourWest.getBuilding())).getDirection() == RoadDirection.WEST) {
+                                t.getRoad().setConnection(RoadDirection.WEST);
+                                ((BusStop) (neighbourWest.getBuilding())).setConnectedRoad(t);
+                            }
+                        case BuildingType.STATION:
+                            if (((Station) (neighbourWest.getBuilding())).getDirection() == RoadDirection.WEST) {
+                                t.getRoad().setConnection(RoadDirection.WEST);
+                                ((Station) (neighbourWest.getBuilding())).setConnectedRoad(t);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
