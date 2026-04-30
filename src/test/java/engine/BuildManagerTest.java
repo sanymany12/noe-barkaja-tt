@@ -75,7 +75,7 @@ public class BuildManagerTest {
         Tile start = world.get(5, 5);
 
         Exception exception = assertThrows(Exception.class, () -> {
-            buildManager.buildBridge(start, start, BridgeType.WOOD);
+            buildManager.buildBridge(start, start, BridgeType.WOOD, false);
         });
 
         assertEquals("A híd legalább 2 cella hosszú kell, hogy legyen!", exception.getMessage());
@@ -87,7 +87,7 @@ public class BuildManagerTest {
         Tile end = world.get(6, 6);
 
         Exception exception = assertThrows(Exception.class, () -> {
-            buildManager.buildBridge(start, end, BridgeType.WOOD);
+            buildManager.buildBridge(start, end, BridgeType.WOOD, false);
         });
 
         assertEquals("A híd csak egyenes vonalban építhető!", exception.getMessage());
