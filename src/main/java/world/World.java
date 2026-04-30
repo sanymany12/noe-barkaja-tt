@@ -472,7 +472,7 @@ public class World {
 
     public void rerouteVehiclesStation(Tile t) {
         for (int i = 0; i < this.vehicles.size(); i++) {
-            this.vehicles.get(i).rerouteStops(t);
+            this.vehicles.get(i).rerouteStop(t);
         }
     }
 
