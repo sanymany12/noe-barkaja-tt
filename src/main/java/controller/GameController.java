@@ -183,7 +183,9 @@ public class GameController implements GameListener {
                         }
                         else if(action == VehicleAction.SELL)
                         {
-                            // TODO
+                            clickedVehicle.sellVehicle();
+                            afterSpending(model.getWorld().getMoney());
+                            view.mapRefresh();
                         }
                         return;
                     }
