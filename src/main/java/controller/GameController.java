@@ -46,7 +46,7 @@ public class GameController implements GameListener {
     private int mapWidthTiles;
     private int mapHeightTiles;
 
-    private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION }
+    private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION, DEMOLISH }
     public enum VehicleAction { NONE, ASSIGN_ROUTE, SELL }
     public enum BuildingAction { NONE, BUY_VEHICLE }
 
@@ -86,6 +86,7 @@ public class GameController implements GameListener {
                 currentState = BuildState.BUILD_ROAD;
                 view.getRoadToggle().setText("**Ut ikon**");
                 view.getStationToggle().setText("Megálló ikon");
+                view.getDemolishToggle().setText("Bomba ikon");
 
             }
         });
@@ -97,7 +98,20 @@ public class GameController implements GameListener {
                 currentState = BuildState.BUILD_STATION;
                 view.getStationToggle().setText("**Megálló ikon**");
                 view.getRoadToggle().setText("Ut ikon");
+                view.getDemolishToggle().setText("Bomba ikon");
             }
+        });
+        view.getDemolishToggle().addActionListener(e -> {
+           if(currentState == BuildState.DEMOLISH)
+           {
+               currentState = BuildState.NONE;
+               view.getDemolishToggle().setText("Bomba ikon");
+           } else {
+               currentState = BuildState.DEMOLISH;
+               view.getDemolishToggle().setText("**Bomba ikon**");
+               view.getRoadToggle().setText("Ut ikon");
+               view.getStationToggle().setText("Megallo ikon");
+           }
         });
         view.getSpeedPaused().addActionListener(e -> {
             model.setTimeMultiplier(TimeSpeed.PAUSED);
@@ -244,6 +258,11 @@ public class GameController implements GameListener {
                 {
                     buildStationAtScreen(e.getX(), e.getY());
                 }
+                // Rombolas
+                else if(currentState == BuildState.DEMOLISH && SwingUtilities.isLeftMouseButton(e))
+                {
+                    demolishAtScreen(e.getX(), e.getY());
+                }
             }
 
             @Override
@@ -264,6 +283,10 @@ public class GameController implements GameListener {
                     lastMouseY = e.getY();
 
                     view.mapRefresh();
+                }
+                else if(currentState == BuildState.DEMOLISH && SwingUtilities.isLeftMouseButton(e))
+                {
+                    demolishAtScreen(e.getX(), e.getY());
                 }
 
             }
@@ -310,6 +333,7 @@ public class GameController implements GameListener {
 
                     view.getRoadToggle().setText("Út ikon");
                     view.getStationToggle().setText("Megálló ikon");
+                    view.getDemolishToggle().setText("Bomba ikon");
                 }
             }
         });
@@ -368,6 +392,39 @@ public class GameController implements GameListener {
         }
 
         afterSpending(model.getWorld().getMoney());
+    }
+
+    private void demolishAtScreen(int screenX, int screenY)
+    {
+        Point gridPos = model.getCamera().screenToWorld(screenX, screenY);
+        Tile tile = model.getWorld().get(gridPos.x, gridPos.y);
+
+        if(tile != null)
+        {
+            boolean changed = false;
+
+            if(tile.getTerrainType() == TerrainType.ROAD && tile.getRoad() != null)
+            {
+                model.getWorld().spendMoney(tile.getRoad().getCostToRemove());
+                tile.setRoad(null);
+                tile.setTerrainType(TerrainType.LAND);
+                changed = true;
+            }
+            else if(tile.getTerrainType() == TerrainType.STOP && tile.getBuilding() != null)
+            {
+                model.getWorld().spendMoney(15);
+                tile.setBuilding(null);
+                tile.setTerrainType(TerrainType.LAND);
+                changed = true;
+            }
+
+            if(changed)
+            {
+                view.mapRefresh();
+                view.getMinimapPanel().getMinimap().generateImage();
+                afterSpending(model.getWorld().getMoney());
+            }
+        }
     }
 
     private void buyVehicleAtScreen(int screenX, int screenY, VehicleType type) throws Exception

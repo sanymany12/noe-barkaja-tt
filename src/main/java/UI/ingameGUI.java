@@ -24,6 +24,7 @@ public class ingameGUI {
     private JLabel balanceLabel;
     private JButton roadToggle;
     private JButton stationToggle;
+    private JButton demolishToggle;
     private JButton speedPaused;
     private JButton saveBtn;
     private JButton loadBtn;
@@ -115,6 +116,9 @@ public class ingameGUI {
 
         stationToggle = new JButton("Megálló ikon");
         buildPanel.add(stationToggle);
+
+        demolishToggle = new JButton("Bomba ikon");
+        buildPanel.add(demolishToggle);
 
         buildPanel.add(new JButton("További ikonok"));
         upperPanel.add(buildPanel, BorderLayout.CENTER);
@@ -457,6 +461,8 @@ public class ingameGUI {
     public MinimapPanel getMinimapPanel() { return minimapPanel; }
 
     public JButton getRoadToggle() { return roadToggle; }
+
+    public JButton getDemolishToggle() { return demolishToggle; }
 
     public JButton getSpeedPaused() { return speedPaused; }
 
