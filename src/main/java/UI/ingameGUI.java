@@ -25,6 +25,7 @@ public class ingameGUI {
     private JButton roadToggle;
     private JButton stationToggle;
     private JButton demolishToggle;
+    private JButton bridgeToggle;
     private JButton speedPaused;
     private JButton saveBtn;
     private JButton loadBtn;
@@ -119,6 +120,9 @@ public class ingameGUI {
 
         demolishToggle = new JButton("Bomba ikon");
         buildPanel.add(demolishToggle);
+
+        bridgeToggle = new JButton("Hid ikon");
+        buildPanel.add(bridgeToggle);
 
         buildPanel.add(new JButton("További ikonok"));
         upperPanel.add(buildPanel, BorderLayout.CENTER);
@@ -463,6 +467,8 @@ public class ingameGUI {
     public JButton getRoadToggle() { return roadToggle; }
 
     public JButton getDemolishToggle() { return demolishToggle; }
+
+    public JButton getBridgeToggle() { return bridgeToggle; }
 
     public JButton getSpeedPaused() { return speedPaused; }
 
