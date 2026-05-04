@@ -10,7 +10,6 @@ public class Farm extends Building<Integer,Integer> {
     private int grainMade;
     private int productionBoost;
     private int boostDay;
-    private boolean productionIsBoosted;
 
     private final int PRODUCTION_BOOST_DAYS = 7;
     private final int PRODUCTION_BOOST_COST = 2000;
@@ -28,7 +27,7 @@ public class Farm extends Building<Integer,Integer> {
 
         this.grainMade = 0;
         this.productionBoost = 0;
-        this.boostDay = 0;
+        this.boostDay = this.PRODUCTION_BOOST_DAYS;
     }
 
     // metódus az eddig termelt gabona mennyiségének lekérésére
@@ -44,8 +43,11 @@ public class Farm extends Building<Integer,Integer> {
     public void boostProduction() {
         this.world.spendMoney(this.PRODUCTION_BOOST_COST);
         this.boostDay = this.boostDay - this.PRODUCTION_BOOST_DAYS;
-        this.productionIsBoosted = true;
         this.productionBoost = this.PRODUCTION_BOOST;
+    }
+
+    public int getDaysLeftOfBoost() {
+        return this.PRODUCTION_BOOST_DAYS - this.productionBoost;
     }
 
     private void grainGrows() {
@@ -77,10 +79,9 @@ public class Farm extends Building<Integer,Integer> {
         if (this.grainMade != this.CAPACITY) {
             this.grainGrows();
         }
-        if (this.productionIsBoosted) {
+        if (this.boostDay != this.PRODUCTION_BOOST_DAYS) {
             this.boostDay++;
             if (this.boostDay == this.PRODUCTION_BOOST_DAYS) {
-                this.productionIsBoosted = false;
                 this.productionBoost = 0;
             }
         }
