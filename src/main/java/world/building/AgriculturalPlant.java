@@ -80,10 +80,10 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
     // új adag étel készül
     private void newBatchMade() {
         int capacityleft = this.CAPACITY_OUT - this.outgoingFood;
-        if (capacityleft >= this.BATCH) {
-            if (this.incomingGrain > this.BATCH) {
-                this.incomingGrain = this.incomingGrain - this.BATCH;
-                this.outgoingFood = this.outgoingFood + this.BATCH;
+        if (capacityleft >= (this.BATCH + this.productionBoost)) {
+            if (this.incomingGrain > (this.BATCH + this.productionBoost)) {
+                this.incomingGrain = this.incomingGrain - (this.BATCH + this.productionBoost);
+                this.outgoingFood = this.outgoingFood + (this.BATCH + this.productionBoost);
             } else {
                 this.outgoingFood = this.outgoingFood + this.incomingGrain;
                 this.incomingGrain = 0;
@@ -125,6 +125,12 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
     public void newDay() {
         if (this.incomingGrain > 0 && this.outgoingFood <= this.CAPACITY_OUT) {
             this.newBatchMade();
+        }
+        if (this.boostDay != this.PRODUCTION_BOOST_DAYS) {
+            this.boostDay++;
+            if (this.boostDay == this.PRODUCTION_BOOST_DAYS) {
+                this.productionBoost = 0;
+            }
         }
     }
 
