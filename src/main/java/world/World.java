@@ -262,7 +262,7 @@ public class World {
     // ÚTKERESÉS ÚT -> ÚT
     public List<Point> findPathRoad(Tile start, Tile stop) throws Exception {
         // Ellenőrizzük, hogy útra akarunk-e menni
-        if (stop.getTerrainType() != TerrainType.ROAD) {
+        if (stop.getTerrainType() != TerrainType.ROAD && stop.getTerrainType() != TerrainType.BRIDGE) {
             throw new Exception("The destination isn't on the road!");
         }
         else {
@@ -443,16 +443,16 @@ public class World {
         Tile eastNeighbour = this.get(t.getCoordinate().x + 1, t.getCoordinate().y);
         Tile westNeighbour = this.get(t.getCoordinate().x - 1, t.getCoordinate().y);
 
-        if (northNeighbour != null && northNeighbour.getTerrainType() == TerrainType.ROAD && northNeighbour.getRoad() != null) {
+        if (northNeighbour != null && (northNeighbour.getTerrainType() == TerrainType.ROAD || northNeighbour.getTerrainType() == TerrainType.BRIDGE) && northNeighbour.getRoad() != null) {
             neighbourRoads.add(northNeighbour);
         }
-        if (southNeighbour != null && southNeighbour.getTerrainType() == TerrainType.ROAD && southNeighbour.getRoad() != null) {
+        if (southNeighbour != null && (southNeighbour.getTerrainType() == TerrainType.ROAD || southNeighbour.getTerrainType() == TerrainType.BRIDGE) && southNeighbour.getRoad() != null) {
             neighbourRoads.add(southNeighbour);
         }
-        if (eastNeighbour != null && eastNeighbour.getTerrainType() == TerrainType.ROAD && eastNeighbour.getRoad() != null) {
+        if (eastNeighbour != null && (eastNeighbour.getTerrainType() == TerrainType.ROAD || eastNeighbour.getTerrainType() == TerrainType.BRIDGE) && eastNeighbour.getRoad() != null) {
             neighbourRoads.add(eastNeighbour);
         }
-        if (westNeighbour != null && westNeighbour.getTerrainType() == TerrainType.ROAD && westNeighbour.getRoad() != null) {
+        if (westNeighbour != null && (westNeighbour.getTerrainType() == TerrainType.ROAD || westNeighbour.getTerrainType() == TerrainType.BRIDGE) && westNeighbour.getRoad() != null) {
             neighbourRoads.add(westNeighbour);
         }
 
