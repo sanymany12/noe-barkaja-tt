@@ -72,6 +72,10 @@ public class Silo extends Building<Integer,Integer> {
 
     @Override
     public String getSpriteName() {
-        return "silo";
+        if (this.numOfFood == 0) {
+            return "silo-empty";
+        } else {
+            return "silo";
+        }
     }
 }
