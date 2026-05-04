@@ -4,6 +4,7 @@ import world.World;
 import world.resources.AnimalType;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class City extends Building<AnimalType, Integer> {
@@ -20,6 +21,8 @@ public class City extends Building<AnimalType, Integer> {
     private final int MAX_TO_BE_ORDERED = 10;
     private final int MIN_TO_BE_ORDERED = 1;
     private final int DAYS_TIL_NEW_ORDER = 14;
+
+    final private Random random = new Random();
 
     public City (World world) {
         super(world);
@@ -45,6 +48,9 @@ public class City extends Building<AnimalType, Integer> {
 
         this.orderedAnimal = null;
         this.orderedAmount = 0;
+
+        this.width = 2;
+        this.height = 2;
 
         this.visual = visual;
 
@@ -82,38 +88,44 @@ public class City extends Building<AnimalType, Integer> {
 
     private void newOrder() {
         if (this.deliveredAmount == 0) {
-            int animalId = ThreadLocalRandom.current().nextInt(1, 10);
-            switch (animalId) {
-                case 1:
-                    this.orderedAnimal = AnimalType.BEAR;
-                    break;
-                case 2:
-                    this.orderedAnimal = AnimalType.CAPYBARA;
-                    break;
-                case 3:
-                    this.orderedAnimal = AnimalType.CAT;
-                    break;
-                case 4:
-                    this.orderedAnimal = AnimalType.FISH;
-                    break;
-                case 5:
-                    this.orderedAnimal = AnimalType.GUINEAPIG;
-                    break;
-                case 6:
-                    this.orderedAnimal = AnimalType.HORSE;
-                    break;
-                case 7:
-                    this.orderedAnimal = AnimalType.PIG;
-                    break;
-                case 8:
-                    this.orderedAnimal = AnimalType.RACOON;
-                    break;
-                case 9:
-                    this.orderedAnimal = AnimalType.SEAHORSE;
-                    break;
+            int getsNewOrder = random.nextInt(0, 2);
+            if (getsNewOrder == 1 || this.daysSinceLastOrder == 30) {
+                int animalId = ThreadLocalRandom.current().nextInt(1, 10);
+                switch (animalId) {
+                    case 1:
+                        this.orderedAnimal = AnimalType.BEAR;
+                        break;
+                    case 2:
+                        this.orderedAnimal = AnimalType.CAPYBARA;
+                        break;
+                    case 3:
+                        this.orderedAnimal = AnimalType.CAT;
+                        break;
+                    case 4:
+                        this.orderedAnimal = AnimalType.FISH;
+                        break;
+                    case 5:
+                        this.orderedAnimal = AnimalType.GUINEAPIG;
+                        break;
+                    case 6:
+                        this.orderedAnimal = AnimalType.HORSE;
+                        break;
+                    case 7:
+                        this.orderedAnimal = AnimalType.PIG;
+                        break;
+                    case 8:
+                        this.orderedAnimal = AnimalType.RACOON;
+                        break;
+                    case 9:
+                        this.orderedAnimal = AnimalType.SEAHORSE;
+                        break;
+                }
+                this.orderedAmount = ThreadLocalRandom.current().nextInt(this.MIN_TO_BE_ORDERED, this.MAX_TO_BE_ORDERED + 1);
+                this.daysSinceLastOrder = 0;
+            } else {
+                this.orderedAnimal = null;
+                this.orderedAmount = 0;
             }
-            this.orderedAmount = ThreadLocalRandom.current().nextInt(this.MIN_TO_BE_ORDERED, this.MAX_TO_BE_ORDERED + 1);
-            this.daysSinceLastOrder = 0;
         }
     }
 

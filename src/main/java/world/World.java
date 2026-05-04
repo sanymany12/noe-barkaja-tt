@@ -93,11 +93,11 @@ public class World {
 
         // Varosok
         grid[4][2].setTerrainType(TerrainType.BUILDING);
-        grid[4][2].setBuilding(new City(this));
+        grid[4][2].setBuilding(new City(this, 1));
         grid[4][2].setAnchor(true);
 
         grid[8][2].setTerrainType(TerrainType.BUILDING);
-        grid[8][2].setBuilding(new City(this));
+        grid[8][2].setBuilding(new City(this, 2));
         grid[8][2].setAnchor(true);
 
         // Utak varosok kozott
