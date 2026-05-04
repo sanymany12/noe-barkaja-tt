@@ -139,15 +139,54 @@ public class City extends Building<AnimalType, Integer> {
 
     @Override
     public String getSpriteName() {
+        String spriteName = "townhouse";
         switch (this.visual) {
             case 1:
-                return "townhouse-1";
+                spriteName = spriteName.concat("-1");
+                break;
             case 2:
-                return "townhouse-2";
+                spriteName = spriteName.concat("-2");
+                break;
             case 3:
-                return "townhouse-3";
+                spriteName = spriteName.concat("-3");
+                break;
             default:
-                return "townhouse-1";
+                spriteName = spriteName.concat("-1");
+                break;
         }
+        if (this.orderedAnimal != null) {
+            switch (this.orderedAnimal) {
+                case AnimalType.BEAR:
+                    spriteName = spriteName.concat("-bear");
+                    break;
+                case AnimalType.CAPYBARA:
+                    spriteName = spriteName.concat("-capybara");
+                    break;
+                case AnimalType.CAT:
+                    spriteName = spriteName.concat("-cat");
+                    break;
+                case AnimalType.FISH:
+                    spriteName = spriteName.concat("-fish");
+                    break;
+                case AnimalType.GUINEAPIG:
+                    spriteName = spriteName.concat("-guineapig");
+                    break;
+                case AnimalType.HORSE:
+                    spriteName = spriteName.concat("-horse");
+                    break;
+                case AnimalType.PIG:
+                    spriteName = spriteName.concat("-pig");
+                    break;
+                case AnimalType.RACOON:
+                    spriteName = spriteName.concat("-racoon");
+                    break;
+                case AnimalType.SEAHORSE:
+                    spriteName = spriteName.concat("-seahorse");
+                    break;
+                default:
+                    break;
+            }
+        }
+        return spriteName;
     }
 }
