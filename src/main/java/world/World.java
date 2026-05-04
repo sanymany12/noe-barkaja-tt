@@ -208,30 +208,6 @@ public class World {
         this.money = this.money - spending;
     }
 
-    public void busesMove() throws Exception {
-        for (int i = 0; i < this.vehicles.size(); i++) {
-            if (this.vehicles.get(i).getVehicleType() == VehicleType.BUS && this.vehicles.get(i).getSpeed() == VehicleType.BUS.getBaseSpeed()) {
-                this.vehicles.get(i).move();
-            }
-        }
-    }
-
-    public void animalTrucksMove() throws Exception {
-        for (int i = 0; i < this.vehicles.size(); i++) {
-            if (this.vehicles.get(i).getVehicleType() == VehicleType.ANIMALTRUCK && this.vehicles.get(i).getSpeed() == VehicleType.ANIMALTRUCK.getBaseSpeed()) {
-                this.vehicles.get(i).move();
-            }
-        }
-    }
-
-    public void foodTrucksMove() throws Exception {
-        for (int i = 0; i < this.vehicles.size(); i++) {
-            if (this.vehicles.get(i).getVehicleType() == VehicleType.FOODTRUCK && this.vehicles.get(i).getSpeed() == VehicleType.FOODTRUCK.getBaseSpeed()) {
-                this.vehicles.get(i).move();
-            }
-        }
-    }
-
     public void moveVehicles() throws Exception {
         for (int i = 0; i < this.vehicles.size(); i++) {
             this.vehicles.get(i).increaseTickCount();
@@ -240,11 +216,6 @@ public class World {
 
     public void newDay() throws Exception {
         this.elapsedTime = this.elapsedTime + 1;
-
-        // Régi move hívás
-//        for (int i = 0; i < this.vehicles.size(); i++) {
-//            this.vehicles.get(i).move();
-//        }
 
         Set<Building> updatedBuildings = new HashSet<>();
         for(int i = 0; i < cols; i++)
@@ -479,6 +450,12 @@ public class World {
     public void rerouteVehiclesRoad(Tile t) {
         for (int i = 0; i < this.vehicles.size(); i++) {
             this.vehicles.get(i).reroutePath(t);
+        }
+    }
+
+    public void rerouteVehicles() {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            this.vehicles.get(i).reroutePath();
         }
     }
 

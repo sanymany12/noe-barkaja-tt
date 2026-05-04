@@ -105,7 +105,7 @@ public abstract class Vehicle {
         if (world.get(this.currentPlace.x, this.currentPlace.y) != null) {
             Tile currentPosition = world.get(this.currentPlace.x, this.currentPlace.y);
             switch (currentPosition.getTerrainType()) {
-                case TerrainType.ROAD, TerrainType.BRIDGE:
+                case TerrainType.ROAD:
                     if (currentPosition.getRoad() != null) {
                         currentPosition.getRoad().vehicleLeaves(this, this.currentDirection);
                     }
@@ -193,6 +193,15 @@ public abstract class Vehicle {
                     System.err.println("Hiba az allomassal: " + e.getMessage());
                 }
             }
+        }
+    }
+
+    public void reroutePath() {
+        try {
+            findPath(this.routeStops.get(stopIndex));
+        } catch (Exception e) {
+            this.movingForward = false;
+            System.err.println("Hiba az allomassal: " + e.getMessage());
         }
     }
 

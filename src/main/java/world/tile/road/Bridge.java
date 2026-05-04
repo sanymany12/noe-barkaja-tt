@@ -1,23 +1,47 @@
 package world.tile.road;
 
+import world.tile.Tile;
+
 public class Bridge extends Road {
     private BridgeType type;
 
     private int speedlimit;
 
+    private Tile startTile;
+    private Tile endTile;
+
     private RoadDirection direction;
     private boolean isEnd;
     private boolean isPreBuilt;
 
-    public Bridge(int x, int y, BridgeType type, RoadDirection dir, boolean isEnd, boolean isPreBuilt) {
+    public Bridge(int x, int y, BridgeType type, RoadDirection dir, Tile startTile, Tile endTile, boolean isEnd, boolean isPreBuilt) {
         super(x, y, isPreBuilt);
 
         this.isBridge = true;
+
+        this.startTile = startTile;
+        this.endTile = endTile;
 
         this.type = type;
         this.direction = dir;
         this.isEnd = isEnd;
         this.isPreBuilt = isPreBuilt;
+    }
+
+    public RoadDirection getDirection() {
+        return this.direction;
+    }
+
+    public boolean getIsEnd() {
+        return this.isEnd;
+    }
+
+    public Tile getStartTile() {
+        return this.startTile;
+    }
+
+    public Tile getEndTile() {
+        return this.endTile;
     }
 
     public BridgeType getType() {

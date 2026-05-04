@@ -82,8 +82,14 @@ public class Tile {
     }
 
     public void removeRoad() {
-        this.road = null;
-        this.terrainType = TerrainType.ROAD;
+        if (this.road != null) {
+            if (this.road.getIsBridge()) {
+                this.terrainType = TerrainType.WATER;
+            } else {
+                this.terrainType = TerrainType.LAND;
+            }
+            this.road = null;
+        }
     }
 
     public String getSpriteName() {
