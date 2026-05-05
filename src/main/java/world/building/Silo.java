@@ -6,6 +6,11 @@ import world.vehicle.FoodTruck;
 
 public class Silo extends Building<Integer,Integer> {
     private int numOfFood;
+    private int plusCapacity;
+
+    private final int CAPACITY_INCREASE = 10;
+    private final int CAPACITY_INCREASE_BASE_COST = 5000;
+    private final int CAPACITY_INCREASE_COST_INCREMENT = 1000;
 
     private final int STARTING_STOCK = 20;
     private final int CAPACITY = 500;
@@ -17,6 +22,8 @@ public class Silo extends Building<Integer,Integer> {
 
         this.numOfFood = STARTING_STOCK;
 
+        this.plusCapacity = 0;
+
         this.width = 2;
         this.height = 2;
     }
@@ -27,24 +34,15 @@ public class Silo extends Building<Integer,Integer> {
     }
 
     public int getRemainingCapacity() {
-        return this.CAPACITY - this.numOfFood;
+        return (this.CAPACITY + this.plusCapacity) - this.numOfFood;
     }
 
-    // régi metódus az ide érkező étel lekezelésére
-//    public void loadFrom(FoodTruck truck) throws Exception {
-//        if (truck.getCargoType() != ResourceType.FOOD) {
-//            throw new Exception("Can't load from a truck that doesn't have food!");
-//        } else {
-//            int canTake = this.CAPACITY - this.numOfFood;
-//            if (canTake <= truck.getCurrentCargoNum()) {
-//                this.numOfFood = this.numOfFood + canTake;
-//                truck.decreaseCargo(canTake);
-//            } else {
-//                this.numOfFood = this.numOfFood + truck.getCurrentCargoNum();
-//                truck.emptyCargo();
-//            }
-//        }
-//    }
+    public void increaseCapacity() {
+        if (this.plusCapacity < this.CAPACITY_INCREASE * 50) {
+            this.world.spendMoney(this.CAPACITY_INCREASE_BASE_COST + (this.plusCapacity / this.CAPACITY_INCREASE) * this.CAPACITY_INCREASE_COST_INCREMENT);
+            this.plusCapacity = this.plusCapacity + this.CAPACITY_INCREASE;
+        }
+    }
 
     // étel érkezése teherautóról
     public void loadFromTruck(int load) throws Exception {
