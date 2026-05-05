@@ -8,7 +8,7 @@ import world.tile.Point;
 import world.tile.road.RoadDirection;
 
 public class FoodTruck extends Vehicle {
-    private final int CAPACITY = 10;
+    private final int CAPACITY = 50;
 
     private final int COST_TO_BUY = 2000;
     private final int SELLING_PRICE = 1000;
