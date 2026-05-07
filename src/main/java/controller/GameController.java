@@ -46,7 +46,7 @@ public class GameController implements GameListener {
 
     private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION, DEMOLISH, BUILD_BRIDGE }
     public enum VehicleAction { NONE, ASSIGN_ROUTE, SELL }
-    public enum BuildingAction { NONE, BUY_VEHICLE, START_RESEARCH, TRANSPORT_ANIMAL, SELL_ANIMAL, START_CLONING }
+    public enum BuildingAction { NONE, BUY_VEHICLE, START_RESEARCH, TRANSPORT_ANIMAL, SELL_ANIMAL, START_CLONING, BOOST_PRODUCTION, TRANSPORT_RESOURCE }
 
     private BuildState currentState = BuildState.NONE;
     private VehicleType selectedVehicleType = null;
@@ -283,6 +283,36 @@ public class GameController implements GameListener {
                                     System.out.println("Nincs elég pénz a klónozáshoz!");
                                 }
                             }
+                        }
+                        else if(action == BuildingAction.BOOST_PRODUCTION)
+                        {
+                            if(clickedTile.getBuilding() instanceof Farm)
+                            {
+                                Farm farm = (Farm) clickedTile.getBuilding();
+                                if(model.getWorld().getMoney() >= farm.getBoostCost())
+                                {
+                                    farm.boostProduction();
+                                    afterSpending(model.getWorld().getMoney());
+                                    view.mapRefresh();
+                                } else {
+                                    System.out.println("Nincs elég pénz a boosterhez!");
+                                }
+                            }
+                            else if(clickedTile.getBuilding() instanceof AgriculturalPlant)
+                            {
+                                AgriculturalPlant plant =  (AgriculturalPlant) clickedTile.getBuilding();
+                                if(model.getWorld().getMoney() >= plant.getBoostCost())
+                                {
+                                    plant.boostProduction();
+                                    afterSpending(model.getWorld().getMoney());
+                                } else {
+                                    System.out.println("Nincs elég pénz a boosterhez!");
+                                }
+                            }
+                        }
+                        else if(action == BuildingAction.TRANSPORT_RESOURCE)
+                        {
+                            // TODO
                         }
                         return;
                     }

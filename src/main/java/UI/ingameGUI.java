@@ -258,9 +258,10 @@ public class ingameGUI {
             infoText += "<b>Típus:</b> " + b.getBuildingType().name() + "<br><br>";
 
             if (b instanceof Farm) {
-                Farm farm = (Farm) b;
-                infoText += "<b>Tárolt gabona:</b> " + farm.getGrainMade() + " / " + farm.getCapacity() + "<br>";
-                infoText += createProgressBar(farm.getGrainMade(), farm.getCapacity());
+                dialog.setSize(650, 300);
+                dialog.add(farmWindow((Farm) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
             else if (b instanceof Silo) {
                 Silo silo = (Silo) b;
@@ -269,11 +270,10 @@ public class ingameGUI {
                 infoText += createProgressBar(silo.getNumOfFood(), maxCap);
             }
             else if (b instanceof AgriculturalPlant) {
-                AgriculturalPlant plant = (AgriculturalPlant) b;
-                infoText += "<b>Bemenet (Gabona):</b> " + plant.getIncomingGrain() + " / " + plant.getCapacityIn() + "<br>";
-                infoText += createProgressBar(plant.getIncomingGrain(), plant.getCapacityIn()) + "<br><br>";
-                infoText += "<b>Kimenet (Étel):</b> " + plant.getOutgoingFood() + " / " + plant.getCapacityOut() + "<br>";
-                infoText += createProgressBar(plant.getOutgoingFood(), plant.getCapacityOut());
+                dialog.setSize(750, 300);
+                dialog.add(agriPlantWindow((AgriculturalPlant) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
             else if (b instanceof Enclosure) {
                 dialog.setSize(650, 300);
@@ -580,6 +580,100 @@ public class ingameGUI {
         });
 
         leftPanel.add(buttonRow(start, transport), BorderLayout.SOUTH);
+
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel farmWindow(Farm farm, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel("farm", "Farm"), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+
+        String capacityText = farm.getGrainMade() + " / " + farm.getCapacity();
+        topPanel.add(resourceBox("grain", "Gabona", capacityText), BorderLayout.WEST);
+
+        String info;
+        if (farm.isBoosted()) {
+            info = "<html><center><b>Termelés növelve!</b><br><br>Bónusz: +" + farm.getBoostAmount() + " db / nap<br>Hátralévő idő: " + farm.getDaysLeftOfBoost() + " nap</center></html>";
+        } else {
+            info = "<html><center><b>Normál termelés</b><br><br>Fejlesztés után:<br>+" + farm.getBoostAmount() + " db / nap</center></html>";
+        }
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton boost = new JButton("Termelés növelése (-$" + farm.getBoostCost() + ")");
+        boost.setEnabled(!farm.isBoosted());
+        boost.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.BOOST_PRODUCTION;
+            dialog.dispose();
+        });
+
+        JButton transport = new JButton("Gabona elszállítása");
+        transport.setEnabled(farm.getGrainMade() > 0);
+        transport.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.TRANSPORT_RESOURCE;
+            dialog.dispose();
+        });
+
+        leftPanel.add(buttonRow(boost, transport), BorderLayout.SOUTH);
+
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel agriPlantWindow(AgriculturalPlant plant, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel("agriculturalplant", "Agrárüzem"), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+
+        JPanel middleContainer = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+
+        String grainCap = plant.getIncomingGrain() + " / " + plant.getCapacityIn();
+        middleContainer.add(resourceBox("grain", "Gabona", grainCap));
+
+        String info;
+        if (plant.isBoosted()) {
+            int total = plant.getBatchAmount() + plant.getBoostAmount();
+            info = "<html><center><b>Termelés növelve!</b><br><br>Feldolgozás:<br>" + total + " db / NAP<br>Hátralévő: " + plant.getDaysLeftOfBoost() + " NAP</center></html>";
+        } else {
+            info = "<html><center><b>Feldolgozás:</b><br>" + plant.getBatchAmount() + " db / NAP<br><br>Fejlesztéssel:<br>+" + plant.getBoostAmount() + " / NAP</center></html>";
+        }
+        middleContainer.add(infoPanel(info));
+
+        String foodCap = plant.getOutgoingFood() + " / " + plant.getCapacityOut();
+        middleContainer.add(resourceBox("food", "Étel", foodCap));
+
+        leftPanel.add(middleContainer, BorderLayout.CENTER);
+
+        JButton boost = new JButton("Termelés növelése (-$" + plant.getBoostCost() + ")");
+        boost.setEnabled(!plant.isBoosted());
+        boost.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.BOOST_PRODUCTION;
+            dialog.dispose();
+        });
+
+        JButton transport = new JButton("Étel elszállítása");
+        transport.setEnabled(plant.getOutgoingFood() > 0);
+        transport.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.TRANSPORT_RESOURCE;
+            dialog.dispose();
+        });
+
+        leftPanel.add(buttonRow(boost, transport), BorderLayout.SOUTH);
 
         mainPanel.add(leftPanel, BorderLayout.CENTER);
 

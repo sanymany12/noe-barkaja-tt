@@ -40,6 +40,10 @@ public class Farm extends Building<Integer,Integer> {
         return this.CAPACITY;
     }
 
+    public boolean isBoosted() { return this.boostDay < this.PRODUCTION_BOOST_DAYS; }
+
+    public int getBoostAmount() { return this.PRODUCTION_BOOST; }
+
     public void boostProduction() {
         this.world.spendMoney(this.PRODUCTION_BOOST_COST);
         this.boostDay = this.boostDay - this.PRODUCTION_BOOST_DAYS;
@@ -47,8 +51,10 @@ public class Farm extends Building<Integer,Integer> {
     }
 
     public int getDaysLeftOfBoost() {
-        return this.PRODUCTION_BOOST_DAYS - this.productionBoost;
+        return this.PRODUCTION_BOOST_DAYS - this.boostDay;
     }
+
+    public int getBoostCost() { return this.PRODUCTION_BOOST_COST; }
 
     private void grainGrows() {
         int today = ThreadLocalRandom.current().nextInt(MIN_GAIN, MAX_GAIN);
