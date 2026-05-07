@@ -347,12 +347,12 @@ public class BuildManager {
                 break;
             case BUS:
                 Bus bus = new Bus(this.world, t.getCoordinate());
-                cost = 300;
+                cost = bus.getCostToBuy();
                 newVehicle = bus;
                 break;
             case ANIMALTRUCK:
                 AnimalTruck at = new AnimalTruck(this.world, t.getCoordinate());
-                cost = 500;
+                cost = at.getCostToBuy();
                 newVehicle = at;
                 break;
         }

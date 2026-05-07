@@ -20,6 +20,9 @@ public class World {
     private int money;
     private int elapsedTime;
 
+    private int vehiclesUpkeep;
+    private final int DAYS_PER_VEHICLES_UPKEEP = 14;
+
     private List<Vehicle> vehicles;
     private ArrayList<BusStop> busStops;
 
@@ -40,6 +43,8 @@ public class World {
 
         this.busStops = new ArrayList<BusStop>();
         this.vehicles = new ArrayList<Vehicle>();
+
+        this.vehiclesUpkeep = 0;
 
         this.start = null;
         this.stop = null;
@@ -184,6 +189,14 @@ public class World {
 
     public int getElapsedTime() { return this.elapsedTime; }
 
+    public int getAnnualCostOfVehicles() {
+        int cost = 0;
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            cost = cost + this.vehicles.get(i).getCostToOperate();
+        }
+        return cost;
+    }
+
     public void sellVehicle(Vehicle vehicle) {
         this.receiveMoney(vehicle.getCostToSell());
         this.vehicles.remove(vehicle);
@@ -251,6 +264,12 @@ public class World {
                     }
                 }
             }
+        }
+
+        this.vehiclesUpkeep++;
+        if (this.vehiclesUpkeep == this.DAYS_PER_VEHICLES_UPKEEP) {
+            this.vehiclesUpkeep = 0;
+            this.spendMoney(this.getAnnualCostOfVehicles());
         }
 
         this.daysSinceBusRoute++;
