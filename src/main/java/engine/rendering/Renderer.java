@@ -104,7 +104,7 @@ public class Renderer {
                         }
                     }
 
-                    if(tile.getTerrainType() == TerrainType.ROAD){
+                    if(tile.getTerrainType() == TerrainType.ROAD || tile.getTerrainType() == TerrainType.BRIDGE){
                         //Kiszámoljuk a csempe bal felső sarkát
                         Point topLeft = camera.worldToScreen(i, j);
                         //jobb alsó sarok
