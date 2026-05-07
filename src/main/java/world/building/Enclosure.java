@@ -39,6 +39,10 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
         return this.numOfAnimals;
     }
 
+    public boolean isStarving() { return this.starving; }
+
+    public Silo getSilo() { return this.silo; }
+
     public boolean hasAnimals() {
         return this.numOfAnimals > 0 && this.species != null;
     }
@@ -99,6 +103,14 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
                 this.numOfAnimals = this.CAPACITY;
             }
         }
+    }
+
+    public int getDaysUntilStarvation() {
+        if(this.numOfAnimals == 0)
+        {
+            return -1;
+        }
+        return this.silo.getNumOfFood() / this.numOfAnimals;
     }
 
     @Override

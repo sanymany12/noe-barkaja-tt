@@ -4,9 +4,7 @@ import UI.ingameGUI;
 import engine.GameEngine;
 import engine.GameListener;
 import engine.TimeSpeed;
-import world.building.Building;
-import world.building.BuildingType;
-import world.building.Station;
+import world.building.*;
 import world.tile.Point;
 import world.tile.Tile;
 import world.tile.TerrainType;
@@ -48,7 +46,7 @@ public class GameController implements GameListener {
 
     private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION, DEMOLISH, BUILD_BRIDGE }
     public enum VehicleAction { NONE, ASSIGN_ROUTE, SELL }
-    public enum BuildingAction { NONE, BUY_VEHICLE }
+    public enum BuildingAction { NONE, BUY_VEHICLE, START_RESEARCH, TRANSPORT_ANIMAL, SELL_ANIMAL, START_CLONING }
 
     private BuildState currentState = BuildState.NONE;
     private VehicleType selectedVehicleType = null;
@@ -236,6 +234,56 @@ public class GameController implements GameListener {
                                 }
                             }
                         }
+                        else if(action == BuildingAction.START_RESEARCH)
+                        {
+                            ResearchLab rl = (ResearchLab) clickedTile.getBuilding();
+                            if(model.getWorld().getMoney() >= rl.getCostOfResearch())
+                            {
+                                if(rl.startResearch())
+                                {
+                                    model.getWorld().spendMoney(rl.getCostOfResearch());
+                                    afterSpending(model.getWorld().getMoney());
+                                    view.mapRefresh();
+                                }
+                            } else {
+                                System.out.println("Nincs elég pénz a kutatáshoz!");
+                            }
+                        }
+                        else if(action == BuildingAction.TRANSPORT_ANIMAL)
+                        {
+                            // TODO
+                        }
+                        else if(action == BuildingAction.SELL_ANIMAL)
+                        {
+                            if(clickedTile.getBuilding() instanceof Enclosure)
+                            {
+                                Enclosure enc = (Enclosure) clickedTile.getBuilding();
+                                if(enc.hasAnimals())
+                                {
+                                    enc.sellAnimal();
+                                    afterSpending(model.getWorld().getMoney());
+                                    view.mapRefresh();
+                                }
+                            }
+                        }
+                        else if(action == BuildingAction.START_CLONING) {
+                            if(clickedTile.getBuilding() instanceof CloningFacility)
+                            {
+                                CloningFacility cf = (CloningFacility) clickedTile.getBuilding();
+                                if(model.getWorld().getMoney() >= cf.getCostOfCloning())
+                                {
+                                    if(cf.startCloning())
+                                    {
+                                        model.getWorld().spendMoney(cf.getCostOfCloning());
+                                        afterSpending(model.getWorld().getMoney());
+                                        view.mapRefresh();
+                                    }
+                                } else
+                                {
+                                    System.out.println("Nincs elég pénz a klónozáshoz!");
+                                }
+                            }
+                        }
                         return;
                     }
 
@@ -280,7 +328,7 @@ public class GameController implements GameListener {
                     } else {
                         if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
                             try {
-                                model.getBuildManager().buildBridge(bridgeStartTile, clickedTile, world.tile.road.BridgeType.WOOD);
+                                model.getBuildManager().buildBridge(bridgeStartTile, clickedTile, world.tile.road.BridgeType.WOOD, false);
 
                                 view.mapRefresh();
                                 view.getMinimapPanel().getMinimap().generateImage();
@@ -435,29 +483,7 @@ public class GameController implements GameListener {
 
         if(tile != null)
         {
-            boolean changed = false;
-
-            if(tile.getTerrainType() == TerrainType.ROAD && tile.getRoad() != null)
-            {
-                model.getWorld().spendMoney(tile.getRoad().getCostToRemove());
-                tile.setRoad(null);
-                tile.setTerrainType(TerrainType.LAND);
-                changed = true;
-            }
-            else if(tile.getTerrainType() == TerrainType.STOP && tile.getBuilding() != null)
-            {
-                model.getWorld().spendMoney(15);
-                tile.setBuilding(null);
-                tile.setTerrainType(TerrainType.LAND);
-                changed = true;
-            }
-
-            if(changed)
-            {
-                view.mapRefresh();
-                view.getMinimapPanel().getMinimap().generateImage();
-                afterSpending(model.getWorld().getMoney());
-            }
+            model.getBuildManager().destroy(tile);
         }
     }
 
