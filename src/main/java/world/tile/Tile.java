@@ -2,6 +2,7 @@ package world.tile;
 
 import engine.AssetManager;
 import world.building.Building;
+import world.building.BuildingType;
 import world.tile.road.Road;
 
 import java.awt.*;
@@ -69,14 +70,26 @@ public class Tile {
         isAnchor = value;
     }
 
-    //TODO a mező értékének kiszámítása a romboláshoz/építéshez
-    public int calculateCost(){
-        return 0;
+    public boolean isEmpty() {
+        return this.building == null && this.road == null && this.treeCount == 0;
     }
 
-    //TODO üres e a mező? segédfüggvény
-    public boolean isEmpty() {
-        return false;
+    public void removeStation() {
+        if (this.building.getBuildingType() == BuildingType.STATION) {
+            this.building = null;
+            this.terrainType = TerrainType.LAND;
+        }
+    }
+
+    public void removeRoad() {
+        if (this.road != null) {
+            if (this.road.getIsBridge()) {
+                this.terrainType = TerrainType.WATER;
+            } else {
+                this.terrainType = TerrainType.LAND;
+            }
+            this.road = null;
+        }
     }
 
     public String getSpriteName() {

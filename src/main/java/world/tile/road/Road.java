@@ -8,7 +8,6 @@ import java.util.List;
 public class Road {
     protected List<RoadDirection> connections;
 
-    private final int COST_TO_REMOVE = 3;
     private final int COST_TO_BUILD = 5;
 
     transient private Vehicle rightLaneV;
@@ -20,8 +19,9 @@ public class Road {
     protected int locationY;
 
     protected boolean isBridge;
+    protected boolean isPreBuilt;
 
-    public Road(int x, int y) {
+    public Road (int x, int y, boolean isPreBuilt) {
         this.connections = new ArrayList<RoadDirection>();
 
         this.rightLaneV = null;
@@ -33,6 +33,7 @@ public class Road {
         this.locationY = y;
 
         this.isBridge = false;
+        this.isPreBuilt = isPreBuilt;
     }
 
     public int getCostToBuild() {
@@ -59,6 +60,10 @@ public class Road {
 
     public boolean getIsBridge() {
         return this.isBridge;
+    }
+
+    public boolean getIsPreBuilt() {
+        return this.isPreBuilt;
     }
 
     public boolean isOccupied (RoadDirection dir) {
@@ -89,6 +94,19 @@ public class Road {
                 }
             default:
                 return true;
+        }
+    }
+
+    public void getsDestroyed() {
+        this.rightLaneV.sellVehicle();
+        this.rightLaneH.sellVehicle();
+        this.leftLaneH.sellVehicle();
+        this.leftLaneV.sellVehicle();
+    }
+
+    public void destroyConnection(RoadDirection dir) {
+        if (this.connections.contains(dir)) {
+            this.connections.remove(dir);
         }
     }
 

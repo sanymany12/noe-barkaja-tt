@@ -34,6 +34,9 @@ public class World {
     private final static int TICKS_PER_DAY = 100;
     private final int DAYS_UNTIL_NEW_BUS_ROUTE = 50;
 
+    private final int COST_TO_CUT_TREE = 5;
+    private final int COST_TO_DESTROY = 200;
+
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
@@ -64,6 +67,14 @@ public class World {
 
     public int getCols() {
         return cols;
+    }
+
+    public int getCostToCutTree() {
+        return this.COST_TO_CUT_TREE;
+    }
+
+    public int getCostToDestroy() {
+        return this.COST_TO_DESTROY;
     }
 
     public void increaseTickCounter() throws Exception {
@@ -108,7 +119,7 @@ public class World {
         // Utak varosok kozott
         BuildManager setupBuilder = new BuildManager(this);
         for(int x = 4; x <= 8; x++) {
-            setupBuilder.buildRoad(grid[x][3]);
+            setupBuilder.buildRoad(grid[x][3], true);
         }
 
         // Farm
@@ -210,30 +221,6 @@ public class World {
         this.money = this.money - spending;
     }
 
-    public void busesMove() throws Exception {
-        for (int i = 0; i < this.vehicles.size(); i++) {
-            if (this.vehicles.get(i).getVehicleType() == VehicleType.BUS && this.vehicles.get(i).getSpeed() == VehicleType.BUS.getBaseSpeed()) {
-                this.vehicles.get(i).move();
-            }
-        }
-    }
-
-    public void animalTrucksMove() throws Exception {
-        for (int i = 0; i < this.vehicles.size(); i++) {
-            if (this.vehicles.get(i).getVehicleType() == VehicleType.ANIMALTRUCK && this.vehicles.get(i).getSpeed() == VehicleType.ANIMALTRUCK.getBaseSpeed()) {
-                this.vehicles.get(i).move();
-            }
-        }
-    }
-
-    public void foodTrucksMove() throws Exception {
-        for (int i = 0; i < this.vehicles.size(); i++) {
-            if (this.vehicles.get(i).getVehicleType() == VehicleType.FOODTRUCK && this.vehicles.get(i).getSpeed() == VehicleType.FOODTRUCK.getBaseSpeed()) {
-                this.vehicles.get(i).move();
-            }
-        }
-    }
-
     public void moveVehicles() throws Exception {
         for (int i = 0; i < this.vehicles.size(); i++) {
             this.vehicles.get(i).increaseTickCount();
@@ -242,11 +229,6 @@ public class World {
 
     public void newDay() throws Exception {
         this.elapsedTime = this.elapsedTime + 1;
-
-        // Régi move hívás
-//        for (int i = 0; i < this.vehicles.size(); i++) {
-//            this.vehicles.get(i).move();
-//        }
 
         Set<Building> updatedBuildings = new HashSet<>();
         for(int i = 0; i < cols; i++)
@@ -476,6 +458,24 @@ public class World {
         }
 
         return neighbourRoads;
+    }
+
+    public void rerouteVehiclesStation(Tile t) {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            this.vehicles.get(i).rerouteStop(t);
+        }
+    }
+
+    public void rerouteVehiclesRoad(Tile t) {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            this.vehicles.get(i).reroutePath(t);
+        }
+    }
+
+    public void rerouteVehicles() {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            this.vehicles.get(i).reroutePath();
+        }
     }
 
     public void startedBusRoute() {
