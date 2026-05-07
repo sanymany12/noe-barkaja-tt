@@ -218,6 +218,7 @@ public class AssetManager {
 
         // SILO sprite betöltése
         loadAsset("silo", "/assets-final/silo.png");
+        loadAsset("silo-empty", "/assets-final/silo-empty.png");
 
         // CITY spriteok betöltése
         loadAsset("townhouse-1", "/assets-final/townhouse-1.png");

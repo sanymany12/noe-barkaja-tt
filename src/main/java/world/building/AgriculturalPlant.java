@@ -12,9 +12,15 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
     private int incomingGrain;
     private int outgoingFood;
 
+    private int productionBoost;
+    private int boostDay;
+
+    private final int PRODUCTION_BOOST = 10;
+    private final int PRODUCTION_BOOST_DAYS = 7;
+    private final int PRODUCTION_BOOST_COST = 3000;
     private final int BATCH = 20;
-    private final int CAPACITY_IN = 400;
-    private final int CAPACITY_OUT = 100;
+    private final int CAPACITY_IN = 500;
+    private final int CAPACITY_OUT = 300;
 
     public AgriculturalPlant(World world) {
         super(world);
@@ -23,6 +29,9 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
 
         this.height = 2;
         this.width = 4;
+
+        this.productionBoost = 0;
+        this.boostDay = this.PRODUCTION_BOOST_DAYS;
 
         this.incomingGrain = 0;
         this.outgoingFood = 0;
@@ -58,29 +67,23 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
         return days;
     }
 
-    // régi metódus gabona érkezésének lekezeléséhez
-//    public void loadFrom(FoodTruck truck) throws Exception {
-//        if (truck.getCargoType() != ResourceType.GRAIN) {
-//            throw new Exception("Can't load from truck that doesn't have grain!");
-//        } else {
-//            int canTake = this.CAPACITY_IN - this.incomingGrain;
-//            if (canTake <= truck.getCurrentCargoNum()) {
-//                this.incomingGrain = this.incomingGrain + canTake;
-//                truck.decreaseCargo(canTake);
-//            } else {
-//                this.incomingGrain = this.incomingGrain + truck.getCurrentCargoNum();
-//                truck.emptyCargo();
-//            }
-//        }
-//    }
+    public void boostProduction() {
+        this.world.spendMoney(this.PRODUCTION_BOOST_COST);
+        this.productionBoost = this.PRODUCTION_BOOST;
+        this.boostDay = this.boostDay - this.PRODUCTION_BOOST_DAYS;
+    }
+
+    public int getDaysLeftOfBoost() {
+        return this.PRODUCTION_BOOST_DAYS - this.boostDay;
+    }
 
     // új adag étel készül
     private void newBatchMade() {
         int capacityleft = this.CAPACITY_OUT - this.outgoingFood;
-        if (capacityleft >= this.BATCH) {
-            if (this.incomingGrain > this.BATCH) {
-                this.incomingGrain = this.incomingGrain - this.BATCH;
-                this.outgoingFood = this.outgoingFood + this.BATCH;
+        if (capacityleft >= (this.BATCH + this.productionBoost)) {
+            if (this.incomingGrain > (this.BATCH + this.productionBoost)) {
+                this.incomingGrain = this.incomingGrain - (this.BATCH + this.productionBoost);
+                this.outgoingFood = this.outgoingFood + (this.BATCH + this.productionBoost);
             } else {
                 this.outgoingFood = this.outgoingFood + this.incomingGrain;
                 this.incomingGrain = 0;
@@ -122,6 +125,12 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
     public void newDay() {
         if (this.incomingGrain > 0 && this.outgoingFood <= this.CAPACITY_OUT) {
             this.newBatchMade();
+        }
+        if (this.boostDay != this.PRODUCTION_BOOST_DAYS) {
+            this.boostDay++;
+            if (this.boostDay == this.PRODUCTION_BOOST_DAYS) {
+                this.productionBoost = 0;
+            }
         }
     }
 
