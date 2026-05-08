@@ -96,10 +96,18 @@ public class Road {
     }
 
     public void getsDestroyed() {
-        this.rightLaneV.sellVehicle();
-        this.rightLaneH.sellVehicle();
-        this.leftLaneH.sellVehicle();
-        this.leftLaneV.sellVehicle();
+        if (this.rightLaneV != null) {
+            this.rightLaneV.sellVehicle();
+        }
+        if (this.rightLaneH != null) {
+            this.rightLaneH.sellVehicle();
+        }
+        if (this.leftLaneH != null) {
+            this.leftLaneH.sellVehicle();
+        }
+        if (this.leftLaneV != null) {
+            this.leftLaneV.sellVehicle();
+        }
     }
 
     public void destroyConnection(RoadDirection dir) {
