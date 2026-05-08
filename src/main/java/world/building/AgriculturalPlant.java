@@ -67,6 +67,14 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
         return days;
     }
 
+    public int getBoostCost() { return this.PRODUCTION_BOOST_COST; }
+
+    public int getBoostAmount() { return this.PRODUCTION_BOOST; }
+
+    public int getBatchAmount() { return this.BATCH; }
+
+    public boolean isBoosted() { return this.boostDay < this.PRODUCTION_BOOST_DAYS; }
+
     public void boostProduction() {
         this.world.spendMoney(this.PRODUCTION_BOOST_COST);
         this.productionBoost = this.PRODUCTION_BOOST;

@@ -204,6 +204,19 @@ public class AssetManager {
         loadAsset("enclosure-racoon", "/assets-final/enclosure-racoon.png");
         loadAsset("enclosure-seahorse", "/assets-final/enclosure-seahorse.png");
 
+        // EROFORRASOK betöltése
+        loadAsset("cat", "/assets-final/cat.png");
+        loadAsset("bear", "/assets-final/bear.png");
+        loadAsset("capybara", "/assets-final/capybara.png");
+        loadAsset("fish", "/assets-final/fish.png");
+        loadAsset("guineapig", "/assets-final/guinea-pig.png");
+        loadAsset("horse", "/assets-final/horse.png");
+        loadAsset("pig", "/assets-final/pig.png");
+        loadAsset("racoon", "/assets-final/racoon.png");
+        loadAsset("seahorse", "/assets-final/seahorse.png");
+        loadAsset("grain", "/assets-final/grain.png");
+        loadAsset("food", "/assets-final/food.png");
+
         // AGRICULTURALPLANT sprite betöltése
         loadAsset("agriculturalplant", "/assets-final/agriculturalplant.png");
 

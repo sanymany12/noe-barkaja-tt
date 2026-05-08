@@ -44,8 +44,6 @@ public class Road {
         return this.rightLaneV;
     }
 
-    public int getCostToRemove() { return this.COST_TO_REMOVE; }
-
     public Vehicle getLeftLaneV() {
         return this.leftLaneV;
     }

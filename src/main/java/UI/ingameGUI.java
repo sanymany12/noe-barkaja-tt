@@ -2,6 +2,7 @@ package UI;
 
 import engine.rendering.Minimap;
 import engine.rendering.Renderer;
+import world.resources.AnimalType;
 import world.tile.Tile;
 import world.vehicle.Vehicle;
 import world.vehicle.VehicleType;
@@ -14,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 public class ingameGUI {
 
@@ -256,9 +258,10 @@ public class ingameGUI {
             infoText += "<b>Típus:</b> " + b.getBuildingType().name() + "<br><br>";
 
             if (b instanceof Farm) {
-                Farm farm = (Farm) b;
-                infoText += "<b>Tárolt gabona:</b> " + farm.getGrainMade() + " / " + farm.getCapacity() + "<br>";
-                infoText += createProgressBar(farm.getGrainMade(), farm.getCapacity());
+                dialog.setSize(650, 300);
+                dialog.add(farmWindow((Farm) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
             else if (b instanceof Silo) {
                 Silo silo = (Silo) b;
@@ -267,64 +270,32 @@ public class ingameGUI {
                 infoText += createProgressBar(silo.getNumOfFood(), maxCap);
             }
             else if (b instanceof AgriculturalPlant) {
-                AgriculturalPlant plant = (AgriculturalPlant) b;
-                infoText += "<b>Bemenet (Gabona):</b> " + plant.getIncomingGrain() + " / " + plant.getCapacityIn() + "<br>";
-                infoText += createProgressBar(plant.getIncomingGrain(), plant.getCapacityIn()) + "<br><br>";
-                infoText += "<b>Kimenet (Étel):</b> " + plant.getOutgoingFood() + " / " + plant.getCapacityOut() + "<br>";
-                infoText += createProgressBar(plant.getOutgoingFood(), plant.getCapacityOut());
+                dialog.setSize(750, 300);
+                dialog.add(agriPlantWindow((AgriculturalPlant) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
             else if (b instanceof Enclosure) {
-                Enclosure enc = (Enclosure) b;
-                infoText += "<b>Faj:</b> " + (enc.getSpecies() != null ? enc.getSpecies().name() : "Üres") + "<br>";
-                infoText += "<b>Állatok száma:</b> " + enc.getNumOfAnimals() + " / 200<br>";
-                infoText += createProgressBar(enc.getNumOfAnimals(), 200);
+                dialog.setSize(650, 300);
+                dialog.add(enclosureWindow((Enclosure) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
             else if (b instanceof City) {
                 City city = (City) b;
                 infoText += "<b>Rendelés alatt:</b> " + (city.hasOrder() ? city.getOrderedAmount() + " db " + city.getOrderedAnimal().name() : "Nincs") + "<br>";
             }
             else if (b instanceof CloningFacility) {
-                CloningFacility cf = (CloningFacility) b;
-                String animalName = cf.hasAnimal() ? cf.getAnimalType().name() : "Nincs";
-
-                infoText += "<b>Klónozott faj:</b> " + animalName + "<br>";
-                infoText += "<b>Tárolt klónok:</b> " + cf.getAnimalsMade() + " / " + cf.getCapacity() + "<br>";
-                infoText += createProgressBar(cf.getAnimalsMade(), cf.getCapacity()) + "<br><br>";
-
-                if (cf.isCloning()) {
-                    infoText += "<b>Folyamat:</b> " + cf.getDaysSinceStarted() + " / " + cf.getDaysToClone() + " nap<br>";
-                    infoText += createProgressBar(cf.getDaysSinceStarted(), cf.getDaysToClone());
-                } else {
-                    if(cf.getAnimalsMade() >= cf.getCapacity()) {
-                        infoText += "<b>Állapot:</b> <font color='red'>A tároló megtelt!</font><br>";
-                    } else if (cf.hasAnimal()) {
-                        infoText += "<b>Állapot:</b> Klónozásra kész.<br>";
-                    } else {
-                        infoText += "<b>Állapot:</b> Várakozás DNS mintára<br>";
-                    }
-                }
+                dialog.setSize(650, 300);
+                dialog.add(cloningFacilityWindow((CloningFacility) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
             else if (b instanceof ResearchLab) {
-                ResearchLab rl = (ResearchLab) b;
-                String anim1 = rl.getReceivedAnimal1() != null ? rl.getReceivedAnimal1().name() : "Üres";
-                String anim2 = rl.getReceivedAnimal2() != null ? rl.getReceivedAnimal2().name() : "Üres";
-                String discovered = rl.getDiscoveredAnimal() != null ? rl.getDiscoveredAnimal().name() : "Nincs";
-
-                infoText += "<b>Alany 1:</b> " + anim1 + "<br>";
-                infoText += "<b>Alany 2:</b> " + anim2 + "<br><br>";
-
-                if (rl.isResearchHappening()) {
-                    infoText += "<b>Kutatás folyamatban:</b> " + rl.getDaysSinceResearchStarted() + " / " + rl.getResearchDays() + " nap<br>";
-                    infoText += createProgressBar(rl.getDaysSinceResearchStarted(), rl.getResearchDays()) + "<br><br>";
-                } else {
-                    infoText += "<b>Kutatás állapota:</b> Inaktív<br><br>";
-                }
-
-                if (rl.getDiscoveredAnimal() != null) {
-                    infoText += "<b>Eredmény:</b> <font color='green'>Felfedezve: " + discovered + "</font><br>";
-                } else {
-                    infoText += "<b>Eredmény:</b> Még nincs felfedezés<br>";
-                }
+                dialog.setSize(800, 350);
+                dialog.add(researchLabWindow((ResearchLab) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
 
         }
@@ -436,6 +407,413 @@ public class ingameGUI {
 
         dialog.setVisible(true);
         return tempVehicleAction;
+    }
+
+    private JPanel researchLabWindow(ResearchLab rl, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Epulet neve es kepe
+        mainPanel.add(buildingRightPanel("researchlab", "Kutatólabor"), BorderLayout.EAST);
+
+        // Allatok
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel animalsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
+        String ani1Ass = (rl.getReceivedAnimal1() != null) ? rl.getReceivedAnimal1().name().toLowerCase() : null;
+        String ani1Name = (rl.getReceivedAnimal1() != null) ? rl.getReceivedAnimal1().name().toLowerCase() : "Alany 1";
+        animalsPanel.add(resourceBox(ani1Ass, ani1Name, ""));
+
+        JLabel plusLabel = new JLabel("+");
+        plusLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        animalsPanel.add(plusLabel);
+
+        String ani2Ass = (rl.getReceivedAnimal2() != null) ? rl.getReceivedAnimal2().name().toLowerCase() : null;
+        String ani2Name = (rl.getReceivedAnimal2() != null) ? rl.getReceivedAnimal2().name().toLowerCase() : "Alany 1";
+        animalsPanel.add(resourceBox(ani2Ass, ani2Name, ""));
+
+        JLabel equalsLabel = new JLabel("=");
+        equalsLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        animalsPanel.add(equalsLabel);
+
+        String discAss = (rl.getDiscoveredAnimal() != null) ? rl.getDiscoveredAnimal().name().toLowerCase() : null;
+        String discName = (rl.getDiscoveredAnimal() != null) ? rl.getDiscoveredAnimal().name() : "Új állat";
+        animalsPanel.add(resourceBox(discAss, discName, ""));
+
+        leftPanel.add(animalsPanel, BorderLayout.NORTH);
+
+        // Tudnivalok
+        JPanel infoPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        if (rl.isResearchHappening()) {
+            JLabel progressText = new JLabel("Kutatás folyamatban: " + rl.getDaysSinceResearchStarted() + " / " + rl.getResearchDays() + " nap", SwingConstants.CENTER);
+            progressText.setFont(new Font("Arial", Font.BOLD, 14));
+            JLabel progressBar = new JLabel("<html>" + createProgressBar(rl.getDaysSinceResearchStarted(), rl.getResearchDays()) + "</html>", SwingConstants.CENTER);
+
+            infoPanel.add(progressText);
+            infoPanel.add(progressBar);
+        } else {
+            JLabel costTimeLabel = new JLabel("Kutatás ára: $" + rl.getCostOfResearch() + "  |  Kutatás ideje: " + rl.getResearchDays() + " nap", SwingConstants.CENTER);
+            costTimeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+            infoPanel.add(costTimeLabel);
+        }
+        leftPanel.add(infoPanel, BorderLayout.CENTER);
+
+        // Gombok
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+
+        JButton start = new JButton("Kutatás kezdése (-$" + rl.getCostOfResearch() + ")");
+        boolean canStart = (rl.getReceivedAnimal1() != null && rl.getReceivedAnimal2() != null && rl.getDiscoveredAnimal() == null && !rl.isResearchHappening());
+        start.setEnabled(canStart);
+        start.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.START_RESEARCH;
+            dialog.dispose();
+        });
+
+        JButton transport = new JButton("Felfedezett állat elszállítása");
+        boolean canTransport = (rl.getDiscoveredAnimal() != null);
+        transport.setEnabled(canTransport);
+        transport.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.TRANSPORT_ANIMAL;
+            dialog.dispose();
+        });
+
+        buttonPanel.add(start);
+        buttonPanel.add(transport);
+        leftPanel.add(buttonPanel, BorderLayout.SOUTH);
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+        return mainPanel;
+    }
+
+    private JPanel enclosureWindow(Enclosure enc, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel(enc.getSpriteName(), "Karám"), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+
+        String aniAss = (enc.hasAnimals()) ? enc.getSpecies().name().toLowerCase() : null;
+        String aniName = (enc.hasAnimals()) ? enc.getSpecies().name() : "Üres";
+        String cap = enc.getNumOfAnimals() + " / 200";
+
+        topPanel.add(resourceBox(aniAss, aniName, cap), BorderLayout.WEST);
+
+        String info;
+        if(enc.isStarving()) {
+            info = "<html><center><font color='red'><b>Az állatok éheznek!</b></font></center></html>";
+        } else if(!enc.hasAnimals()) {
+            info = "<html><center>A karám üres,<br>nincs fogyasztás.</center></html>";
+        } else {
+            int daysLeft = enc.getDaysUntilStarvation();
+            info = "<html><center>Az állatok meg vannak etetve.<br><br><b>Hátralévő napok éhezésig: " + daysLeft + "</b></center></html>";
+        }
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton transport = new JButton("Állat elszállítása");
+        transport.setEnabled(enc.hasAnimals());
+        transport.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.TRANSPORT_ANIMAL;
+            dialog.dispose();
+        });
+
+        int sellValue = enc.hasAnimals() ? enc.getSpecies().getValue() : 0;
+        JButton sell = new JButton("Állat eladása (+$" + sellValue + ")");
+        sell.setEnabled(enc.hasAnimals());
+        sell.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.SELL_ANIMAL;
+            dialog.dispose();
+        });
+
+        leftPanel.add(buttonRow(transport, sell), BorderLayout.SOUTH);
+
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel cloningFacilityWindow(CloningFacility cf, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel("cloningfacility", "Klónozó labor"), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+        String aniAss = (cf.hasAnimal()) ? cf.getAnimalType().name().toLowerCase() : null;
+        String aniName = (cf.hasAnimal()) ? cf.getAnimalType().name() : "Üres";
+        String cap = cf.getAnimalsMade() + " / " + cf.getCapacity();
+
+        topPanel.add(resourceBox(aniAss, aniName, cap), BorderLayout.WEST);
+
+        String info;
+        if (cf.isCloning()) {
+            int daysLeft = cf.getDaysToClone() - cf.getDaysSinceStarted();
+            info = "<html><center><b>Klónozás hátralévő ideje:</b> " + daysLeft + " nap</center></html>";
+        } else {
+            info = "<html><center><b>Klónozás ára:</b> $" + cf.getCostOfCloning() + "<br><br><b>Klónozás ideje:</b> " + cf.getDaysToClone() + " nap</center></html>";
+        }
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton start = new JButton("Klónozás megkezdése (-$" + cf.getCostOfCloning() + ")");
+        boolean canStart = cf.hasAnimal() && !cf.isCloning() && (cf.getAnimalsMade() < cf.getCapacity());
+        start.setEnabled(canStart);
+        start.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.START_CLONING;
+            dialog.dispose();
+        });
+
+        JButton transport = new JButton("Állat elszállítása");
+        transport.setEnabled(cf.getAnimalsMade() > 0);
+        transport.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.TRANSPORT_ANIMAL;
+            dialog.dispose();
+        });
+
+        leftPanel.add(buttonRow(start, transport), BorderLayout.SOUTH);
+
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel farmWindow(Farm farm, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel("farm", "Farm"), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+
+        String capacityText = farm.getGrainMade() + " / " + farm.getCapacity();
+        topPanel.add(resourceBox("grain", "Gabona", capacityText), BorderLayout.WEST);
+
+        String info;
+        if (farm.isBoosted()) {
+            info = "<html><center><b>Termelés növelve!</b><br><br>Bónusz: +" + farm.getBoostAmount() + " db / nap<br>Hátralévő idő: " + farm.getDaysLeftOfBoost() + " nap</center></html>";
+        } else {
+            info = "<html><center><b>Normál termelés</b><br><br>Fejlesztés után:<br>+" + farm.getBoostAmount() + " db / nap</center></html>";
+        }
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton boost = new JButton("Termelés növelése (-$" + farm.getBoostCost() + ")");
+        boost.setEnabled(!farm.isBoosted());
+        boost.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.BOOST_PRODUCTION;
+            dialog.dispose();
+        });
+
+        JButton transport = new JButton("Gabona elszállítása");
+        transport.setEnabled(farm.getGrainMade() > 0);
+        transport.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.TRANSPORT_RESOURCE;
+            dialog.dispose();
+        });
+
+        leftPanel.add(buttonRow(boost, transport), BorderLayout.SOUTH);
+
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel agriPlantWindow(AgriculturalPlant plant, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel("agriculturalplant", "Agrárüzem"), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+
+        JPanel middleContainer = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+
+        String grainCap = plant.getIncomingGrain() + " / " + plant.getCapacityIn();
+        middleContainer.add(resourceBox("grain", "Gabona", grainCap));
+
+        String info;
+        if (plant.isBoosted()) {
+            int total = plant.getBatchAmount() + plant.getBoostAmount();
+            info = "<html><center><b>Termelés növelve!</b><br><br>Feldolgozás:<br>" + total + " db / NAP<br>Hátralévő: " + plant.getDaysLeftOfBoost() + " NAP</center></html>";
+        } else {
+            info = "<html><center><b>Feldolgozás:</b><br>" + plant.getBatchAmount() + " db / NAP<br><br>Fejlesztéssel:<br>+" + plant.getBoostAmount() + " / NAP</center></html>";
+        }
+        middleContainer.add(infoPanel(info));
+
+        String foodCap = plant.getOutgoingFood() + " / " + plant.getCapacityOut();
+        middleContainer.add(resourceBox("food", "Étel", foodCap));
+
+        leftPanel.add(middleContainer, BorderLayout.CENTER);
+
+        JButton boost = new JButton("Termelés növelése (-$" + plant.getBoostCost() + ")");
+        boost.setEnabled(!plant.isBoosted());
+        boost.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.BOOST_PRODUCTION;
+            dialog.dispose();
+        });
+
+        JButton transport = new JButton("Étel elszállítása");
+        transport.setEnabled(plant.getOutgoingFood() > 0);
+        transport.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.TRANSPORT_RESOURCE;
+            dialog.dispose();
+        });
+
+        leftPanel.add(buttonRow(boost, transport), BorderLayout.SOUTH);
+
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel animalBox(AnimalType animal, String placeholder)
+    {
+        JPanel box = new JPanel(new BorderLayout());
+        box.setPreferredSize(new Dimension(110, 130));
+        box.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+
+        JLabel imgLabel = new JLabel("", SwingConstants.CENTER);
+        imgLabel.setOpaque(true);
+        imgLabel.setBackground(Color.WHITE);
+
+        if(animal != null)
+        {
+            BufferedImage img = engine.AssetManager.get(animal.name().toLowerCase());
+
+            if(img != null)
+            {
+                Image scaledImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                imgLabel.setIcon(new ImageIcon(scaledImg));
+            } else {
+                imgLabel.setText(animal.name());
+            }
+        } else {
+            imgLabel.setText("Üres");
+        }
+
+        box.add(imgLabel, BorderLayout.CENTER);
+
+        String nameText = (animal != null) ? animal.name() : placeholder;
+        JLabel nameLabel = new JLabel(nameText, SwingConstants.CENTER);
+        nameLabel.setPreferredSize(new Dimension(110, 30));
+        nameLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        box.add(nameLabel, BorderLayout.SOUTH);
+
+        return box;
+    }
+
+    private JPanel buildingRightPanel(String asset, String buildingName)
+    {
+        JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
+        rightPanel.setPreferredSize(new Dimension(200, 0));
+
+        JLabel imgLabel = new JLabel("", SwingConstants.CENTER);
+        imgLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+
+        BufferedImage img = engine.AssetManager.get(asset);
+
+        if(img != null)
+        {
+            Image scaledImg = img.getScaledInstance(180, 180, Image.SCALE_SMOOTH);
+            imgLabel.setIcon(new ImageIcon(scaledImg));
+        } else {
+            imgLabel.setText("Sikertelen betöltés");
+        }
+
+        rightPanel.add(imgLabel, BorderLayout.CENTER);
+
+        JLabel nameLabel = new JLabel(buildingName, SwingConstants.CENTER);
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        rightPanel.add(nameLabel, BorderLayout.SOUTH);
+
+        return rightPanel;
+    }
+
+    private JPanel resourceBox(String asset, String title, String capacity)
+    {
+        JPanel box = new JPanel(new BorderLayout());
+        box.setPreferredSize(new Dimension(130, 160));
+        box.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+
+        JLabel imgLabel = new JLabel("", SwingConstants.CENTER);
+        imgLabel.setOpaque(true);
+        imgLabel.setBackground(Color.WHITE);
+
+        if(asset != null && !asset.isEmpty())
+        {
+            BufferedImage img = engine.AssetManager.get(asset);
+            if(img != null)
+            {
+                Image scaledImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                imgLabel.setIcon(new ImageIcon(scaledImg));
+            } else {
+                imgLabel.setText(title);
+            }
+        } else {
+            imgLabel.setText("Üres");
+        }
+
+        box.add(imgLabel, BorderLayout.CENTER);
+
+        JPanel textPanel = new JPanel(new GridLayout(2, 1));
+        textPanel.setOpaque(false);
+        textPanel.setBorder(BorderFactory.createEmptyBorder(2, 0, 5, 0));
+
+        JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 14));
+
+        JLabel capLabel = new JLabel(capacity, SwingConstants.CENTER);
+        capLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        textPanel.add(titleLabel);
+        textPanel.add(capLabel);
+
+        box.add(textPanel, BorderLayout.SOUTH);
+
+        return box;
+    }
+
+    private JPanel infoPanel(String content)
+    {
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        infoPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+        infoPanel.setBackground(Color.WHITE);
+
+        JLabel textLabel = new JLabel(content, SwingConstants.CENTER);
+        textLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+
+        textLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        infoPanel.add(textLabel, BorderLayout.CENTER);
+
+        return infoPanel;
+    }
+
+    private JPanel buttonRow(JButton... buttons)
+    {
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+
+        for (JButton btn : buttons) {
+            btn.setFont(new Font("Arial", Font.BOLD, 13));
+            btn.setFocusPainted(false);
+            buttonPanel.add(btn);
+        }
+
+        return buttonPanel;
     }
 
     private String createProgressBar(int current, int max) {
