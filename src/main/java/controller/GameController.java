@@ -294,9 +294,9 @@ public class GameController implements GameListener {
                             ResearchLab rl = (ResearchLab) clickedTile.getBuilding();
                             if(model.getWorld().getMoney() >= rl.getCostOfResearch())
                             {
-                                if(rl.startResearch())
+                                if(rl.canStartResearch())
                                 {
-                                    model.getWorld().spendMoney(rl.getCostOfResearch());
+                                    rl.startResearch();
                                     afterSpending(model.getWorld().getMoney());
                                     view.mapRefresh();
                                 }
@@ -327,9 +327,9 @@ public class GameController implements GameListener {
                                 CloningFacility cf = (CloningFacility) clickedTile.getBuilding();
                                 if(model.getWorld().getMoney() >= cf.getCostOfCloning())
                                 {
-                                    if(cf.startCloning())
+                                    if(cf.canStartCloning())
                                     {
-                                        model.getWorld().spendMoney(cf.getCostOfCloning());
+                                        cf.startCloning();
                                         afterSpending(model.getWorld().getMoney());
                                         view.mapRefresh();
                                     }
@@ -623,6 +623,8 @@ public class GameController implements GameListener {
             model.getBuildManager().destroy(tile);
             view.mapRefresh();
         }
+
+        afterSpending(model.getWorld().getMoney());
     }
 
     private void buyVehicleAtScreen(int screenX, int screenY, VehicleType type) throws Exception

@@ -54,22 +54,23 @@ public class ResearchLab extends Building<AnimalType, List<AnimalType>> {
             return true;
         } else if (this.receivedAnimal1 != animal && this.receivedAnimal2 == null) {
             this.receivedAnimal2 = animal;
-            this.startResearch();
             return true;
         } else {
             return false;
         }
     }
 
+    public boolean canStartResearch() {
+        return this.hasAnimalsForResearch() && this.discoveredAnimal == null;
+    }
+
     // igazat ad vissza, ha most lehet kutatni, hamisat, ha nem
     // ha lehet, elindítja a kutatást
-    public boolean startResearch() {
-        if (!this.hasAnimalsForResearch() || this.discoveredAnimal != null) {
-            return false;
-        } else {
+    public void startResearch() {
+        if (this.hasAnimalsForResearch() && this.discoveredAnimal == null) {
             this.researchHappening = true;
             this.daysSinceResearchStarted = 0;
-            return true;
+            this.world.spendMoney(this.COST_OF_RESEARCH);
         }
     }
 
