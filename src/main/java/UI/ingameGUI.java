@@ -342,8 +342,10 @@ public class ingameGUI {
                 return tempBuildingAction;
             }
             else if (b instanceof City) {
-                City city = (City) b;
-                infoText += "<b>Rendelés alatt:</b> " + (city.hasOrder() ? city.getOrderedAmount() + " db " + city.getOrderedAnimal().name() : "Nincs") + "<br>";
+                dialog.setSize(600, 250);
+                dialog.add(cityWindow((City) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
             else if (b instanceof CloningFacility) {
                 dialog.setSize(650, 300);
