@@ -8,6 +8,8 @@ public class Silo extends Building<Integer,Integer> {
     private int numOfFood;
     private int plusCapacity;
 
+    private Enclosure enclosure;
+
     private final int CAPACITY_INCREASE = 10;
     private final int CAPACITY_INCREASE_BASE_COST = 5000;
     private final int CAPACITY_INCREASE_COST_INCREMENT = 1000;
@@ -19,6 +21,7 @@ public class Silo extends Building<Integer,Integer> {
         super(world);
 
         this.type = BuildingType.SILO;
+        this.enclosure = null;
 
         this.numOfFood = STARTING_STOCK;
 
@@ -26,6 +29,30 @@ public class Silo extends Building<Integer,Integer> {
 
         this.width = 2;
         this.height = 2;
+    }
+
+    public void setEnclosure(Enclosure enclosure) {
+        this.enclosure = enclosure;
+    }
+
+    public Enclosure getEnclosure() {
+        return this.enclosure;
+    }
+
+    public int getFoodConsumptionPerDay() {
+        if (this.enclosure != null) {
+            return this.enclosure.getNumOfAnimals();
+        } else {
+            return 0;
+        }
+    }
+
+    public int getDaysUntilStarvation() {
+        if (this.enclosure != null) {
+            return this.enclosure.getDaysUntilStarvation();
+        } else {
+            return 0;
+        }
     }
 
     // getter az itt tárolt étel mennyiségére
