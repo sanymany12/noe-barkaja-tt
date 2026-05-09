@@ -514,6 +514,7 @@ public class GameController implements GameListener {
         if(tile != null)
         {
             model.getBuildManager().destroy(tile);
+            view.mapRefresh();
         }
     }
 
