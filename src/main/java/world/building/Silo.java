@@ -2,13 +2,14 @@ package world.building;
 
 import world.World;
 import world.resources.ResourceType;
+import world.tile.Point;
 import world.vehicle.FoodTruck;
 
 public class Silo extends Building<Integer,Integer> {
     private int numOfFood;
     private int plusCapacity;
 
-    private Enclosure enclosure;
+    transient private Enclosure enclosure;
 
     private final int CAPACITY_INCREASE = 10;
     private final int CAPACITY_INCREASE_BASE_COST = 5000;

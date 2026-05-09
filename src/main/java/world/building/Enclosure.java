@@ -2,6 +2,7 @@ package world.building;
 
 import world.World;
 import world.resources.AnimalType;
+import world.tile.Point;
 import world.tile.Tile;
 import world.vehicle.AnimalTruck;
 import world.vehicle.Vehicle;
@@ -9,19 +10,26 @@ import world.vehicle.Vehicle;
 public class Enclosure extends Building<AnimalType, AnimalType> {
     private AnimalType species;
     private int numOfAnimals;
-    private Silo silo;
+    transient private Silo silo;
+    private Point siloPos;
     private boolean starving;
 
     private final double ANIMAL_MULTIPLIER = 1.2;
     private final int CAPACITY = 200;
 
-    public Enclosure(World world, Silo silo) {
+    public Enclosure(World world, Point siloPos) {
         super(world);
 
         this.type = BuildingType.ENCLOSURE;
 
-        this.silo = silo;
-        this.silo.setEnclosure(this);
+        this.siloPos = siloPos;
+        if(world.get(siloPos.x, siloPos.y).getBuilding() instanceof Silo silo){
+            this.silo = silo;
+            this.silo.setEnclosure(this);
+        }else{
+            System.err.println("Hibás koordináta lett megadva az Enclosure siloPos-nak!");
+        }
+
 
         this.width = 4;
         this.height = 2;
@@ -30,6 +38,15 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
         this.numOfAnimals = 0;
 
         this.starving = false;
+    }
+
+    public void restoreSiloRef(){
+        if(world.get(siloPos.x, siloPos.y).getBuilding() instanceof Silo silo){
+            this.silo = silo;
+            this.silo.setEnclosure(this);
+        }else{
+            System.err.println("Hibás koordináta lett megadva az Enclosure siloPos-nak!");
+        }
     }
 
     public AnimalType getSpecies() {

@@ -14,7 +14,11 @@ public class UniversalAdapter<T> implements JsonSerializer<T>, JsonDeserializer<
     @Override
     public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
         // lefordítjuk az objektumot osztály alapján
-        JsonElement element = context.serialize(src, src.getClass());
+        Gson plainGson = new Gson();
+
+        // 2. Ezzel a tiszta Gsonnal mentjük le a City belső változóit
+        JsonElement element = plainGson.toJsonTree(src);
+
         JsonObject result = element.getAsJsonObject();
 
         // hozzá tesszük a típust
@@ -35,8 +39,9 @@ public class UniversalAdapter<T> implements JsonSerializer<T>, JsonDeserializer<
                 // megkeressük az osztályt név alapján
                 Class<?> clazz = Class.forName(className);
 
-                // betöltés
-                return context.deserialize(jsonObject, clazz);
+                Gson plainGson = new Gson();
+
+                return (T) plainGson.fromJson(jsonObject, clazz);
             } catch (ClassNotFoundException e) {
                 throw new JsonParseException("ismeretlen osztály a mentésben: " + className, e);
             }

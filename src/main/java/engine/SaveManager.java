@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import world.World;
 import world.building.Building;
 import world.resources.ICargo;
+import world.tile.road.Road;
 import world.vehicle.Vehicle;
 
 import java.io.*;
@@ -18,6 +19,7 @@ public class SaveManager {
             registerTypeAdapter(Vehicle.class, universalAdapter).
             registerTypeAdapter(ICargo.class, universalAdapter).
             registerTypeAdapter(Building.class, universalAdapter).
+            registerTypeAdapter(Road.class, universalAdapter).
             create();
 
     public static void saveGame(World world, String fileName) {
