@@ -121,10 +121,7 @@ public class Station extends Building<Object, Object> {
     @Override
     // Újra triggereljük a járműérkezést, ha esetleg valami termelés történt volna???
     public void newDay() throws Exception {
-        if(this.vehicle != null)
-        {
-            this.vehicleArrives(this.vehicle);
-        }
+        // semmi :(
     }
 
     @Override

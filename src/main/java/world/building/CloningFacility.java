@@ -11,7 +11,7 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
     private boolean isCloning;
     private int daysSinceStarted;
 
-    private final int DAYS_TO_CLONE = 10;
+    private final int DAYS_TO_CLONE = 6;
     private final int COST_OF_CLONING = 200;
     private final int CAPACITY = 20;
 
@@ -55,21 +55,22 @@ public class CloningFacility extends Building<AnimalType, List<AnimalType>> {
         if (this.receivedAnimal == null) {
             this.receivedAnimal = animal;
             this.animalsMade = 1;
-            this.startCloning();
             return true;
         } else {
             return false;
         }
     }
 
+    public boolean canStartCloning() {
+        return this.hasAnimal() && this.animalsMade < this.CAPACITY;
+    }
+
     // klónozás megkezdésének metódusa
-    // igazat ad vissza, ha sikeres, hamisat, ha nem
-    public boolean startCloning() {
+    public void startCloning() {
         if (this.hasAnimal() && this.animalsMade < this.CAPACITY) {
             this.isCloning = true;
-            return true;
-        } else {
-            return false;
+            this.daysSinceStarted = 0;
+            this.world.spendMoney(this.COST_OF_CLONING);
         }
     }
 
