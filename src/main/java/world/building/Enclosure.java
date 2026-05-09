@@ -54,7 +54,7 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
 
     public void purchaseAnimal(AnimalType animalType) {
         if ((this.numOfAnimals == 0 && this.species == null) || this.species == animalType) {
-            this.world.spendMoney(animalType.getValue() * 10);
+            this.world.spendMoney(animalType.getValue() * 5);
             this.species = animalType;
             this.numOfAnimals++;
         }

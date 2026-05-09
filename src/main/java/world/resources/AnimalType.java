@@ -2,15 +2,15 @@ package world.resources;
 
 public enum AnimalType implements ICargo {
     UNKNOWN("???", -1),
-    HORSE("Ló", 10),
-    FISH("Hal", 5),
-    PIG("Malac", 8),
-    CAT("Cica", 4),
-    BEAR("Medve", 20),
-    SEAHORSE("Csikóhal", 25),
-    GUINEAPIG("Tengerimalac", 18),
-    RACOON("Mosómedve", 30),
-    CAPYBARA("Capybara", 35);
+    HORSE("Ló", 1000),
+    FISH("Hal", 500),
+    PIG("Malac", 800),
+    CAT("Cica", 600),
+    BEAR("Medve", 1000),
+    SEAHORSE("Csikóhal", 5000),
+    GUINEAPIG("Tengerimalac", 2200),
+    RACOON("Mosómedve", 3500),
+    CAPYBARA("Capybara", 4000);
 
     private String displayName;
     private int value;
