@@ -95,13 +95,21 @@ public class BuildManager {
         }
     }
 
-    public void placeEnclosure(Tile t, Silo silo) {
-        Enclosure enclosure = new Enclosure(this.world, silo);
-        t.setAnchor(true);
-        for (int i = t.getCoordinate().x; i < t.getCoordinate().x + enclosure.getHeight(); i++) {
-            for (int j = t.getCoordinate().y; j < t.getCoordinate().y + enclosure.getHeight(); j++) {
-                world.get(i, j).setBuilding(enclosure);
-                world.get(i, j).setTerrainType(TerrainType.BUILDING);
+    public void placeEnclosure(Tile t, Tile silotile) {
+        Silo silo = null;
+        if (silotile.getBuilding() != null) {
+            if (silotile.getBuilding().getBuildingType() == BuildingType.SILO) {
+                silo = (Silo) silotile.getBuilding();
+            }
+        }
+        if (silo != null && silo.getEnclosure() != null) {
+            Enclosure enclosure = new Enclosure(this.world, silo);
+            t.setAnchor(true);
+            for (int i = t.getCoordinate().x; i < t.getCoordinate().x + enclosure.getHeight(); i++) {
+                for (int j = t.getCoordinate().y; j < t.getCoordinate().y + enclosure.getHeight(); j++) {
+                    world.get(i, j).setBuilding(enclosure);
+                    world.get(i, j).setTerrainType(TerrainType.BUILDING);
+                }
             }
         }
     }
