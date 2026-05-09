@@ -39,6 +39,7 @@ public class ingameGUI {
 
     private VehicleType tempSelectedType = null;
     private VehicleAction tempVehicleAction = VehicleAction.NONE;
+    private AnimalType tempSelectedAnimal = null;
 
     private BuildingAction tempBuildingAction = BuildingAction.NONE;
 
@@ -548,22 +549,29 @@ public class ingameGUI {
 
         leftPanel.add(topPanel, BorderLayout.CENTER);
 
-        JButton transport = new JButton("Állat elszállítása");
-        transport.setEnabled(enc.hasAnimals());
-        transport.addActionListener(e -> {
-            tempBuildingAction = BuildingAction.TRANSPORT_ANIMAL;
-            dialog.dispose();
-        });
+        if (!enc.hasAnimals()) {
+            JButton buy = new JButton("Állat vásárlása");
+            buy.addActionListener(e -> {
+                tempBuildingAction = BuildingAction.BUY_ANIMAL;
+                dialog.dispose();
+            });
+            leftPanel.add(buttonRow(buy), BorderLayout.SOUTH);
+        } else {
+            JButton transport = new JButton("Állat elszállítása");
+            transport.addActionListener(e -> {
+                tempBuildingAction = BuildingAction.TRANSPORT_ANIMAL;
+                dialog.dispose();
+            });
 
-        int sellValue = enc.hasAnimals() ? enc.getSpecies().getValue() : 0;
-        JButton sell = new JButton("Állat eladása (+$" + sellValue + ")");
-        sell.setEnabled(enc.hasAnimals());
-        sell.addActionListener(e -> {
-            tempBuildingAction = BuildingAction.SELL_ANIMAL;
-            dialog.dispose();
-        });
+            int sellValue = enc.getSpecies().getValue();
+            JButton sell = new JButton("Állat eladása (+$" + sellValue + ")");
+            sell.addActionListener(e -> {
+                tempBuildingAction = BuildingAction.SELL_ANIMAL;
+                dialog.dispose();
+            });
 
-        leftPanel.add(buttonRow(transport, sell), BorderLayout.SOUTH);
+            leftPanel.add(buttonRow(transport, sell), BorderLayout.SOUTH);
+        }
 
         mainPanel.add(leftPanel, BorderLayout.CENTER);
 
@@ -1004,6 +1012,58 @@ public class ingameGUI {
 
         gameOverDialog.add(mainPanel);
         gameOverDialog.setVisible(true);
+    }
+
+    public AnimalType showAnimalSelector()
+    {
+        tempSelectedAnimal = null;
+
+        JDialog dialog = new JDialog(gameWindow, "Állat vásárlása", true);
+        dialog.setLayout(new GridLayout(1, 5, 10, 10));
+        dialog.setSize(750, 200);
+        dialog.setLocationRelativeTo(gameWindow);
+
+        dialog.add(createAnimalOption("boxed-bear", AnimalType.BEAR, dialog));
+        dialog.add(createAnimalOption("boxed-fish", AnimalType.FISH, dialog));
+        dialog.add(createAnimalOption("boxed-cat", AnimalType.CAT, dialog));
+        dialog.add(createAnimalOption("boxed-horse", AnimalType.HORSE, dialog));
+        dialog.add(createAnimalOption("boxed-pig", AnimalType.PIG, dialog));
+
+        dialog.setVisible(true);
+
+        return tempSelectedAnimal;
+    }
+
+    private JPanel createAnimalOption(String assName, AnimalType type, JDialog dialog)
+    {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+
+        JLabel imgLabel = new JLabel("", SwingConstants.CENTER);
+        imgLabel.setPreferredSize(new Dimension(100, 100));
+
+        BufferedImage img = engine.AssetManager.get(assName);
+        if (img != null) {
+            Image scaled = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            imgLabel.setIcon(new ImageIcon(scaled));
+        } else {
+            imgLabel.setText("Nincs kép");
+            imgLabel.setOpaque(true);
+            imgLabel.setBackground(Color.DARK_GRAY);
+            imgLabel.setForeground(Color.WHITE);
+        }
+        panel.add(imgLabel, BorderLayout.CENTER);
+
+        int price = type.getValue() * 10;
+        JButton buy = new JButton("$" + price);
+        buy.addActionListener(e -> {
+            tempSelectedAnimal = type;
+            dialog.dispose();
+        });
+
+        panel.add(buy, BorderLayout.SOUTH);
+
+        return panel;
     }
 
     private String createProgressBar(int current, int max) {

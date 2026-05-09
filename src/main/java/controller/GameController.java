@@ -5,6 +5,7 @@ import engine.GameEngine;
 import engine.GameListener;
 import engine.TimeSpeed;
 import world.building.*;
+import world.resources.AnimalType;
 import world.tile.Point;
 import world.tile.Tile;
 import world.tile.TerrainType;
@@ -47,7 +48,7 @@ public class GameController implements GameListener {
 
     private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION, DEMOLISH, BUILD_WOODEN_BRIDGE, BUILD_STONE_BRIDGE, BUILD_GLASS_BRIDGE }
     public enum VehicleAction { NONE, ASSIGN_ROUTE, SELL }
-    public enum BuildingAction { NONE, BUY_VEHICLE, START_RESEARCH, TRANSPORT_ANIMAL, SELL_ANIMAL, START_CLONING, BOOST_PRODUCTION, TRANSPORT_RESOURCE }
+    public enum BuildingAction { NONE, BUY_VEHICLE, START_RESEARCH, TRANSPORT_ANIMAL, SELL_ANIMAL, START_CLONING, BOOST_PRODUCTION, TRANSPORT_RESOURCE, BUY_ANIMAL }
 
     private BuildState currentState = BuildState.NONE;
     private VehicleType selectedVehicleType = null;
@@ -285,6 +286,21 @@ public class GameController implements GameListener {
                                 } catch (Exception ex) {
                                     view.errorPopup("Hiba (jármű vásárlás): " + ex.getMessage());
                                 }
+                            }
+
+                            model.setTimeMultiplier(originalSpeed);
+                        }
+                        else if(action == BuildingAction.BUY_ANIMAL)
+                        {
+                            model.setTimeMultiplier(TimeSpeed.PAUSED);
+                            AnimalType selectedAnimal = view.showAnimalSelector();
+
+                            if(selectedAnimal != null && clickedTile.getBuilding() instanceof Enclosure)
+                            {
+                                Enclosure enc = (Enclosure) clickedTile.getBuilding();
+                                enc.purchaseAnimal(selectedAnimal);
+                                afterSpending(model.getWorld().getMoney());
+                                view.mapRefresh();
                             }
 
                             model.setTimeMultiplier(originalSpeed);
