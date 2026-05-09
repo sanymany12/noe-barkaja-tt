@@ -27,7 +27,9 @@ public class ingameGUI {
     private JButton roadToggle;
     private JButton stationToggle;
     private JButton demolishToggle;
-    private JButton bridgeToggle;
+    private JButton stoneBridgeToggle;
+    private JButton woodenBridgeToggle;
+    private JButton glassBridgeToggle;
     private JButton speedPaused;
     private JButton saveBtn;
     private JButton loadBtn;
@@ -87,6 +89,7 @@ public class ingameGUI {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setLayout(new BorderLayout(10, 10));
+        Color panelBg = new Color(238, 238, 238);
 
         JPanel upperPanel = new JPanel(new BorderLayout(10, 0));
         upperPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
@@ -112,32 +115,49 @@ public class ingameGUI {
         upperPanel.add(minimapPanel, BorderLayout.WEST);
 
         JPanel buildPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        buildPanel.setBorder(BorderFactory.createTitledBorder("Build Options"));
+        buildPanel.setBorder(BorderFactory.createTitledBorder("Építési lehetőségek"));
 
-        roadToggle = new JButton("Ut ikon");
+        roadToggle = iconButton("build-road", "Út építése");
         buildPanel.add(roadToggle);
 
-        stationToggle = new JButton("Megálló ikon");
+        stationToggle = iconButton("build-station", "Megálló építése");
         buildPanel.add(stationToggle);
 
-        demolishToggle = new JButton("Bomba ikon");
+        woodenBridgeToggle = iconButton("build-wooden-bridge", "Híd építése");
+        buildPanel.add(woodenBridgeToggle);
+
+        stoneBridgeToggle = iconButton("build-stone-bridge", "Híd építése");
+        buildPanel.add(stoneBridgeToggle);
+
+        glassBridgeToggle = iconButton("build-glass-bridge", "Híd építése");
+        buildPanel.add(glassBridgeToggle);
+
+        demolishToggle = iconButton("build-bomb", "Rombolás");
         buildPanel.add(demolishToggle);
 
-        bridgeToggle = new JButton("Hid ikon");
-        buildPanel.add(bridgeToggle);
-
-        buildPanel.add(new JButton("További ikonok"));
         upperPanel.add(buildPanel, BorderLayout.CENTER);
 
-        JPanel napPanel = new JPanel(new BorderLayout());
-        napPanel.setPreferredSize(new Dimension(100, 100));
-        napPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        JPanel napContainer = new JPanel(new GridBagLayout());
+        napContainer.setOpaque(false);
 
-        dayCounter = new JLabel("<html><center>Day<br><b>1</b></center></html>", SwingConstants.CENTER);
-        dayCounter.setFont(new Font("Arial", Font.PLAIN, 18));
+        JPanel napPanel = new JPanel(new BorderLayout());
+        Dimension napMeret = new Dimension(110,110);
+        napPanel.setPreferredSize(napMeret);
+        napPanel.setMinimumSize(napMeret);
+        napPanel.setMaximumSize(napMeret);
+
+        dayCounter = new JLabel("<html><center><b style='font-size:22px'>1</b></center></html>", SwingConstants.CENTER);
+        dayCounter.setFont(new Font("Monospaced", Font.PLAIN, 14));
         napPanel.add(dayCounter, BorderLayout.CENTER);
+        napContainer.add(napPanel);
         upperPanel.add(napPanel, BorderLayout.EAST);
 
+        Image napKep = engine.AssetManager.get("sun").getScaledInstance(110,110,Image.SCALE_SMOOTH);
+        dayCounter.setIcon(new ImageIcon(napKep));
+        dayCounter.setHorizontalTextPosition(JLabel.CENTER);
+        dayCounter.setVerticalTextPosition(JLabel.CENTER);
+
+        upperPanel.setBackground(panelBg);
         gameWindow.add(upperPanel, BorderLayout.NORTH);
 
         mapPanel = new GameMapPanel();
@@ -151,35 +171,59 @@ public class ingameGUI {
 
         JPanel alsoPanel = new JPanel(new BorderLayout(10, 0));
         alsoPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-
-        balanceLabel = new JLabel("<html><span style='font-size:24px'>$10000</span><sup style='font-size:14px'></sup></html>");
+        balanceLabel = new JLabel("<html><span style='font-family: SansSerif; font-size:24px'>$20000</span><sup style='font-family: SansSerif; font-size:14px; color:#E74C3C;'>-0</sup></html>");
         alsoPanel.add(balanceLabel, BorderLayout.WEST);
 
         JPanel idoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        speedPaused = new JButton("||");
+        Color timeBg = new Color(92, 92, 92);
+        Color timeHover = new Color(115, 115, 115);
+        Font timeFont = new Font("Monospaced", Font.BOLD, 18);
+
+        speedPaused = new JButton("⏸");
+        styleButtons(speedPaused, timeBg, timeHover, Color.WHITE, timeFont);
         idoPanel.add(speedPaused);
-        speedNormal = new JButton("►");
+        speedNormal = new JButton("▶");
+        styleButtons(speedNormal, timeBg, timeHover, Color.WHITE, timeFont);
         idoPanel.add(speedNormal);
-        speedFast = new JButton("►►");
+        speedFast = new JButton("⏩");
+        styleButtons(speedFast, timeBg, timeHover, Color.WHITE, timeFont);
         idoPanel.add(speedFast);
-        speedSuperFast = new JButton("►|");
+        speedSuperFast = new JButton("⏭");
+        styleButtons(speedSuperFast, timeBg, timeHover, Color.WHITE, timeFont);
         idoPanel.add(speedSuperFast);
         alsoPanel.add(idoPanel, BorderLayout.CENTER);
 
         JPanel lowerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        Font actionFont = new Font("Monospaced", Font.BOLD, 14);
+        Color actionBg = new Color(143, 168, 118);
+        Color actionHover = new Color(165, 188, 142);
 
         saveBtn = new JButton("Mentés");
         loadBtn = new JButton("Betöltés");
 
+        styleButtons(saveBtn, actionBg, actionHover, Color.WHITE, actionFont);
+        styleButtons(loadBtn, actionBg, actionHover, Color.WHITE, actionFont);
+
         lowerPanel.add(saveBtn);
         lowerPanel.add(loadBtn);
 
+        Color exitBg = new Color(180, 100, 100);
+        Color exitHover = new Color(200, 120, 120);
+
         JButton exitGomb = new JButton("Kilépés");
+        styleButtons(exitGomb, exitBg, exitHover, Color.WHITE, actionFont);
         exitGomb.addActionListener(e -> System.exit(0));
         lowerPanel.add(exitGomb);
-        lowerPanel.add(new JButton("?"));
+
+        Color helpBg = new Color(190, 165, 100);
+        Color helpHover = new Color(210, 185, 120);
+        JButton helpGomb = new JButton("?");
+
+        styleButtons(helpGomb, helpBg, helpHover, Color.WHITE, actionFont);
+        lowerPanel.add(helpGomb);
         alsoPanel.add(lowerPanel, BorderLayout.EAST);
 
+        alsoPanel.setBackground(panelBg);
         gameWindow.add(alsoPanel, BorderLayout.SOUTH);
     }
 
@@ -207,6 +251,22 @@ public class ingameGUI {
         dialog.setVisible(true);
 
         return tempSelectedType;
+    }
+
+    private JButton iconButton(String asset, String tooltip)
+    {
+        JButton butt = new JButton();
+        butt.setToolTipText(tooltip);
+        butt.setPreferredSize(new Dimension(50,50));
+        butt.setFocusPainted(false);
+        butt.setContentAreaFilled(false);
+        butt.setOpaque(false);
+        butt.setBorderPainted(false);
+
+        Image scaled = engine.AssetManager.get(asset).getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        butt.setIcon(new ImageIcon(scaled));
+
+        return butt;
     }
 
     private JPanel createVehicleOption(String name, String imagePlaceholder, String price, VehicleType type, JDialog dialog)
@@ -816,6 +876,26 @@ public class ingameGUI {
         return buttonPanel;
     }
 
+    private void styleButtons(JButton butt, Color bgColor, Color hoverColor, Color fgColor, Font font)
+    {
+        butt.setBackground(bgColor);
+        butt.setForeground(fgColor);
+        butt.setFont(font);
+        butt.setFocusPainted(false);
+        butt.setBorderPainted(false);
+        butt.setOpaque(true);
+        butt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        butt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                butt.setBackground(hoverColor);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                butt.setBackground(bgColor);
+            }
+        });
+    }
+
     private String createProgressBar(int current, int max) {
         if (max <= 0) return "[Hiba: Max 0]";
         int bars = 20;
@@ -831,12 +911,13 @@ public class ingameGUI {
     }
 
     public void setDay(int day) {
-        dayCounter.setText("<html><center>Nap:<br><b>" + day + "</b></center></html>");
+        dayCounter.setText("<html><center><b style='font-size:22px'>"+ day +"</b></center></html>");
     }
 
-    public void setBalance(int money)
+    public void setBalance(int money, int expenses)
     {
-        balanceLabel.setText("<html><span style='font-size:24px'>$" + money + "</span><sup style='font-size:14px'></sup></html>");
+        balanceLabel.setText("<html><span style='font-family: SansSerif; font-size:24px'>$" + money +
+                "</span><sup style='font-family: SansSerif; font-size:14px; color:#E74C3C;'>-" + expenses + "</sup></html>");
     }
 
     public GameMapPanel getMapPanel() { return mapPanel; }
@@ -846,7 +927,11 @@ public class ingameGUI {
 
     public JButton getDemolishToggle() { return demolishToggle; }
 
-    public JButton getBridgeToggle() { return bridgeToggle; }
+    public JButton getStoneBridgeToggle() { return stoneBridgeToggle; }
+
+    public JButton getWoodenBridgeToggle() { return woodenBridgeToggle; }
+
+    public JButton getGlassBridgeToggle() { return glassBridgeToggle; }
 
     public JButton getSpeedPaused() { return speedPaused; }
 

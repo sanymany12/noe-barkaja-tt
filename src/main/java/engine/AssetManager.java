@@ -240,6 +240,14 @@ public class AssetManager {
 
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella
+
+        String directoryPath = "src/main/resources/gui";
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            String trimmed = file.getName().substring(0, file.getName().lastIndexOf('.'));
+            loadAsset(trimmed, "/gui/" + file.getName());
+        }
     }
 /*
 kep betoltese a mapbe input streammel
