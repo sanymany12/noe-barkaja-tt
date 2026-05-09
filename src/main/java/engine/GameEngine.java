@@ -112,6 +112,8 @@ public class GameEngine {
         return this.buildManager;
     }
 
+    public TimeSpeed getTimeSpeed() { return this.timeMultiplier; }
+
     private void update() {
 
     }

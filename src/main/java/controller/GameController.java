@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.BitSet;
 import javax.swing.SwingUtilities;
@@ -44,7 +45,7 @@ public class GameController implements GameListener {
     private int mapWidthTiles;
     private int mapHeightTiles;
 
-    private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION, DEMOLISH, BUILD_BRIDGE }
+    private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION, DEMOLISH, BUILD_WOODEN_BRIDGE, BUILD_STONE_BRIDGE, BUILD_GLASS_BRIDGE }
     public enum VehicleAction { NONE, ASSIGN_ROUTE, SELL }
     public enum BuildingAction { NONE, BUY_VEHICLE, START_RESEARCH, TRANSPORT_ANIMAL, SELL_ANIMAL, START_CLONING, BOOST_PRODUCTION, TRANSPORT_RESOURCE }
 
@@ -78,59 +79,98 @@ public class GameController implements GameListener {
             if(currentState == BuildState.BUILD_ROAD)
             {
                 currentState = BuildState.NONE;
-                view.getRoadToggle().setText("Ut ikon");
+                view.getRoadToggle().setBorderPainted(false);
             }
             else
             {
                 currentState = BuildState.BUILD_ROAD;
                 bridgeStartTile = null;
-                view.getRoadToggle().setText("**Ut ikon**");
-                view.getStationToggle().setText("Megálló ikon");
-                view.getDemolishToggle().setText("Bomba ikon");
-                view.getBridgeToggle().setText("Hid ikon");
+                view.getRoadToggle().setBorderPainted(true);
+                view.getStationToggle().setBorderPainted(false);
+                view.getDemolishToggle().setBorderPainted(false);
+                view.getStoneBridgeToggle().setBorderPainted(false);
+                view.getWoodenBridgeToggle().setBorderPainted(false);
 
             }
         });
         view.getStationToggle().addActionListener(e -> {
             if(currentState == BuildState.BUILD_STATION) {
                 currentState = BuildState.NONE;
-                view.getStationToggle().setText("Megálló ikon");
+                view.getStationToggle().setBorderPainted(false);
             } else {
                 currentState = BuildState.BUILD_STATION;
                 bridgeStartTile = null;
-                view.getStationToggle().setText("**Megálló ikon**");
-                view.getRoadToggle().setText("Ut ikon");
-                view.getDemolishToggle().setText("Bomba ikon");
-                view.getBridgeToggle().setText("Hid ikon");
+                view.getStationToggle().setBorderPainted(true);
+                view.getRoadToggle().setBorderPainted(false);
+                view.getDemolishToggle().setBorderPainted(false);
+                view.getStoneBridgeToggle().setBorderPainted(false);
+                view.getWoodenBridgeToggle().setBorderPainted(false);
             }
         });
         view.getDemolishToggle().addActionListener(e -> {
            if(currentState == BuildState.DEMOLISH)
            {
                currentState = BuildState.NONE;
-               view.getDemolishToggle().setText("Bomba ikon");
+               view.getDemolishToggle().setBorderPainted(false);
            } else {
                currentState = BuildState.DEMOLISH;
                bridgeStartTile = null;
-               view.getDemolishToggle().setText("**Bomba ikon**");
-               view.getRoadToggle().setText("Ut ikon");
-               view.getStationToggle().setText("Megallo ikon");
-               view.getBridgeToggle().setText("Hid ikon");
+               view.getDemolishToggle().setBorderPainted(true);
+               view.getRoadToggle().setBorderPainted(false);
+               view.getStationToggle().setBorderPainted(false);
+               view.getStoneBridgeToggle().setBorderPainted(false);
+               view.getWoodenBridgeToggle().setBorderPainted(false);
            }
         });
-        view.getBridgeToggle().addActionListener(e -> {
-            if(currentState == BuildState.BUILD_BRIDGE)
+        view.getStoneBridgeToggle().addActionListener(e -> {
+            if(currentState == BuildState.BUILD_STONE_BRIDGE)
             {
                 currentState = BuildState.NONE;
                 bridgeStartTile = null;
-                view.getBridgeToggle().setText("Hid ikon");
+                view.getStoneBridgeToggle().setBorderPainted(false);
             } else {
-                currentState = BuildState.BUILD_BRIDGE;
+                currentState = BuildState.BUILD_STONE_BRIDGE;
                 bridgeStartTile = null;
-                view.getBridgeToggle().setText("**Hid ikon");
-                view.getRoadToggle().setText("Ut ikon");
-                view.getStationToggle().setText("Megallo ikon");
-                view.getDemolishToggle().setText("Bomba ikon");
+                view.getStoneBridgeToggle().setBorderPainted(true);
+                view.getWoodenBridgeToggle().setBorderPainted(false);
+                view.getGlassBridgeToggle().setBorderPainted(false);
+                view.getRoadToggle().setBorderPainted(false);
+                view.getStationToggle().setBorderPainted(false);
+                view.getDemolishToggle().setBorderPainted(false);
+            }
+        });
+        view.getWoodenBridgeToggle().addActionListener(e -> {
+            if(currentState == BuildState.BUILD_WOODEN_BRIDGE)
+            {
+                currentState = BuildState.NONE;
+                bridgeStartTile = null;
+                view.getWoodenBridgeToggle().setBorderPainted(false);
+            } else {
+                currentState = BuildState.BUILD_WOODEN_BRIDGE;
+                bridgeStartTile = null;
+                view.getWoodenBridgeToggle().setBorderPainted(true);
+                view.getStoneBridgeToggle().setBorderPainted(false);
+                view.getGlassBridgeToggle().setBorderPainted(false);
+                view.getRoadToggle().setBorderPainted(false);
+                view.getStationToggle().setBorderPainted(false);
+                view.getDemolishToggle().setBorderPainted(false);
+            }
+        });
+        view.getGlassBridgeToggle().addActionListener(e -> {
+            if(currentState == BuildState.BUILD_GLASS_BRIDGE)
+            {
+                currentState = BuildState.NONE;
+                bridgeStartTile = null;
+                view.getGlassBridgeToggle().setBorderPainted(false);
+            } else {
+                currentState = BuildState.BUILD_GLASS_BRIDGE;
+                bridgeStartTile = null;
+                view.getGlassBridgeToggle().setBorderPainted(true);
+                view.getWoodenBridgeToggle().setBorderPainted(false);
+                view.getStoneBridgeToggle().setBorderPainted(false);
+                view.getRoadToggle().setBorderPainted(false);
+                view.getStationToggle().setBorderPainted(false);
+                view.getDemolishToggle().setBorderPainted(false);
             }
         });
         view.getSpeedPaused().addActionListener(e -> {
@@ -164,7 +204,7 @@ public class GameController implements GameListener {
                             routingVehicle.startRoute();
                             System.out.println("Útvonal véglegesítve");
                         } else {
-                            System.out.println("Útvonal kijelölése megszakadt, a régi útvonal marad.");
+                            view.errorPopup("Útvonal kijelölése megszakadt, a régi útvonal marad.");
                         }
                     }
 
@@ -172,10 +212,12 @@ public class GameController implements GameListener {
                     selectedVehicleType = null;
                     routingVehicle = null;
                     bridgeStartTile = null;
-                    view.getRoadToggle().setText("Út ikon");
-                    view.getStationToggle().setText("Megálló ikon");
-                    view.getBridgeToggle().setText("Hid ikon");
-                    view.getDemolishToggle().setText("Bomba ikon");
+                    view.getRoadToggle().setBorderPainted(false);
+                    view.getStationToggle().setBorderPainted(false);
+                    view.getStoneBridgeToggle().setBorderPainted(false);
+                    view.getWoodenBridgeToggle().setBorderPainted(false);
+                    view.getGlassBridgeToggle().setBorderPainted(false);
+                    view.getDemolishToggle().setBorderPainted(false);
                     return;
                 }
 
@@ -200,12 +242,17 @@ public class GameController implements GameListener {
                     }
 
                     if (clickedVehicle != null) {
+                        TimeSpeed originalSpeed = model.getTimeSpeed();
+                        model.setTimeMultiplier(TimeSpeed.PAUSED);
                         VehicleAction action = view.showVehicleInfo(clickedVehicle);
+
+                        model.setTimeMultiplier(originalSpeed);
 
                         if (action == VehicleAction.ASSIGN_ROUTE) {
                             currentState = BuildState.ASSIGN_ROUTE;
                             routingVehicle = clickedVehicle;
                             tempRouteStops.clear();
+                            model.setTimeMultiplier(TimeSpeed.PAUSED);
                             System.out.println("Kattints BAL gombbal a MEGÁLLÓKRA, majd JOBB KLIKK a befejezéshez");
                         } else if (action == VehicleAction.SELL) {
                             clickedVehicle.sellVehicle();
@@ -217,11 +264,17 @@ public class GameController implements GameListener {
 
                     // Epuletre vagy megallora kattintas
                     if (clickedTile != null && (clickedTile.getTerrainType() == TerrainType.STOP || clickedTile.getTerrainType() == TerrainType.BUILDING)) {
+                        TimeSpeed originalSpeed = model.getTimeSpeed();
+                        model.setTimeMultiplier(TimeSpeed.PAUSED);
+
                         // Info ablak es felhasznalo dontese
                         BuildingAction action = view.showBuildingInfo(clickedTile);
 
+                        model.setTimeMultiplier(originalSpeed);
+
                         // Ha vasarolni szeretne
                         if (action == BuildingAction.BUY_VEHICLE) {
+                            model.setTimeMultiplier(TimeSpeed.PAUSED);
                             VehicleType selectedType = view.showVehicleSelector();
 
                             if (selectedType != null) {
@@ -230,9 +283,11 @@ public class GameController implements GameListener {
                                     afterSpending(model.getWorld().getMoney());
                                     view.mapRefresh();
                                 } catch (Exception ex) {
-                                    System.err.println("Hiba (jármű vásárlás): " + ex.getMessage());
+                                    view.errorPopup("Hiba (jármű vásárlás): " + ex.getMessage());
                                 }
                             }
+
+                            model.setTimeMultiplier(originalSpeed);
                         }
                         else if(action == BuildingAction.START_RESEARCH)
                         {
@@ -246,7 +301,7 @@ public class GameController implements GameListener {
                                     view.mapRefresh();
                                 }
                             } else {
-                                System.out.println("Nincs elég pénz a kutatáshoz!");
+                                view.errorPopup("Nincs elég pénz a kutatáshoz!");
                             }
                         }
                         else if(action == BuildingAction.TRANSPORT_ANIMAL)
@@ -280,7 +335,7 @@ public class GameController implements GameListener {
                                     }
                                 } else
                                 {
-                                    System.out.println("Nincs elég pénz a klónozáshoz!");
+                                    view.errorPopup("Nincs elég pénz a klónozáshoz!");
                                 }
                             }
                         }
@@ -295,7 +350,7 @@ public class GameController implements GameListener {
                                     afterSpending(model.getWorld().getMoney());
                                     view.mapRefresh();
                                 } else {
-                                    System.out.println("Nincs elég pénz a boosterhez!");
+                                    view.errorPopup("Nincs elég pénz a boosterhez!");
                                 }
                             }
                             else if(clickedTile.getBuilding() instanceof AgriculturalPlant)
@@ -306,7 +361,7 @@ public class GameController implements GameListener {
                                     plant.boostProduction();
                                     afterSpending(model.getWorld().getMoney());
                                 } else {
-                                    System.out.println("Nincs elég pénz a boosterhez!");
+                                    view.errorPopup("Nincs elég pénz a boosterhez!");
                                 }
                             }
                         }
@@ -327,7 +382,7 @@ public class GameController implements GameListener {
                         tempRouteStops.add(clickedTile);
                         System.out.println("Megálló hozzáadva a listához");
                     } else {
-                        System.out.println("Kérlek, egy megállóra kattints!");
+                        view.errorPopup("Kérlek, egy megállóra kattints!");
                     }
                 }
 
@@ -347,13 +402,13 @@ public class GameController implements GameListener {
                 }
 
                 // Hid epitese
-                else if (currentState == BuildState.BUILD_BRIDGE && SwingUtilities.isLeftMouseButton(e)) {
+                else if (currentState == BuildState.BUILD_WOODEN_BRIDGE && SwingUtilities.isLeftMouseButton(e)) {
                     if (bridgeStartTile == null) {
                         if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
                             bridgeStartTile = clickedTile;
                             System.out.println("Híd kezdőpont kiválasztva. Kattints a túloldalra!");
                         } else {
-                            System.out.println("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
+                            view.errorPopup("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
                         }
                     } else {
                         if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
@@ -364,10 +419,60 @@ public class GameController implements GameListener {
                                 view.getMinimapPanel().getMinimap().generateImage();
                                 afterSpending(model.getWorld().getMoney());
                             } catch (Exception ex) {
-                                System.err.println("Hiba: " + ex.getMessage());
+                                view.errorPopup("Hiba: " + ex.getMessage());
                             }
                         } else {
-                            System.out.println("A híd végpontja szarazfold melletti viz!");
+                            view.errorPopup("A híd végpontja szarazfold melletti viz!");
+                        }
+                        bridgeStartTile = null;
+                    }
+                }
+                else if (currentState == BuildState.BUILD_STONE_BRIDGE && SwingUtilities.isLeftMouseButton(e)) {
+                    if (bridgeStartTile == null) {
+                        if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
+                            bridgeStartTile = clickedTile;
+                            System.out.println("Híd kezdőpont kiválasztva. Kattints a túloldalra!");
+                        } else {
+                            view.errorPopup("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
+                        }
+                    } else {
+                        if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
+                            try {
+                                model.getBuildManager().buildBridge(bridgeStartTile, clickedTile, world.tile.road.BridgeType.STONE, false);
+
+                                view.mapRefresh();
+                                view.getMinimapPanel().getMinimap().generateImage();
+                                afterSpending(model.getWorld().getMoney());
+                            } catch (Exception ex) {
+                                view.errorPopup("Hiba: " + ex.getMessage());
+                            }
+                        } else {
+                            view.errorPopup("A híd végpontja szarazfold melletti viz!");
+                        }
+                        bridgeStartTile = null;
+                    }
+                }
+                else if (currentState == BuildState.BUILD_GLASS_BRIDGE && SwingUtilities.isLeftMouseButton(e)) {
+                    if (bridgeStartTile == null) {
+                        if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
+                            bridgeStartTile = clickedTile;
+                            System.out.println("Híd kezdőpont kiválasztva. Kattints a túloldalra!");
+                        } else {
+                            view.errorPopup("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
+                        }
+                    } else {
+                        if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
+                            try {
+                                model.getBuildManager().buildBridge(bridgeStartTile, clickedTile, world.tile.road.BridgeType.GLASS, false);
+
+                                view.mapRefresh();
+                                view.getMinimapPanel().getMinimap().generateImage();
+                                afterSpending(model.getWorld().getMoney());
+                            } catch (Exception ex) {
+                                view.errorPopup("Hiba: " + ex.getMessage());
+                            }
+                        } else {
+                            view.errorPopup("A híd végpontja szarazfold melletti viz!");
                         }
                         bridgeStartTile = null;
                     }
@@ -442,10 +547,12 @@ public class GameController implements GameListener {
                     routingVehicle = null;
                     bridgeStartTile = null;
 
-                    view.getRoadToggle().setText("Út ikon");
-                    view.getStationToggle().setText("Megálló ikon");
-                    view.getDemolishToggle().setText("Bomba ikon");
-                    view.getBridgeToggle().setText("Hid ikon");
+                    view.getRoadToggle().setBorderPainted(false);
+                    view.getStationToggle().setBorderPainted(false);
+                    view.getDemolishToggle().setBorderPainted(false);
+                    view.getStoneBridgeToggle().setBorderPainted(false);
+                    view.getWoodenBridgeToggle().setBorderPainted(false);
+                    view.getGlassBridgeToggle().setBorderPainted(false);
                 }
             }
         });
@@ -485,7 +592,7 @@ public class GameController implements GameListener {
 
             model.loadGame(fileToLoad.getAbsolutePath());
 
-            view.setBalance(model.getWorld().getMoney());
+            view.setBalance(model.getWorld().getMoney(), model.getWorld().getAnnualCostOfVehicles());
             view.setDay(model.getWorld().getElapsedTime());
             view.mapRefresh();
         }
@@ -559,7 +666,7 @@ public class GameController implements GameListener {
                 view.mapRefresh();
                 view.getMinimapPanel().getMinimap().generateImage();
             } else {
-                System.out.println("Az ipari megállót egy épület mellé kell építeni!");
+                view.errorPopup("Az ipari megállót egy épület mellé kell építeni!");
             }
         }
     }
@@ -574,11 +681,23 @@ public class GameController implements GameListener {
     public void onNewDay(int currentDay)
     {
         view.setDay(currentDay);
-        view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
+        view.setBalance(model.getWorld().getMoney(), model.getWorld().getAnnualCostOfVehicles());
+        view.getMinimapPanel().getMinimap().generateImage();
+
+        if (model.getWorld().getMoney() < 0) {
+            model.setTimeMultiplier(TimeSpeed.PAUSED);
+            view.showGameOver();
+        }
     }
 
     @Override
     public void afterSpending(int money) {
-        view.setBalance(money);
+        view.setBalance(money, model.getWorld().getAnnualCostOfVehicles());
+
+        if (money < 0) {
+            model.setTimeMultiplier(TimeSpeed.PAUSED);
+            view.showGameOver();
+        }
     }
+
 }

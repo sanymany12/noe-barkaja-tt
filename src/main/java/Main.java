@@ -21,7 +21,7 @@ public class Main {
 
                 if (loadFilePath != null) {
                     model.loadGame(loadFilePath);
-                    view.setBalance(model.getWorld().getMoney());
+                    view.setBalance(model.getWorld().getMoney(), model.getWorld().getAnnualCostOfVehicles());
                     view.setDay(model.getWorld().getElapsedTime());
                     view.mapRefresh();
                 }
