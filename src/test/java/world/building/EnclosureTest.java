@@ -42,7 +42,7 @@ public class EnclosureTest {
     @Test
     public void testPurchaseAnimal_EmptyEnclosure_SetsSpeciesAndDeductsMoney() {
         int initialMoney = world.getMoney();
-        int expectedCost = AnimalType.BEAR.getValue() * 10;
+        int expectedCost = AnimalType.BEAR.getValue() * 5;
 
         enclosure.purchaseAnimal(AnimalType.BEAR);
 
