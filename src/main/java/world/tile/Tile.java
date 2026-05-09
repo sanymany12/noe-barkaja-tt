@@ -78,6 +78,7 @@ public class Tile {
         if (this.building.getBuildingType() == BuildingType.STATION) {
             this.building = null;
             this.terrainType = TerrainType.LAND;
+            this.isAnchor = false;
         }
     }
 
@@ -108,7 +109,7 @@ public class Tile {
                         return "land-1";
                     }
                 }
-            case WATER:
+            case WATER, BRIDGE:
                 return "water";
             case CLIFF:
                 return "cliff";
