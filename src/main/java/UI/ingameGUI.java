@@ -896,6 +896,45 @@ public class ingameGUI {
         });
     }
 
+    public void showGameOver()
+    {
+        JDialog gameOverDialog = new JDialog(gameWindow, "Csőd:(", true);
+        gameOverDialog.setSize(450, 250);
+        gameOverDialog.setLocationRelativeTo(gameWindow);
+
+        gameOverDialog.setUndecorated(true);
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBackground(new Color(45, 45, 45));
+        mainPanel.setBorder(BorderFactory.createLineBorder(new Color(180, 100, 100), 6));
+
+        JLabel titleLabel = new JLabel("Projekt vége", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Monospaced", Font.BOLD, 36));
+        titleLabel.setForeground(new Color(220, 80, 80));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(25, 0, 10, 0));
+
+        JLabel messageLabel = new JLabel("<html><center>A játék véget ért, a kiadások felemésztették a projektet.</center></html>", SwingConstants.CENTER);
+        messageLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        messageLabel.setForeground(Color.LIGHT_GRAY);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(new Color(45, 45, 45));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+
+        JButton exit = new JButton("Kilépés");
+        exit.setPreferredSize(new Dimension(150, 45));
+        styleButtons(exit, new Color(180, 100, 100), new Color(200, 120, 120), Color.WHITE, new Font("Monospaced", Font.BOLD, 18));
+        exit.addActionListener(e -> System.exit(0));
+
+        buttonPanel.add(exit    );
+
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        mainPanel.add(messageLabel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        gameOverDialog.add(mainPanel);
+        gameOverDialog.setVisible(true);
+    }
+
     private String createProgressBar(int current, int max) {
         if (max <= 0) return "[Hiba: Max 0]";
         int bars = 20;
@@ -908,6 +947,45 @@ public class ingameGUI {
         }
         sb.append("]</span>");
         return sb.toString();
+    }
+
+    public void errorPopup(String errorMes)
+    {
+        JDialog errorDialog = new JDialog(gameWindow, "Hiba", true);
+        errorDialog.setSize(350, 150);
+        errorDialog.setLocationRelativeTo(gameWindow);
+        errorDialog.setUndecorated(true);
+
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBackground(new Color(45, 45, 45));
+        mainPanel.setBorder(BorderFactory.createLineBorder(new Color(200, 80, 80), 4));
+
+        JLabel titleLabel = new JLabel("Hiba", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        titleLabel.setForeground(new Color(220, 80, 80));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+
+        JLabel messageLabel = new JLabel("<html><center>" + errorMes + "</center></html>", SwingConstants.CENTER);
+        messageLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        messageLabel.setForeground(Color.LIGHT_GRAY);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(new Color(45, 45, 45));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+        JButton ok = new JButton("OK");
+        ok.setPreferredSize(new Dimension(80, 30));
+        styleButtons(ok, new Color(92, 92, 92), new Color(115, 115, 115), Color.WHITE, new Font("Monospaced", Font.BOLD, 14));
+
+        ok.addActionListener(e -> errorDialog.dispose());
+        buttonPanel.add(ok);
+
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        mainPanel.add(messageLabel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        errorDialog.add(mainPanel);
+        errorDialog.setVisible(true);
     }
 
     public void setDay(int day) {

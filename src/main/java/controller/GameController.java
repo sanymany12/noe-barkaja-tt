@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.BitSet;
 import javax.swing.SwingUtilities;
@@ -203,7 +204,7 @@ public class GameController implements GameListener {
                             routingVehicle.startRoute();
                             System.out.println("Útvonal véglegesítve");
                         } else {
-                            System.out.println("Útvonal kijelölése megszakadt, a régi útvonal marad.");
+                            view.errorPopup("Útvonal kijelölése megszakadt, a régi útvonal marad.");
                         }
                     }
 
@@ -241,12 +242,17 @@ public class GameController implements GameListener {
                     }
 
                     if (clickedVehicle != null) {
+                        TimeSpeed originalSpeed = model.getTimeSpeed();
+                        model.setTimeMultiplier(TimeSpeed.PAUSED);
                         VehicleAction action = view.showVehicleInfo(clickedVehicle);
+
+                        model.setTimeMultiplier(originalSpeed);
 
                         if (action == VehicleAction.ASSIGN_ROUTE) {
                             currentState = BuildState.ASSIGN_ROUTE;
                             routingVehicle = clickedVehicle;
                             tempRouteStops.clear();
+                            model.setTimeMultiplier(TimeSpeed.PAUSED);
                             System.out.println("Kattints BAL gombbal a MEGÁLLÓKRA, majd JOBB KLIKK a befejezéshez");
                         } else if (action == VehicleAction.SELL) {
                             clickedVehicle.sellVehicle();
@@ -258,11 +264,17 @@ public class GameController implements GameListener {
 
                     // Epuletre vagy megallora kattintas
                     if (clickedTile != null && (clickedTile.getTerrainType() == TerrainType.STOP || clickedTile.getTerrainType() == TerrainType.BUILDING)) {
+                        TimeSpeed originalSpeed = model.getTimeSpeed();
+                        model.setTimeMultiplier(TimeSpeed.PAUSED);
+
                         // Info ablak es felhasznalo dontese
                         BuildingAction action = view.showBuildingInfo(clickedTile);
 
+                        model.setTimeMultiplier(originalSpeed);
+
                         // Ha vasarolni szeretne
                         if (action == BuildingAction.BUY_VEHICLE) {
+                            model.setTimeMultiplier(TimeSpeed.PAUSED);
                             VehicleType selectedType = view.showVehicleSelector();
 
                             if (selectedType != null) {
@@ -271,9 +283,11 @@ public class GameController implements GameListener {
                                     afterSpending(model.getWorld().getMoney());
                                     view.mapRefresh();
                                 } catch (Exception ex) {
-                                    System.err.println("Hiba (jármű vásárlás): " + ex.getMessage());
+                                    view.errorPopup("Hiba (jármű vásárlás): " + ex.getMessage());
                                 }
                             }
+
+                            model.setTimeMultiplier(originalSpeed);
                         }
                         else if(action == BuildingAction.START_RESEARCH)
                         {
@@ -287,7 +301,7 @@ public class GameController implements GameListener {
                                     view.mapRefresh();
                                 }
                             } else {
-                                System.out.println("Nincs elég pénz a kutatáshoz!");
+                                view.errorPopup("Nincs elég pénz a kutatáshoz!");
                             }
                         }
                         else if(action == BuildingAction.TRANSPORT_ANIMAL)
@@ -321,7 +335,7 @@ public class GameController implements GameListener {
                                     }
                                 } else
                                 {
-                                    System.out.println("Nincs elég pénz a klónozáshoz!");
+                                    view.errorPopup("Nincs elég pénz a klónozáshoz!");
                                 }
                             }
                         }
@@ -336,7 +350,7 @@ public class GameController implements GameListener {
                                     afterSpending(model.getWorld().getMoney());
                                     view.mapRefresh();
                                 } else {
-                                    System.out.println("Nincs elég pénz a boosterhez!");
+                                    view.errorPopup("Nincs elég pénz a boosterhez!");
                                 }
                             }
                             else if(clickedTile.getBuilding() instanceof AgriculturalPlant)
@@ -347,7 +361,7 @@ public class GameController implements GameListener {
                                     plant.boostProduction();
                                     afterSpending(model.getWorld().getMoney());
                                 } else {
-                                    System.out.println("Nincs elég pénz a boosterhez!");
+                                    view.errorPopup("Nincs elég pénz a boosterhez!");
                                 }
                             }
                         }
@@ -368,7 +382,7 @@ public class GameController implements GameListener {
                         tempRouteStops.add(clickedTile);
                         System.out.println("Megálló hozzáadva a listához");
                     } else {
-                        System.out.println("Kérlek, egy megállóra kattints!");
+                        view.errorPopup("Kérlek, egy megállóra kattints!");
                     }
                 }
 
@@ -394,7 +408,7 @@ public class GameController implements GameListener {
                             bridgeStartTile = clickedTile;
                             System.out.println("Híd kezdőpont kiválasztva. Kattints a túloldalra!");
                         } else {
-                            System.out.println("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
+                            view.errorPopup("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
                         }
                     } else {
                         if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
@@ -405,10 +419,10 @@ public class GameController implements GameListener {
                                 view.getMinimapPanel().getMinimap().generateImage();
                                 afterSpending(model.getWorld().getMoney());
                             } catch (Exception ex) {
-                                System.err.println("Hiba: " + ex.getMessage());
+                                view.errorPopup("Hiba: " + ex.getMessage());
                             }
                         } else {
-                            System.out.println("A híd végpontja szarazfold melletti viz!");
+                            view.errorPopup("A híd végpontja szarazfold melletti viz!");
                         }
                         bridgeStartTile = null;
                     }
@@ -419,7 +433,7 @@ public class GameController implements GameListener {
                             bridgeStartTile = clickedTile;
                             System.out.println("Híd kezdőpont kiválasztva. Kattints a túloldalra!");
                         } else {
-                            System.out.println("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
+                            view.errorPopup("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
                         }
                     } else {
                         if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
@@ -430,10 +444,10 @@ public class GameController implements GameListener {
                                 view.getMinimapPanel().getMinimap().generateImage();
                                 afterSpending(model.getWorld().getMoney());
                             } catch (Exception ex) {
-                                System.err.println("Hiba: " + ex.getMessage());
+                                view.errorPopup("Hiba: " + ex.getMessage());
                             }
                         } else {
-                            System.out.println("A híd végpontja szarazfold melletti viz!");
+                            view.errorPopup("A híd végpontja szarazfold melletti viz!");
                         }
                         bridgeStartTile = null;
                     }
@@ -444,7 +458,7 @@ public class GameController implements GameListener {
                             bridgeStartTile = clickedTile;
                             System.out.println("Híd kezdőpont kiválasztva. Kattints a túloldalra!");
                         } else {
-                            System.out.println("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
+                            view.errorPopup("A híd kezdőpontja szarazfolddel szomszedos viz legyen!");
                         }
                     } else {
                         if (clickedTile != null && clickedTile.getTerrainType() == TerrainType.WATER) {
@@ -455,10 +469,10 @@ public class GameController implements GameListener {
                                 view.getMinimapPanel().getMinimap().generateImage();
                                 afterSpending(model.getWorld().getMoney());
                             } catch (Exception ex) {
-                                System.err.println("Hiba: " + ex.getMessage());
+                                view.errorPopup("Hiba: " + ex.getMessage());
                             }
                         } else {
-                            System.out.println("A híd végpontja szarazfold melletti viz!");
+                            view.errorPopup("A híd végpontja szarazfold melletti viz!");
                         }
                         bridgeStartTile = null;
                     }
@@ -651,7 +665,7 @@ public class GameController implements GameListener {
                 view.mapRefresh();
                 view.getMinimapPanel().getMinimap().generateImage();
             } else {
-                System.out.println("Az ipari megállót egy épület mellé kell építeni!");
+                view.errorPopup("Az ipari megállót egy épület mellé kell építeni!");
             }
         }
     }
@@ -667,11 +681,22 @@ public class GameController implements GameListener {
     {
         view.setDay(currentDay);
         view.setBalance(model.getWorld().getMoney(), model.getWorld().getAnnualCostOfVehicles());
-        view.getMinimapPanel().getMinimap().generateImage(); //frissítjük a minimap hátterét
+        view.getMinimapPanel().getMinimap().generateImage();
+
+        if (model.getWorld().getMoney() < 0) {
+            model.setTimeMultiplier(TimeSpeed.PAUSED);
+            view.showGameOver();
+        }
     }
 
     @Override
     public void afterSpending(int money) {
         view.setBalance(money, model.getWorld().getAnnualCostOfVehicles());
+
+        if (money < 0) {
+            model.setTimeMultiplier(TimeSpeed.PAUSED);
+            view.showGameOver();
+        }
     }
+
 }
