@@ -37,11 +37,15 @@ public class World {
     private final int COST_TO_CUT_TREE = 5;
     private final int COST_TO_DESTROY = 200;
 
+    private final int STARTING_FUNDS = 5000;
+
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         grid = new Tile[rows][cols];
-        this.money = 10000;
+
+        this.money = this.STARTING_FUNDS;
+
         this.elapsedTime = 0;
 
         this.busStops = new ArrayList<BusStop>();
@@ -183,8 +187,6 @@ public class World {
 //            grid[6][3].getRoad().vehicleEnters(testVehicle, testVehicle.getCurrentDirection());
 //            vehicles.add(testVehicle);
 //        }catch (Exception e){System.err.println("error: " + e.getMessage());}
-
-        this.money = 20000;
     }
 
     public Tile get(int x, int y) {

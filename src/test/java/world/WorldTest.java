@@ -24,7 +24,7 @@ public class WorldTest {
     public void testWorldInitialization() {
         assertEquals(20, world.getRows());
         assertEquals(20, world.getCols());
-        assertEquals(20000, world.getMoney());
+        assertEquals(5000, world.getMoney());
         assertEquals(0, world.getElapsedTime());
     }
 
