@@ -96,6 +96,7 @@ public class World {
 
     //TODO itt kellene beolvasni a meghatározott világot
     public void initWorld(){
+        BuildManager setupBuilder = new BuildManager(this);
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
                 grid[i][j] = new Tile(new Point(i,j), TerrainType.LAND, 0, null, null, false);
@@ -121,15 +122,12 @@ public class World {
         grid[8][2].setAnchor(true);
 
         // Utak varosok kozott
-        BuildManager setupBuilder = new BuildManager(this);
         for(int x = 4; x <= 8; x++) {
             setupBuilder.buildRoad(grid[x][3], true);
         }
 
         // Farm
-        grid[4][10].setTerrainType(TerrainType.BUILDING);
-        grid[4][10].setBuilding(new Farm(this));
-        grid[4][10].setAnchor(true);
+        setupBuilder.placeBuilding(grid[4][10], BuildingType.FARM);
 
         // Másik siló
         Silo testSilo2 = new Silo(this);
