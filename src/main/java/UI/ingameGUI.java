@@ -399,70 +399,11 @@ public class ingameGUI {
     public VehicleAction showVehicleInfo(Vehicle v)
     {
         tempVehicleAction = VehicleAction.NONE;
-        JDialog dialog = new JDialog(gameWindow, "Jármű információ", true);
-        dialog.setSize(500, 300);
-        dialog.setLayout(new BorderLayout(15, 15));
+
+        JDialog dialog = new JDialog(gameWindow, "Jármű információk", true);
+        dialog.setSize(650, 250);
         dialog.setLocationRelativeTo(gameWindow);
-
-        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
-        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
-
-        String infoText = "<html><h3>Információ a járműről:</h3>"
-                + "<b>Sebesség:</b> " + v.getSpeed() + "<br>"
-                + "<b>Kapacitás:</b> " + v.getCapacity() + "<br><br>";
-
-        if (v instanceof FoodTruck) {
-            FoodTruck ft = (FoodTruck) v;
-            infoText += "<b>Rakomány:</b> " + (ft.getCargoType() != null ? ft.getCargoType() : "Üres") + "<br>";
-            infoText += "<b>Mennyiség:</b> " + ft.getCurrentCargoNum() + " / " + ft.getCapacity() + "<br>";
-            infoText += createProgressBar(ft.getCurrentCargoNum(), ft.getCapacity());
-        }
-        else if (v instanceof AnimalTruck) {
-            infoText += "<b>Szállított állat:</b> " + (v.getCargoType() != null ? v.getCargoType() : "Üres") + "<br>";
-            infoText += "<b>Férőhely:</b> " + (v.isEmpty() ? "0" : "1") + " / 1<br>";
-            infoText += createProgressBar(v.isEmpty() ? 0 : 1, 1);
-        }
-        else if (v instanceof Bus) {
-            infoText += "<b>Utasok:</b> " + (v.isEmpty() ? "Üres" : (v.isFull() ? "Tele" : "Van rajta utas")) + "<br>";
-        }
-        infoText += "</html>";
-
-        JLabel infoLabel = new JLabel(infoText);
-        infoLabel.setVerticalAlignment(SwingConstants.TOP);
-        infoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
-        leftPanel.add(infoLabel, BorderLayout.CENTER);
-
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
-        JButton routeBtn = new JButton("Útvonal kijelölése");
-        JButton sellBtn = new JButton("Eladás");
-        routeBtn.addActionListener(e -> {
-            tempVehicleAction = VehicleAction.ASSIGN_ROUTE;
-            dialog.dispose();
-        });
-        sellBtn.addActionListener(e -> {
-            tempVehicleAction = VehicleAction.SELL;
-            dialog.dispose();
-        });
-
-        buttonPanel.add(routeBtn);
-        buttonPanel.add(sellBtn);
-        leftPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        dialog.add(leftPanel, BorderLayout.CENTER);
-
-        JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
-        rightPanel.setPreferredSize(new Dimension(150, 0));
-
-        JLabel imagePlaceholder = new JLabel("Kép helye", SwingConstants.CENTER);
-        imagePlaceholder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
-        rightPanel.add(imagePlaceholder, BorderLayout.CENTER);
-
-        JLabel typeLabel = new JLabel("Típus: " + (v.getVehicleType() != null ? v.getVehicleType().name() : "Ismeretlen"), SwingConstants.CENTER);
-        typeLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        rightPanel.add(typeLabel, BorderLayout.SOUTH);
-
-        dialog.add(rightPanel, BorderLayout.EAST);
+        dialog.add(vehicleWindow(v, dialog));
 
         dialog.setVisible(true);
         return tempVehicleAction;
@@ -673,6 +614,69 @@ public class ingameGUI {
 
         leftPanel.add(buttonRow(start, transport), BorderLayout.SOUTH);
 
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel vehicleWindow(Vehicle v, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String vName = "Jármű";
+        if (v instanceof FoodTruck) vName = "Étel Szállító";
+        else if (v instanceof AnimalTruck) vName = "Állat Szállító";
+        else if (v instanceof Bus) vName = "Busz";
+
+        mainPanel.add(buildingRightPanel(v.getSpriteName(), vName), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+
+        String resAss = null;
+        String resName = "Üres";
+        String capText = v.getCurrentCargoNum() + " / " + v.getCapacity();
+
+        if (v instanceof FoodTruck) {
+            if (v.getCargoType() != null) {
+                resAss = ((world.resources.ResourceType) v.getCargoType()).name().toLowerCase();
+                resName = ((world.resources.ResourceType) v.getCargoType()).name();
+                if (resName.equals("GRAIN")) resName = "Gabona";
+                if (resName.equals("FOOD")) resName = "Étel";
+            }
+        } else if (v instanceof AnimalTruck) {
+            capText = (v.isEmpty() ? "0" : "1") + " / 1";
+            if (v.getCargoType() != null) {
+                resAss = ((world.resources.AnimalType) v.getCargoType()).name().toLowerCase();
+                resName = ((world.resources.AnimalType) v.getCargoType()).name();
+            }
+        } else if (v instanceof Bus) {
+            if (!v.isEmpty()) {
+                resAss = "nincslol";
+                resName = "Utasok";
+            }
+        }
+        topPanel.add(resourceBox(resAss, resName, capText), BorderLayout.WEST);
+        String info = "<html><center><b>Sebesség:</b> " + v.getSpeed() + " km/h<br><br>";
+        info += "Fenntartás: <font color='red'>-$" + v.getCostToOperate() + "</font> / hó<br>";
+        info += "Eladási ár: <font color='green'>+$" + v.getCostToSell() + "</font></center></html>";
+
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton route = new JButton("Útvonal kijelölése");
+        route.addActionListener(e -> {
+            tempVehicleAction = VehicleAction.ASSIGN_ROUTE;
+            dialog.dispose();
+        });
+
+        JButton sell = new JButton("Eladás (+$" + v.getCostToSell() + ")");
+        sell.addActionListener(e -> {
+            tempVehicleAction = VehicleAction.SELL;
+            dialog.dispose();
+        });
+        leftPanel.add(buttonRow(route, sell), BorderLayout.SOUTH);
         mainPanel.add(leftPanel, BorderLayout.CENTER);
 
         return mainPanel;
