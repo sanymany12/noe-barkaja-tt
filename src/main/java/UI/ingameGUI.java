@@ -351,6 +351,13 @@ public class ingameGUI {
                 dialog.setVisible(true);
                 return tempBuildingAction;
             }
+            else if(b instanceof Station)
+            {
+                dialog.setSize(550, 250);
+                dialog.add(stationWindow((Station) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
+            }
             else if (b instanceof ResearchLab) {
                 dialog.setSize(800, 350);
                 dialog.add(researchLabWindow((ResearchLab) b, dialog));
@@ -377,16 +384,6 @@ public class ingameGUI {
         JPanel actionPanel = new JPanel(new GridLayout(2, 1, 5, 5));
         JLabel typeLabel = new JLabel(tile.getTerrainType().name(), SwingConstants.CENTER);
         actionPanel.add(typeLabel);
-
-        // Ha megallo, vasarolhato jarmu
-        if (tile.getTerrainType() == world.tile.TerrainType.STOP) {
-            JButton buyVehicleBtn = new JButton("Jármű vásárlása");
-            buyVehicleBtn.addActionListener(e -> {
-                tempBuildingAction = controller.GameController.BuildingAction.BUY_VEHICLE;
-                dialog.dispose(); // Bezárjuk az ablakot, a futás folytatódik
-            });
-            actionPanel.add(buyVehicleBtn);
-        }
 
         rightPanel.add(actionPanel, BorderLayout.SOUTH);
         mainPanel.add(rightPanel, BorderLayout.EAST);
@@ -641,6 +638,41 @@ public class ingameGUI {
 
         leftPanel.add(buttonRow(start, transport), BorderLayout.SOUTH);
 
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel stationWindow(Station station, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel(station.getSpriteName(), "Ipari Megálló"), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+
+        String info = "<html><center><b>Tájolás:</b> " + station.getDirection().name() + "<br><br>";
+
+        if (station.isOccupied()) {
+            info += "<font color='blue'><b>Állapot:</b> Jármű bent áll</font><br>";
+            info += "(" + station.getVehicle().getVehicleType().name() + ")";
+        } else {
+            info += "<font color='green'><b>Állapot:</b> Üres</font>";
+        }
+        info += "</center></html>";
+
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton buyVehicle = new JButton("Jármű vásárlása");
+        buyVehicle.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.BUY_VEHICLE;
+            dialog.dispose();
+        });
+
+        leftPanel.add(buttonRow(buyVehicle), BorderLayout.SOUTH);
         mainPanel.add(leftPanel, BorderLayout.CENTER);
 
         return mainPanel;
