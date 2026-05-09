@@ -63,6 +63,9 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
     public void sellAnimal() {
         this.world.receiveMoney(this.species.getValue());
         this.numOfAnimals--;
+        if (this.numOfAnimals == 0) {
+            this.species = null;
+        }
     }
 
     public void newSpeciesArrives(AnimalType a) {
