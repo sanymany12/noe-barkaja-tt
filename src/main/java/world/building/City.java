@@ -22,8 +22,6 @@ public class City extends Building<AnimalType, Integer> {
     private final int MIN_TO_BE_ORDERED = 1;
     private final int DAYS_TIL_NEW_ORDER = 14;
 
-    final private Random random = new Random();
-
     public City (World world) {
         super(world);
         this.type = BuildingType.CITY;
@@ -88,7 +86,7 @@ public class City extends Building<AnimalType, Integer> {
 
     private void newOrder() {
         if (this.deliveredAmount == 0) {
-            int getsNewOrder = random.nextInt(0, 2);
+            int getsNewOrder = ThreadLocalRandom.current().nextInt(0, 2);
             if (getsNewOrder == 1 || this.daysSinceLastOrder == 30) {
                 int animalId = ThreadLocalRandom.current().nextInt(1, 10);
                 switch (animalId) {
