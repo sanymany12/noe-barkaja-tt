@@ -48,7 +48,7 @@ public class GameController implements GameListener {
 
     private enum BuildState { NONE, BUILD_ROAD, ASSIGN_ROUTE, BUILD_STATION, DEMOLISH, BUILD_WOODEN_BRIDGE, BUILD_STONE_BRIDGE, BUILD_GLASS_BRIDGE }
     public enum VehicleAction { NONE, ASSIGN_ROUTE, SELL }
-    public enum BuildingAction { NONE, BUY_VEHICLE, START_RESEARCH, TRANSPORT_ANIMAL, SELL_ANIMAL, START_CLONING, BOOST_PRODUCTION, TRANSPORT_RESOURCE, BUY_ANIMAL }
+    public enum BuildingAction { NONE, BUY_VEHICLE, START_RESEARCH, TRANSPORT_ANIMAL, SELL_ANIMAL, START_CLONING, BOOST_PRODUCTION, TRANSPORT_RESOURCE, BUY_ANIMAL, UPGRADE_SILO }
 
     private BuildState currentState = BuildState.NONE;
     private VehicleType selectedVehicleType = null;
@@ -304,6 +304,21 @@ public class GameController implements GameListener {
                             }
 
                             model.setTimeMultiplier(originalSpeed);
+                        }
+                        else if(action == BuildingAction.UPGRADE_SILO)
+                        {
+                            if(clickedTile.getBuilding() instanceof Silo)
+                            {
+                                Silo silo = (Silo) clickedTile.getBuilding();
+                                if(model.getWorld().getMoney() >= silo.getUpgradeCost())
+                                {
+                                    silo.increaseCapacity();
+                                    afterSpending(model.getWorld().getMoney());
+                                }
+                                else {
+                                    view.errorPopup("Nincs elég pénz a kapacitás növeléséhez!");
+                                }
+                            }
                         }
                         else if(action == BuildingAction.START_RESEARCH)
                         {

@@ -325,10 +325,10 @@ public class ingameGUI {
                 return tempBuildingAction;
             }
             else if (b instanceof Silo) {
-                Silo silo = (Silo) b;
-                int maxCap = silo.getNumOfFood() + silo.getRemainingCapacity();
-                infoText += "<b>Tárolt étel:</b> " + silo.getNumOfFood() + " / " + maxCap + "<br>";
-                infoText += createProgressBar(silo.getNumOfFood(), maxCap);
+                dialog.setSize(600, 250);
+                dialog.add(siloWindow((Silo) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
             }
             else if (b instanceof AgriculturalPlant) {
                 dialog.setSize(750, 300);
@@ -624,6 +624,44 @@ public class ingameGUI {
 
         mainPanel.add(leftPanel, BorderLayout.CENTER);
 
+        return mainPanel;
+    }
+
+    private JPanel siloWindow(Silo silo, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel(silo.getSpriteName(), "Siló"), BorderLayout.EAST);
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+
+        int maxCap = silo.getNumOfFood() + silo.getRemainingCapacity();
+        String capText = silo.getNumOfFood() + " / " + maxCap;
+        topPanel.add(resourceBox("food", "Étel", capText), BorderLayout.WEST);
+
+        int consumption = silo.getFoodConsumptionPerDay();
+        int daysLeft = silo.getDaysUntilStarvation();
+
+        String daysLeftText = (daysLeft > 0) ? daysLeft + " napra elegendő." : "Nincs elegendő étel!";
+        if (consumption == 0) {
+            daysLeftText = "Nincs aktív fogyasztás.";
+        }
+
+        String info = "<html><center><b>Fogyasztás:</b><br>" + consumption + " / NAP<br><br>" + daysLeftText + "</center></html>";
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton upgrade = new JButton("Kapacitás növelése (-$" + silo.getUpgradeCost() + ")");
+        upgrade.setEnabled(silo.canIncreaseCapacity());
+        upgrade.addActionListener(e -> {
+            tempBuildingAction = BuildingAction.UPGRADE_SILO;
+            dialog.dispose();
+        });
+
+        leftPanel.add(buttonRow(upgrade), BorderLayout.SOUTH);
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
         return mainPanel;
     }
 
