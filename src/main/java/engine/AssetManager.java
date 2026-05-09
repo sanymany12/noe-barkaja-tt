@@ -235,8 +235,37 @@ public class AssetManager {
 
         // CITY spriteok betöltése
         loadAsset("townhouse-1", "/assets-final/townhouse-1.png");
+        loadAsset("townhouse-1-bear", "/assets-final/townhouse-1-bear.png");
+        loadAsset("townhouse-1-capybara", "/assets-final/townhouse-1-capybara.png");
+        loadAsset("townhouse-1-cat", "/assets-final/townhouse-1-cat.png");
+        loadAsset("townhouse-1-fish", "/assets-final/townhouse-1-fish.png");
+        loadAsset("townhouse-1-guineapig", "/assets-final/townhouse-1-guineapig.png");
+        loadAsset("townhouse-1-horse", "/assets-final/townhouse-1-horse.png");
+        loadAsset("townhouse-1-pig", "/assets-final/townhouse-1-pig.png");
+        loadAsset("townhouse-1-racoon", "/assets-final/townhouse-1-racoon.png");
+        loadAsset("townhouse-1-seahorse", "/assets-final/townhouse-1-seahorse.png");
+
         loadAsset("townhouse-2", "/assets-final/townhouse-2.png");
+        loadAsset("townhouse-2-bear", "/assets-final/townhouse-2-bear.png");
+        loadAsset("townhouse-2-capybara", "/assets-final/townhouse-2-capybara.png");
+        loadAsset("townhouse-2-cat", "/assets-final/townhouse-2-cat.png");
+        loadAsset("townhouse-2-fish", "/assets-final/townhouse-2-fish.png");
+        loadAsset("townhouse-2-guineapig", "/assets-final/townhouse-2-guineapig.png");
+        loadAsset("townhouse-2-horse", "/assets-final/townhouse-2-horse.png");
+        loadAsset("townhouse-2-pig", "/assets-final/townhouse-2-pig.png");
+        loadAsset("townhouse-2-racoon", "/assets-final/townhouse-2-racoon.png");
+        loadAsset("townhouse-2-seahorse", "/assets-final/townhouse-2-seahorse.png");
+
         loadAsset("townhouse-3", "/assets-final/townhouse-3.png");
+        loadAsset("townhouse-3-bear", "/assets-final/townhouse-3-bear.png");
+        loadAsset("townhouse-3-capybara", "/assets-final/townhouse-3-capybara.png");
+        loadAsset("townhouse-3-cat", "/assets-final/townhouse-3-cat.png");
+        loadAsset("townhouse-3-fish", "/assets-final/townhouse-3-fish.png");
+        loadAsset("townhouse-3-guineapig", "/assets-final/townhouse-3-guineapig.png");
+        loadAsset("townhouse-3-horse", "/assets-final/townhouse-3-horse.png");
+        loadAsset("townhouse-3-pig", "/assets-final/townhouse-3-pig.png");
+        loadAsset("townhouse-3-racoon", "/assets-final/townhouse-3-racoon.png");
+        loadAsset("townhouse-3-seahorse", "/assets-final/townhouse-3-seahorse.png");
 
         loadAsset("building", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_01.png"); //épület 3x9
         loadAsset("concrete", "/assets/CP_V1.0.4_nyknck/CP_V1.0.4_58.png"); //beton cella

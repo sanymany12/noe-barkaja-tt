@@ -4,6 +4,7 @@ import world.World;
 import world.resources.AnimalType;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class City extends Building<AnimalType, Integer> {
@@ -46,6 +47,9 @@ public class City extends Building<AnimalType, Integer> {
         this.orderedAnimal = null;
         this.orderedAmount = 0;
 
+        this.width = 2;
+        this.height = 2;
+
         this.visual = visual;
 
         this.deliveredAmount = 0;
@@ -82,38 +86,44 @@ public class City extends Building<AnimalType, Integer> {
 
     private void newOrder() {
         if (this.deliveredAmount == 0) {
-            int animalId = ThreadLocalRandom.current().nextInt(1, 10);
-            switch (animalId) {
-                case 1:
-                    this.orderedAnimal = AnimalType.BEAR;
-                    break;
-                case 2:
-                    this.orderedAnimal = AnimalType.CAPYBARA;
-                    break;
-                case 3:
-                    this.orderedAnimal = AnimalType.CAT;
-                    break;
-                case 4:
-                    this.orderedAnimal = AnimalType.FISH;
-                    break;
-                case 5:
-                    this.orderedAnimal = AnimalType.GUINEAPIG;
-                    break;
-                case 6:
-                    this.orderedAnimal = AnimalType.HORSE;
-                    break;
-                case 7:
-                    this.orderedAnimal = AnimalType.PIG;
-                    break;
-                case 8:
-                    this.orderedAnimal = AnimalType.RACOON;
-                    break;
-                case 9:
-                    this.orderedAnimal = AnimalType.SEAHORSE;
-                    break;
+            int getsNewOrder = ThreadLocalRandom.current().nextInt(0, 2);
+            if (getsNewOrder == 1 || this.daysSinceLastOrder == 30) {
+                int animalId = ThreadLocalRandom.current().nextInt(1, 10);
+                switch (animalId) {
+                    case 1:
+                        this.orderedAnimal = AnimalType.BEAR;
+                        break;
+                    case 2:
+                        this.orderedAnimal = AnimalType.CAPYBARA;
+                        break;
+                    case 3:
+                        this.orderedAnimal = AnimalType.CAT;
+                        break;
+                    case 4:
+                        this.orderedAnimal = AnimalType.FISH;
+                        break;
+                    case 5:
+                        this.orderedAnimal = AnimalType.GUINEAPIG;
+                        break;
+                    case 6:
+                        this.orderedAnimal = AnimalType.HORSE;
+                        break;
+                    case 7:
+                        this.orderedAnimal = AnimalType.PIG;
+                        break;
+                    case 8:
+                        this.orderedAnimal = AnimalType.RACOON;
+                        break;
+                    case 9:
+                        this.orderedAnimal = AnimalType.SEAHORSE;
+                        break;
+                }
+                this.orderedAmount = ThreadLocalRandom.current().nextInt(this.MIN_TO_BE_ORDERED, this.MAX_TO_BE_ORDERED + 1);
+                this.daysSinceLastOrder = 0;
+            } else {
+                this.orderedAnimal = null;
+                this.orderedAmount = 0;
             }
-            this.orderedAmount = ThreadLocalRandom.current().nextInt(this.MIN_TO_BE_ORDERED, this.MAX_TO_BE_ORDERED + 1);
-            this.daysSinceLastOrder = 0;
         }
     }
 
@@ -127,15 +137,54 @@ public class City extends Building<AnimalType, Integer> {
 
     @Override
     public String getSpriteName() {
+        String spriteName = "townhouse";
         switch (this.visual) {
             case 1:
-                return "townhouse-1";
+                spriteName = spriteName.concat("-1");
+                break;
             case 2:
-                return "townhouse-2";
+                spriteName = spriteName.concat("-2");
+                break;
             case 3:
-                return "townhouse-3";
+                spriteName = spriteName.concat("-3");
+                break;
             default:
-                return "townhouse-1";
+                spriteName = spriteName.concat("-1");
+                break;
         }
+        if (this.orderedAnimal != null) {
+            switch (this.orderedAnimal) {
+                case AnimalType.BEAR:
+                    spriteName = spriteName.concat("-bear");
+                    break;
+                case AnimalType.CAPYBARA:
+                    spriteName = spriteName.concat("-capybara");
+                    break;
+                case AnimalType.CAT:
+                    spriteName = spriteName.concat("-cat");
+                    break;
+                case AnimalType.FISH:
+                    spriteName = spriteName.concat("-fish");
+                    break;
+                case AnimalType.GUINEAPIG:
+                    spriteName = spriteName.concat("-guineapig");
+                    break;
+                case AnimalType.HORSE:
+                    spriteName = spriteName.concat("-horse");
+                    break;
+                case AnimalType.PIG:
+                    spriteName = spriteName.concat("-pig");
+                    break;
+                case AnimalType.RACOON:
+                    spriteName = spriteName.concat("-racoon");
+                    break;
+                case AnimalType.SEAHORSE:
+                    spriteName = spriteName.concat("-seahorse");
+                    break;
+                default:
+                    break;
+            }
+        }
+        return spriteName;
     }
 }
