@@ -3,6 +3,7 @@ package engine;
 import world.World;
 import world.building.BuildingType;
 import world.building.BusStop;
+import world.building.Farm;
 import world.building.Station;
 import world.tile.TerrainType;
 import world.tile.Tile;
@@ -379,23 +380,29 @@ public class BuildManager {
     }
 
     public void destroy(Tile t) {
+        System.out.println("A rombolás megkezdődött.");
         boolean didDamage = false;
         // ellenőrizzük, hogy van-e a tile-on épület, út vagy fa
         if (!t.isEmpty()) {
             // ha van épület
             if (t.getBuilding() != null) {
+                System.out.println("A mezőn épület van.");
                 // ha az épület station
                 if (t.getBuilding().getBuildingType() == BuildingType.STATION) {
+                    System.out.println("A mezőn egy megálló van.");
                     // ha az épület nem volt előre lehelyezve
                     if (!((Station) (t.getBuilding())).getIsPreBuilt()) {
+                        System.out.println("A mezőn lévő megálló rombolható.");
                         // ha van rajta jármű, azt eladjuk
                         if (((Station) (t.getBuilding())).isOccupied()) {
                             ((Station) (t.getBuilding())).getVehicle().sellVehicle();
+                            System.out.println("A mezőn található járművet eladtuk.");
                         }
                         // ha van hozzá kapcsolt út, eltávolítjuk ezt a kapcsolatot
                         if (((Station) (t.getBuilding())).getConnectedRoad() != null) {
                             if (((Station) (t.getBuilding())).getConnectedRoad().getRoad() != null) {
                                 ((Station) (t.getBuilding())).getConnectedRoad().getRoad().destroyConnection(((Station) (t.getBuilding())).getDirection());
+                                System.out.println("A megállóhoz tartozó úttal a kapcsolat megszakadt.");
                             }
                         }
                         // eltávolítjuk a Stationt és újratervezzük a világban lévő járművek útvonalait
@@ -406,10 +413,13 @@ public class BuildManager {
                 }
             // ha utat akarunk törölni
             } else if (t.getRoad() != null) {
+                System.out.println("Utat próbálunk rombolni.");
                 // ha nem előre lehelyezett
                 if (!t.getRoad().getIsPreBuilt()) {
+                    System.out.println("Az út rombolható.");
                     // ha híd
                     if (t.getRoad().getIsBridge()) {
+                        System.out.println("Az út egy híd.");
                         Tile startTile = ((Bridge) t.getRoad()).getStartTile();
                         Tile endTile = ((Bridge) t.getRoad()).getEndTile();
                         if (((Bridge) startTile.getRoad()).getDirection() == RoadDirection.NORTH || ((Bridge) startTile.getRoad()).getDirection() == RoadDirection.SOUTH) {
@@ -461,14 +471,19 @@ public class BuildManager {
                             world.rerouteVehicles();
                         }
                     } else {
+                        System.out.println("Sima utat rombolunk");
                         // eladjuk a rajta található járműveket
                         t.getRoad().getsDestroyed();
-                        // lecsatoljuk a szomszédos utakról, mint kapcsolat
-                        this.unlinkConnectingRoads(t);
-                        // eltávolítjuk az utat
-                        t.removeRoad();
+                        System.out.println("A mezőn található járműveket eladtuk.");
                         // újratervezzük a világban található vehicle-ek útvonalait
                         world.rerouteVehiclesRoad(t);
+                        System.out.println("A járművek útvonalait újraterveztük.");
+                        // lecsatoljuk a szomszédos utakról, mint kapcsolat
+                        this.unlinkConnectingRoads(t);
+                        System.out.println("A mező kapcsolatait eltávolítottuk.");
+                        // eltávolítjuk az utat
+                        t.removeRoad();
+                        System.out.println("Az utat leromboltuk.");
                         didDamage = true;
                     }
                 }
