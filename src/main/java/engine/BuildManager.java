@@ -1,10 +1,7 @@
 package engine;
 
 import world.World;
-import world.building.BuildingType;
-import world.building.BusStop;
-import world.building.Farm;
-import world.building.Station;
+import world.building.*;
 import world.tile.TerrainType;
 import world.tile.Tile;
 import world.tile.road.Bridge;
@@ -19,12 +16,100 @@ import world.vehicle.AnimalTruck;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BuildManager {
     private World world;
 
     public BuildManager(World world) {
         this.world = world;
+    }
+
+    public void placeBuilding(Tile t, BuildingType buildingType) {
+        switch (buildingType) {
+            case BuildingType.FARM:
+                Farm farm = new Farm(this.world);
+                t.setAnchor(true);
+                // System.out.println(farm.getWidth());
+                // System.out.println(farm.getHeight());
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + farm.getHeight(); i++) {
+                    for (int j = t.getCoordinate().y; j < t.getCoordinate().y + farm.getHeight(); j++) {
+                        // System.out.println("A jelenlegi koordináták: " + i + ", " + j);
+                        world.get(i, j).setBuilding(farm);
+                        world.get(i, j).setTerrainType(TerrainType.BUILDING);
+                    }
+                }
+                break;
+            case BuildingType.AGRICULTURALPLANT:
+                AgriculturalPlant agriculturalplant = new AgriculturalPlant(this.world);
+                t.setAnchor(true);
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + agriculturalplant.getHeight(); i++) {
+                    for (int j = t.getCoordinate().y; j < t.getCoordinate().y + agriculturalplant.getHeight(); j++) {
+                        world.get(i, j).setBuilding(agriculturalplant);
+                        world.get(i, j).setTerrainType(TerrainType.BUILDING);
+                    }
+                }
+                break;
+            case BuildingType.SILO:
+                Silo silo = new Silo(this.world);
+                t.setAnchor(true);
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + silo.getHeight(); i++) {
+                    for (int j = t.getCoordinate().y; j < t.getCoordinate().y + silo.getHeight(); j++) {
+                        world.get(i, j).setBuilding(silo);
+                        world.get(i, j).setTerrainType(TerrainType.BUILDING);
+                    }
+                }
+                break;
+            case BuildingType.RESEARCHLAB:
+                ResearchLab researchlab = new ResearchLab (this.world);
+                t.setAnchor(true);
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + researchlab.getHeight(); i++) {
+                    for (int j = t.getCoordinate().y; j < t.getCoordinate().y + researchlab.getHeight(); j++) {
+                        world.get(i, j).setBuilding(researchlab);
+                        world.get(i, j).setTerrainType(TerrainType.BUILDING);
+                    }
+                }
+                break;
+            case BuildingType.CLONINGFACILITY:
+                CloningFacility cloningfacility = new CloningFacility(this.world);
+                t.setAnchor(true);
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + cloningfacility.getHeight(); i++) {
+                    for (int j = t.getCoordinate().y; j < t.getCoordinate().y + cloningfacility.getHeight(); j++) {
+                        world.get(i, j).setBuilding(cloningfacility);
+                        world.get(i, j).setTerrainType(TerrainType.BUILDING);
+                    }
+                }
+                break;
+            case BuildingType.CITY:
+                City city = new City(this.world, ThreadLocalRandom.current().nextInt(1, 4));
+                t.setAnchor(true);
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + city.getHeight(); i++) {
+                    for (int j = t.getCoordinate().y; j < t.getCoordinate().y + city.getHeight(); j++) {
+                        world.get(i, j).setBuilding(city);
+                        world.get(i, j).setTerrainType(TerrainType.BUILDING);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void placeEnclosure(Tile t, Silo silo) {
+        Enclosure enclosure = new Enclosure(this.world, silo);
+        t.setAnchor(true);
+        for (int i = t.getCoordinate().x; i < t.getCoordinate().x + enclosure.getHeight(); i++) {
+            for (int j = t.getCoordinate().y; j < t.getCoordinate().y + enclosure.getHeight(); j++) {
+                world.get(i, j).setBuilding(enclosure);
+                world.get(i, j).setTerrainType(TerrainType.BUILDING);
+            }
+        }
+    }
+
+    public void placeBusStop(Tile t, RoadDirection dir) {
+        BusStop busstop = new BusStop(this.world, dir);
+        t.setBuilding(busstop);
+        t.setAnchor(true);
     }
 
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
