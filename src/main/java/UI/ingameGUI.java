@@ -542,6 +542,39 @@ public class ingameGUI {
         return mainPanel;
     }
 
+    private JPanel cityWindow(City city, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel(city.getSpriteName(), "Város"), BorderLayout.EAST);
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+
+        String aniAss = city.hasOrder() ? city.getOrderedAnimal().name().toLowerCase() : null;
+        String aniName = city.hasOrder() ? city.getOrderedAnimal().name() : "Nincs rendelés";
+        String amountText = city.hasOrder() ? city.getOrderedAmount() + " db" : "-";
+
+        topPanel.add(resourceBox(aniAss, aniName, amountText), BorderLayout.WEST);
+
+        String info;
+        if (city.hasOrder()) {
+            info = "<html><center><b>Aktív rendelés!</b><br><br>Jutalom a teljesítésért:<br><font color='green'><b>$" + city.getOrderWorth() + "</b></font></center></html>";
+        } else {
+            info = "<html><center>Jelenleg <b>nincs</b> aktív rendelés.<br><br>A projekt vezetői hamarosan<br>új igényt adnak le.</center></html>";
+        }
+
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton close = new JButton("Bezárás");
+        close.addActionListener(e -> dialog.dispose());
+        leftPanel.add(buttonRow(close), BorderLayout.SOUTH);
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
     private JPanel enclosureWindow(Enclosure enc, JDialog dialog)
     {
         JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
