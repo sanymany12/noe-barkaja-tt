@@ -15,7 +15,6 @@ public class Tile {
     private Road road;
     private Building<?,?> building;
     private boolean isAnchor; //Az épület bal alsó cellája (horgony)
-    private final int randomValue = ThreadLocalRandom.current().nextInt(4);
 
     public Tile(Point coordinate, TerrainType terrainType, int treeCount, Road road, Building<?, ?> building, boolean isAnchor) {
         this.coordinate = coordinate;

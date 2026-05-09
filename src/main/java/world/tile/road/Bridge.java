@@ -1,5 +1,6 @@
 package world.tile.road;
 
+import world.tile.Point;
 import world.tile.Tile;
 
 public class Bridge extends Road {
@@ -7,12 +8,13 @@ public class Bridge extends Road {
 
     private int speedlimit;
 
-    private Tile startTile;
-    private Tile endTile;
+    transient private Tile startTile;
+    private Point startTilePos;
+    transient private Tile endTile;
+    private Point endTilePos;
 
     private RoadDirection direction;
     private boolean isEnd;
-    private boolean isPreBuilt;
 
     public Bridge(int x, int y, BridgeType type, RoadDirection dir, Tile startTile, Tile endTile, boolean isEnd, boolean isPreBuilt) {
         super(x, y, isPreBuilt);
@@ -22,10 +24,24 @@ public class Bridge extends Road {
         this.startTile = startTile;
         this.endTile = endTile;
 
+        startTilePos = startTile.getCoordinate();
+        endTilePos = endTile.getCoordinate();
         this.type = type;
         this.direction = dir;
         this.isEnd = isEnd;
-        this.isPreBuilt = isPreBuilt;
+    }
+
+    public void initAfterLoad(Tile endTile, Tile startTile){
+        this.startTile = startTile;
+        this.endTile = endTile;
+    }
+
+    public Point getStartTilePos() {
+        return startTilePos;
+    }
+
+    public Point getEndTilePos() {
+        return endTilePos;
     }
 
     public RoadDirection getDirection() {

@@ -4,6 +4,7 @@ import engine.BuildManager;
 import world.building.*;
 import world.resources.AnimalType;
 import world.tile.*;
+import world.tile.road.Bridge;
 import world.tile.road.RoadDirection;
 import world.vehicle.*;
 
@@ -134,7 +135,7 @@ public class World {
         grid[11][5].setAnchor(true);
 
         // Másik enclosure
-        Enclosure testEnclosure2 = new Enclosure(this, testSilo2);
+        Enclosure testEnclosure2 = new Enclosure(this, new Point(11,5));
         testEnclosure2.newSpeciesArrives(AnimalType.BEAR);
         testEnclosure2.receiveAnimal();
         testEnclosure2.receiveAnimal();
@@ -158,7 +159,7 @@ public class World {
         grid[4][14].setAnchor(true);
 
         // Allathely
-        Enclosure testEnclosure = new Enclosure(this, testSilo);
+        Enclosure testEnclosure = new Enclosure(this, new Point(8,10));
         testEnclosure.newSpeciesArrives(AnimalType.CAT);
         grid[12][10].setTerrainType(TerrainType.BUILDING);
         grid[12][10].setBuilding(testEnclosure);
@@ -406,7 +407,13 @@ public class World {
                             bs.initAfterLoad();
                         } else if (t.getBuilding() instanceof Station st) {
                             st.initAfterLoad();
+                        }else if (t.getBuilding() instanceof Enclosure en) {
+                            en.restoreSiloRef();
                         }
+                    }else if(t.getRoad() != null && t.getRoad() instanceof Bridge bridge){
+                        Tile start = get(bridge.getStartTilePos().x, bridge.getStartTilePos().y);
+                        Tile end = get(bridge.getEndTilePos().x, bridge.getEndTilePos().y);
+                        bridge.initAfterLoad(end, start);
                     }
                 }
             }
