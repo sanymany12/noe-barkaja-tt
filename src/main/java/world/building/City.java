@@ -58,12 +58,20 @@ public class City extends Building<AnimalType, Integer> {
         this.newOrder();
     }
 
+    public int getDeliveredAmount() {
+        return this.deliveredAmount;
+    }
+
     public AnimalType getOrderedAnimal() {
         return this.orderedAnimal;
     }
 
     public int getOrderedAmount() {
         return this.orderedAmount;
+    }
+
+    public int getRemainingAmount() {
+        return this.orderedAmount - this.deliveredAmount;
     }
 
     public boolean hasOrder() {

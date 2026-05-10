@@ -497,7 +497,7 @@ public class ingameGUI {
 
         String aniAss = city.hasOrder() ? city.getOrderedAnimal().name().toLowerCase() : null;
         String aniName = city.hasOrder() ? city.getOrderedAnimal().name() : "Nincs rendelés";
-        String amountText = city.hasOrder() ? city.getOrderedAmount() + " db" : "-";
+        String amountText = city.hasOrder() ? city.getRemainingAmount() + " db" : "-";
 
         topPanel.add(resourceBox(aniAss, aniName, amountText), BorderLayout.WEST);
 
