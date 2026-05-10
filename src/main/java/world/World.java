@@ -403,14 +403,14 @@ public class World {
                 if (t != null) {
                     if (t.getBuilding() != null) {
                         t.getBuilding().setWorld(this);
-                        if(t.getBuilding() instanceof BusStop bs){
+                        if (t.getBuilding() instanceof BusStop bs) {
                             bs.initAfterLoad();
                         } else if (t.getBuilding() instanceof Station st) {
                             st.initAfterLoad();
-                        }else if (t.getBuilding() instanceof Enclosure en) {
+                        } else if (t.getBuilding() instanceof Enclosure en) {
                             en.restoreSiloRef();
                         }
-                    }else if(t.getRoad() != null && t.getRoad() instanceof Bridge bridge){
+                    } else if (t.getRoad() != null && t.getRoad() instanceof Bridge bridge) {
                         Tile start = get(bridge.getStartTilePos().x, bridge.getStartTilePos().y);
                         Tile end = get(bridge.getEndTilePos().x, bridge.getEndTilePos().y);
                         bridge.initAfterLoad(end, start);
