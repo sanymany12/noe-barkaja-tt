@@ -65,6 +65,12 @@ public class Silo extends Building<Integer,Integer> {
         return (this.CAPACITY + this.plusCapacity) - this.numOfFood;
     }
 
+    public int getUpgradeCost() {
+        return this.CAPACITY_INCREASE_BASE_COST + (this.plusCapacity / this.CAPACITY_INCREASE) * this.CAPACITY_INCREASE_COST_INCREMENT;
+    }
+
+    public boolean canIncreaseCapacity() { return this.plusCapacity < this.CAPACITY_INCREASE * 50; }
+
     public void increaseCapacity() {
         if (this.plusCapacity < this.CAPACITY_INCREASE * 50) {
             this.world.spendMoney(this.CAPACITY_INCREASE_BASE_COST + (this.plusCapacity / this.CAPACITY_INCREASE) * this.CAPACITY_INCREASE_COST_INCREMENT);

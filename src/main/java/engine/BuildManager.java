@@ -102,7 +102,7 @@ public class BuildManager {
                 silo = (Silo) silotile.getBuilding();
             }
         }
-        if (silo != null && silo.getEnclosure() != null) {
+        if (silo != null && silo.getEnclosure() == null) {
             Enclosure enclosure = new Enclosure(this.world, silotile.getCoordinate());
             t.setAnchor(true);
             for (int i = t.getCoordinate().x; i < t.getCoordinate().x + enclosure.getHeight(); i++) {
