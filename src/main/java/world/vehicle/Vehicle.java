@@ -218,6 +218,8 @@ public abstract class Vehicle {
             this.movingForward = true;
             if (this.routeStops.get(routeStops.size() - 1) == this.world.get(this.currentPlace.x, this.currentPlace.y)) {
                 this.isOnTour = true;
+            } else {
+                this.isOnTour = false;
             }
             try {
                 findPath(this.routeStops.get(this.stopIndex));
