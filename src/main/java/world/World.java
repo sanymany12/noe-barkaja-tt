@@ -43,7 +43,7 @@ public class World {
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        grid = new Tile[rows][cols];
+        grid = new Tile[cols][rows];
 
         this.money = this.STARTING_FUNDS;
 
@@ -438,7 +438,7 @@ public class World {
 
     public boolean isValidTile(int x, int y) {
         if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
-            return true;
+            return false;
         }
         return true;
     }
