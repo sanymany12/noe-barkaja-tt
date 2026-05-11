@@ -19,7 +19,7 @@ public class FoodTruckTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        world = new World(20, 20);
+        world = new World(40, 40);
 
         Tile t1 = world.get(0, 0);
         Tile t2 = world.get(1, 0);

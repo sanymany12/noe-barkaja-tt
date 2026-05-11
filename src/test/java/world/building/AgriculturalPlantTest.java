@@ -12,7 +12,7 @@ public class AgriculturalPlantTest {
 
     @BeforeEach
     public void setUp() {
-        world = new World(20, 20);
+        world = new World(40, 40);
         world.receiveMoney(20000);
 
         agriculturalplant = new AgriculturalPlant(world);

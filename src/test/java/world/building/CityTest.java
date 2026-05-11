@@ -13,7 +13,7 @@ public class CityTest {
 
     @BeforeEach
     public void setUp() {
-        world = new World(20, 20);
+        world = new World(40, 40);
 
         city = new City(world);
     }
@@ -25,11 +25,13 @@ public class CityTest {
 
     @Test
     public void testOrder() {
-        while (city.getOrderedAnimal() == null) {
+        while (city.getOrderedAnimal() == null && city.getOrderedAmount() < 2) {
             city.newDay();
         }
 
         int orderedAmount = city.getOrderedAmount();
+
+        assertEquals(0, city.getDeliveredAmount());
 
         city.receiveAnimal();
 
