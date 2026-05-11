@@ -97,7 +97,9 @@ public class Station extends Building<Object, Object> {
             case VehicleType.ANIMALTRUCK:
                 switch (this.building.getBuildingType()) {
                     case BuildingType.CITY:
-                        // TODO
+                        if (!this.vehicle.isEmpty()) {
+                            this.vehicle.unloadTo(building);
+                        }
                         break;
                     case BuildingType.ENCLOSURE, BuildingType.RESEARCHLAB, BuildingType.CLONINGFACILITY:
                         if (this.vehicle.isEmpty()) {
