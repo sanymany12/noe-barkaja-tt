@@ -41,7 +41,7 @@ public class WorldTest {
         assertEquals(40, world.getRows());
         assertEquals(40, world.getCols());
 
-        assertEquals(5000, world.getMoney());
+        assertEquals(13000, world.getMoney());
         assertEquals(0, world.getElapsedTime());
         assertNotNull(world.getVehicles());
     }

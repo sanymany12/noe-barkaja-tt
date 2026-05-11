@@ -38,7 +38,7 @@ public class World {
     private final int COST_TO_CUT_TREE = 5;
     private final int COST_TO_DESTROY = 200;
 
-    private final int STARTING_FUNDS = 5000;
+    private final int STARTING_FUNDS = 13000;
 
     public World(int rows, int cols) {
         this.rows = rows;

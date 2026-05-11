@@ -172,7 +172,7 @@ public class ingameGUI {
 
         JPanel alsoPanel = new JPanel(new BorderLayout(10, 0));
         alsoPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        balanceLabel = new JLabel("<html><span style='font-family: SansSerif; font-size:24px'>$5000</span><sup style='font-family: SansSerif; font-size:14px; color:#E74C3C;'>-0</sup></html>");
+        balanceLabel = new JLabel("<html><span style='font-family: SansSerif; font-size:24px'>$13000</span><sup style='font-family: SansSerif; font-size:14px; color:#E74C3C;'>-0</sup></html>");
         alsoPanel.add(balanceLabel, BorderLayout.WEST);
 
         JPanel idoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
