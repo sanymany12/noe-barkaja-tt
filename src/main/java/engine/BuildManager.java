@@ -486,6 +486,7 @@ public class BuildManager {
                     // ha az épület nem volt előre lehelyezve
                     if (!((Station) (t.getBuilding())).getIsPreBuilt()) {
                         System.out.println("A mezőn lévő megálló rombolható.");
+                        ((Station) (t.getBuilding())).getConnectedBuilding().removeStation(((Station) (t.getBuilding())));
                         // ha van rajta jármű, azt eladjuk
                         if (((Station) (t.getBuilding())).isOccupied()) {
                             ((Station) (t.getBuilding())).getVehicle().sellVehicle();

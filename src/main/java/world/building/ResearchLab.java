@@ -2,6 +2,7 @@ package world.building;
 
 import world.World;
 import world.resources.AnimalType;
+import world.vehicle.VehicleType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

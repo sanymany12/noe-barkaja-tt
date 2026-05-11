@@ -27,6 +27,7 @@ public class Station extends Building<Object, Object> {
         this.width = 1;
         this.height = 1;
         this.building = building;
+        this.building.setStation(this);
         this.vehicle = null;
         this.connectedRoad = null;
         this.savedConnectedRoad = null;
@@ -53,6 +54,10 @@ public class Station extends Building<Object, Object> {
 
     public boolean getIsPreBuilt() {
         return this.isPreBuilt;
+    }
+
+    public Building getConnectedBuilding() {
+        return this.building;
     }
 
     // setter az ehhez tartozó útnak
