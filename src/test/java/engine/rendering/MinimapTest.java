@@ -15,7 +15,7 @@ class MinimapTest {
     @BeforeEach
     public void setUp() {
 
-        world = new World(20, 20); // 20x20-as pálya
+        world = new World(40, 40); // 20x20-as pálya
 
         camera = new Camera(0, 0, 1.0, 800, 600);
 
@@ -27,8 +27,8 @@ class MinimapTest {
 
         minimap.jumpCameraTo(100, 60);
 
-        assertEquals(240.0, camera.getOffsetX(), 0.1, "A kamera X eltolása nem a várt érték lett!");
-        assertEquals(340.0, camera.getOffsetY(), 0.1, "A kamera Y eltolása nem a várt érték lett!");
+        assertEquals(880.0, camera.getOffsetX(), 0.1, "A kamera X eltolása nem a várt érték lett!");
+        assertEquals(980.0, camera.getOffsetY(), 0.1, "A kamera Y eltolása nem a várt érték lett!");
     }
 
     @Test

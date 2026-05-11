@@ -14,7 +14,7 @@ public class FarmTest {
 
     @BeforeEach
     public void setUp() {
-        world = new World(20, 20);
+        world = new World(40, 40);
         world.receiveMoney(10000); // Adunk elég pénzt a boost teszteléséhez
         farm = new Farm(world);
     }

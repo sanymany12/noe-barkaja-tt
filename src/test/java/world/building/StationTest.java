@@ -57,7 +57,7 @@ public class StationTest {
 
     @BeforeEach
     public void setUp() {
-        world = new World(20, 20);
+        world = new World(40, 40);
     }
 
     @Test

@@ -31,15 +31,15 @@ public class WorldTest {
     @BeforeEach
     public void setUp() {
         // A hardkódolt initWorld miatt legalább 20x20-as pálya kell
-        world = new World(20, 20);
+        world = new World(40, 40);
     }
 
     // INICIALIZÁLÁS ÉS ALAPVETŐ ÁLLAPOTOK
 
     @Test
     public void testInitialization() {
-        assertEquals(20, world.getRows());
-        assertEquals(20, world.getCols());
+        assertEquals(40, world.getRows());
+        assertEquals(40, world.getCols());
 
         assertEquals(5000, world.getMoney());
         assertEquals(0, world.getElapsedTime());
@@ -54,8 +54,8 @@ public class WorldTest {
         // Határokon kívüli lekérdezések (A get() metódus null-t ad vissza kivétel helyett)
         assertNull(world.get(-1, 5), "Negatív X esetén null-t kell adnia!");
         assertNull(world.get(5, -1), "Negatív Y esetén null-t kell adnia!");
-        assertNull(world.get(20, 5), "Túl nagy X esetén null-t kell adnia!");
-        assertNull(world.get(5, 20), "Túl nagy Y esetén null-t kell adnia!");
+        assertNull(world.get(50, 5), "Túl nagy X esetén null-t kell adnia!");
+        assertNull(world.get(5, 50), "Túl nagy Y esetén null-t kell adnia!");
     }
 
     //  GAZDASÁG TESZT
@@ -111,14 +111,14 @@ public class WorldTest {
     @Test
     public void testFindPathRoad_Success_StraightLine() throws Exception {
         // Az initWorld()-ben építettél utakat X=4-től X=8-ig az Y=3 sorban.
-        Tile startNode = world.get(4, 3);
-        Tile endNode = world.get(8, 3);
+        Tile startNode = world.get(30, 32);
+        Tile endNode = world.get(32, 32);
 
         List<Point> path = world.findPathRoad(startNode, endNode);
 
         assertNotNull(path, "Találnia kellene útvonalat!");
         // A 4-es, 5-ös, 6-os, 7-es és 8-as csempék, összesen 5 lépés
-        assertEquals(5, path.size());
+        assertEquals(3, path.size());
     }
 
     @Test

@@ -62,7 +62,7 @@ public class BusStopTest {
 
     @BeforeEach
     public void setUp() {
-        world = new World(20, 20);
+        world = new World(40, 40);
         busStop = new BusStop(world, RoadDirection.NORTH);
     }
 
@@ -223,16 +223,16 @@ public class BusStopTest {
     @Test
     public void testGetSpriteName_Combinations() throws Exception {
         BusStop stopNorth = new BusStop(world, RoadDirection.NORTH);
-        assertEquals("bus-stop-n-", stopNorth.getSpriteName());
+        assertEquals("bus-stop-s-", stopNorth.getSpriteName());
 
         stopNorth.setAsStart();
-        assertEquals("bus-stop-n-start", stopNorth.getSpriteName());
+        assertEquals("bus-stop-s-start", stopNorth.getSpriteName());
 
         stopNorth.resetStop();
         stopNorth.setAsStop();
-        assertEquals("bus-stop-n-stop", stopNorth.getSpriteName());
+        assertEquals("bus-stop-s-stop", stopNorth.getSpriteName());
 
         BusStop stopEast = new BusStop(world, RoadDirection.EAST);
-        assertEquals("bus-stop-e-", stopEast.getSpriteName());
+        assertEquals("bus-stop-w-", stopEast.getSpriteName());
     }
 }

@@ -15,7 +15,7 @@ public class CloningFacilityTest {
 
     @BeforeEach
     public void setUp() {
-        world = new World(20, 20);
+        world = new World(40, 40);
         world.receiveMoney(5000); // Adunk elég pénzt a klónozások teszteléséhez
         facility = new CloningFacility(world);
     }

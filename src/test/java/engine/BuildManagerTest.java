@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import world.World;
 import world.building.BuildingType;
 import world.building.BusStop;
+import world.building.Farm;
 import world.building.Station;
 import world.tile.Point;
 import world.tile.TerrainType;
@@ -22,8 +23,7 @@ public class BuildManagerTest {
 
     @BeforeEach
     public void setUp() {
-        world = new World(20, 20);
-        world.initWorld();
+        world = new World(40, 40);
         buildManager = new BuildManager(world);
     }
 
@@ -32,6 +32,8 @@ public class BuildManagerTest {
         Tile tile = world.get(5, 5);
         tile.setTerrainType(TerrainType.LAND);
         tile.setTreeCount(2);
+        tile.setBuilding(null);
+        tile.setRoad(null);
 
         int initialMoney = world.getMoney();
         buildManager.buildRoad(tile, false);
@@ -44,7 +46,13 @@ public class BuildManagerTest {
     @Test
     public void testBuildRoad_ConnectsToAdjacentRoad() {
         Tile tile1 = world.get(5, 5);
+        tile1.setTerrainType(TerrainType.LAND);
+        tile1.setBuilding(null);
+        tile1.setRoad(null);
         Tile tile2 = world.get(5, 6);
+        tile2.setTerrainType(TerrainType.LAND);
+        tile2.setRoad(null);
+        tile2.setBuilding(null);
 
         buildManager.buildRoad(tile1, false);
         buildManager.buildRoad(tile2, false);
@@ -55,12 +63,12 @@ public class BuildManagerTest {
 
     @Test
     public void testBuildStation_ValidPlacement() {
-        Tile roadTile = world.get(5, 5);
+        Tile roadTile = world.get(5, 6);
         buildManager.buildRoad(roadTile, false);
 
         Tile buildingTile = world.get(5, 4);
         buildingTile.setTerrainType(TerrainType.BUILDING);
-        buildingTile.setBuilding(new BusStop(world, RoadDirection.SOUTH));
+        buildingTile.setBuilding(new Farm(world));
 
         Tile targetTile = world.get(5, 5);
 
