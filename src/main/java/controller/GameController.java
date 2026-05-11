@@ -337,7 +337,11 @@ public class GameController implements GameListener {
                         }
                         else if(action == BuildingAction.TRANSPORT_ANIMAL)
                         {
-                            // TODO
+                            try {
+                                clickedTile.getBuilding().takeAnimalButton();
+                            } catch (Exception ex) {
+                                view.errorPopup(ex.getMessage());
+                            }
                         }
                         else if(action == BuildingAction.SELL_ANIMAL)
                         {
@@ -398,7 +402,11 @@ public class GameController implements GameListener {
                         }
                         else if(action == BuildingAction.TRANSPORT_RESOURCE)
                         {
-                            // TODO
+                            try {
+                                clickedTile.getBuilding().takeResourceButton();
+                            } catch (Exception ex) {
+                                view.errorPopup(ex.getMessage());
+                            }
                         }
                         return;
                     }
