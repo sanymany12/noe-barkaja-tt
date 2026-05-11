@@ -33,7 +33,7 @@ public class World {
 
     private int tickCounter = 0;
     private final static int TICKS_PER_DAY = 100;
-    private final int DAYS_UNTIL_NEW_BUS_ROUTE = 50;
+    private final int DAYS_UNTIL_NEW_BUS_ROUTE = 15;
 
     private final int COST_TO_CUT_TREE = 5;
     private final int COST_TO_DESTROY = 200;
@@ -95,91 +95,133 @@ public class World {
         return this.TICKS_PER_DAY;
     }
 
-    //TODO itt kellene beolvasni a meghatározott világot
     public void initWorld(){
         BuildManager setupBuilder = new BuildManager(this);
-        for (int i = 0; i < cols; i++) {
-            for (int j = 0; j < rows; j++) {
+
+        for(int i = 0; i < cols; i++)
+        {
+            for(int j = 0; j < rows; j++)
+            {
                 grid[i][j] = new Tile(new Point(i,j), TerrainType.LAND, 0, null, null, false);
             }
         }
 
-        grid[0][0].setTreeCount(1);
-        grid[18][18].setTreeCount(2);
-        grid[19][5].setTreeCount(3);
-
-        grid[1][1].setTerrainType(TerrainType.WATER);
-        grid[1][2].setTerrainType(TerrainType.WATER);
-        grid[2][1].setTerrainType(TerrainType.WATER);
-        grid[2][2].setTerrainType(TerrainType.WATER);
-
-        // Varosok
-        grid[4][2].setTerrainType(TerrainType.BUILDING);
-        grid[4][2].setBuilding(new City(this, 1));
-        grid[4][2].setAnchor(true);
-
-        grid[8][2].setTerrainType(TerrainType.BUILDING);
-        grid[8][2].setBuilding(new City(this, 2));
-        grid[8][2].setAnchor(true);
-
-        // Utak varosok kozott
-        for(int x = 4; x <= 8; x++) {
-            setupBuilder.buildRoad(grid[x][3], true);
+        int centerX = cols / 2;
+        int centerY = rows / 2;
+        for (int x = 0; x < cols; x++) {
+            int riverY = (int) (Math.sin(x * 0.25) * 4) + centerY;
+            for (int w = -2; w <= 2; w++) {
+                int wy = riverY + w;
+                if (wy >= 0 && wy < rows) {
+                    grid[x][wy].setTerrainType(TerrainType.WATER);
+                }
+            }
+            for (int y = 0; y < rows; y++) {
+                if (Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2) <= 64) { // Sugár ~8
+                    grid[x][y].setTerrainType(TerrainType.WATER);
+                }
+            }
         }
 
-        // Farm
-        setupBuilder.placeBuilding(grid[4][10], BuildingType.FARM);
+        setupBuilder.placeBuilding(grid[4][4], BuildingType.CITY);
+        setupBuilder.placeBuilding(grid[7][4], BuildingType.CITY);
+        setupBuilder.placeBuilding(grid[4][7], BuildingType.CITY);
+        setupBuilder.placeBuilding(grid[7][7], BuildingType.CITY);
 
-        // Másik siló
-        Silo testSilo2 = new Silo(this);
-        grid[11][5].setTerrainType(TerrainType.BUILDING);
-        grid[11][5].setBuilding(testSilo2);
-        grid[11][5].setAnchor(true);
+        for(int x = 4; x <= 8; x++) { setupBuilder.buildRoad(grid[x][6], true); }
+        for(int y = 4; y <= 8; y++) { setupBuilder.buildRoad(grid[6][y], true); }
 
-        // Másik enclosure
-        Enclosure testEnclosure2 = new Enclosure(this, new Point(11,5));
-        testEnclosure2.newSpeciesArrives(AnimalType.BEAR);
-        testEnclosure2.receiveAnimal();
-        testEnclosure2.receiveAnimal();
-        grid[12][5].setTerrainType(TerrainType.BUILDING);
-        grid[12][5].setBuilding(testEnclosure2);
-        grid[12][5].setAnchor(true);
+        setupBuilder.placeBusStop(grid[5][3], RoadDirection.WEST);
+        setupBuilder.buildRoad(grid[6][3], true);
 
-        grid[13][5].setTerrainType(TerrainType.BUILDING);
-        grid[13][5].setBuilding(testEnclosure2);
-        grid[13][5].setAnchor(false);
+        setupBuilder.placeBusStop(grid[9][5], RoadDirection.NORTH);
+        setupBuilder.buildRoad(grid[9][6], true);
 
-        // Silo
-        Silo testSilo = new Silo(this);
-        grid[8][10].setTerrainType(TerrainType.BUILDING);
-        grid[8][10].setBuilding(testSilo);
-        grid[8][10].setAnchor(true);
+        setupBuilder.placeBusStop(grid[5][9], RoadDirection.WEST);
+        setupBuilder.buildRoad(grid[6][9], true);
 
-        // Feldolgozo
-        grid[4][14].setTerrainType(TerrainType.BUILDING);
-        grid[4][14].setBuilding(new AgriculturalPlant(this));
-        grid[4][14].setAnchor(true);
+        setupBuilder.placeBuilding(grid[2][10], BuildingType.FARM);
+        setupBuilder.placeBuilding(grid[6][10], BuildingType.FARM);
 
-        // Allathely
-        Enclosure testEnclosure = new Enclosure(this, new Point(8,10));
-        testEnclosure.newSpeciesArrives(AnimalType.CAT);
-        grid[12][10].setTerrainType(TerrainType.BUILDING);
-        grid[12][10].setBuilding(testEnclosure);
-        grid[12][10].setAnchor(true);
+        setupBuilder.placeBuilding(grid[15][4], BuildingType.AGRICULTURALPLANT);
+        setupBuilder.placeBuilding(grid[15][7], BuildingType.AGRICULTURALPLANT);
 
-        grid[13][10].setTerrainType(TerrainType.BUILDING);
-        grid[13][10].setBuilding(testEnclosure);
-        grid[13][10].setAnchor(false);
+        setupBuilder.placeBuilding(grid[34][4], BuildingType.RESEARCHLAB);
+        setupBuilder.placeBuilding(grid[34][8], BuildingType.CLONINGFACILITY);
 
-        // Labor
-        grid[12][14].setTerrainType(TerrainType.BUILDING);
-        grid[12][14].setBuilding(new ResearchLab(this));
-        grid[12][14].setAnchor(true);
+        setupBuilder.placeBuilding(grid[24][4], BuildingType.SILO);
+        setupBuilder.placeEnclosure(grid[26][4], grid[24][4]);
 
-        // Klonozo
-        grid[16][14].setTerrainType(TerrainType.BUILDING);
-        grid[16][14].setBuilding(new CloningFacility(this));
-        grid[16][14].setAnchor(true);
+        setupBuilder.placeBuilding(grid[24][7], BuildingType.SILO);
+        setupBuilder.placeEnclosure(grid[26][7], grid[24][7]);
+
+        setupBuilder.placeBuilding(grid[24][10], BuildingType.SILO);
+        setupBuilder.placeEnclosure(grid[26][10], grid[24][10]);
+
+        setupBuilder.placeBuilding(grid[32][11], BuildingType.SILO);
+        setupBuilder.placeEnclosure(grid[34][11], grid[32][11]);
+
+        if (grid[26][4].getBuilding() instanceof Enclosure) {
+            Enclosure enc = (Enclosure) grid[26][4].getBuilding();
+            enc.newSpeciesArrives(AnimalType.CAT);
+            enc.receiveAnimal(); enc.receiveAnimal();
+        }
+        if (grid[26][7].getBuilding() instanceof Enclosure) {
+            Enclosure enc = (Enclosure) grid[26][7].getBuilding();
+            enc.newSpeciesArrives(AnimalType.HORSE);
+            enc.receiveAnimal();
+        }
+        if (grid[26][10].getBuilding() instanceof Enclosure) {
+            Enclosure enc = (Enclosure) grid[26][10].getBuilding();
+            enc.newSpeciesArrives(AnimalType.BEAR);
+            enc.receiveAnimal(); enc.receiveAnimal(); enc.receiveAnimal();
+        }
+
+        setupBuilder.placeBuilding(grid[30][30], BuildingType.CITY);
+        setupBuilder.placeBuilding(grid[33][30], BuildingType.CITY);
+        setupBuilder.placeBuilding(grid[30][33], BuildingType.CITY);
+        setupBuilder.placeBuilding(grid[33][33], BuildingType.CITY);
+
+        for(int x = 30; x <= 34; x++) { setupBuilder.buildRoad(grid[x][32], true); }
+        for(int y = 30; y <= 34; y++) { setupBuilder.buildRoad(grid[32][y], true); }
+
+        setupBuilder.placeBusStop(grid[31][29], RoadDirection.WEST);
+        setupBuilder.buildRoad(grid[32][29], true);
+
+        setupBuilder.placeBusStop(grid[35][31], RoadDirection.NORTH);
+        setupBuilder.buildRoad(grid[35][32], true);
+
+        setupBuilder.placeBusStop(grid[31][35], RoadDirection.WEST);
+        setupBuilder.buildRoad(grid[32][35], true);
+
+        setupBuilder.placeBuilding(grid[26][36], BuildingType.FARM);
+        setupBuilder.placeBuilding(grid[30][36], BuildingType.FARM);
+        setupBuilder.placeBuilding(grid[34][36], BuildingType.FARM);
+
+        setupBuilder.placeBuilding(grid[10][32], BuildingType.AGRICULTURALPLANT);
+        setupBuilder.placeBuilding(grid[10][35], BuildingType.AGRICULTURALPLANT);
+
+        setupBuilder.placeBuilding(grid[4][28], BuildingType.SILO);
+        setupBuilder.placeEnclosure(grid[6][28], grid[4][28]);
+
+        setupBuilder.placeBuilding(grid[4][31], BuildingType.SILO);
+        setupBuilder.placeEnclosure(grid[6][31], grid[4][31]);
+
+        setupBuilder.placeBuilding(grid[12][28], BuildingType.SILO);
+        setupBuilder.placeEnclosure(grid[14][28], grid[12][28]);
+
+        for(int x = 0; x < cols; x++) {
+            for(int y = 0; y < rows; y++) {
+                if (grid[x][y].isEmpty() && grid[x][y].getTerrainType() == TerrainType.LAND) {
+                    int distToCenter = (int) Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+                    int treeChance = distToCenter < 14 ? 10 : 4;
+
+                    if (ThreadLocalRandom.current().nextInt(100) < treeChance) {
+                        grid[x][y].setTreeCount(ThreadLocalRandom.current().nextInt(1, 4));
+                    }
+                }
+            }
+        }
 
 //        try{
 //            Vehicle testVehicle = new FoodTruck(this, new Point(grid[6][3].getCoordinate().x, grid[6][3].getCoordinate().y));
@@ -256,8 +298,13 @@ public class World {
         }
 
         this.daysSinceBusRoute++;
-        if (this.daysSinceBusRoute >= this.DAYS_UNTIL_NEW_BUS_ROUTE && !(this.start == null && this.stop != null)) {
-            //this.setBusRoute();
+        if (this.daysSinceBusRoute >= this.DAYS_UNTIL_NEW_BUS_ROUTE && this.start == null && this.stop == null) {
+            try {
+                this.setBusRoute();
+                this.daysSinceBusRoute = 0;
+            } catch (Exception e) {
+                System.err.println("Nem sikerült buszjáratot generálni: " + e.getMessage());
+            }
         }
     }
 
@@ -499,11 +546,25 @@ public class World {
                     listOfIndexes.add(i);
                 }
                 int startInd = ThreadLocalRandom.current().nextInt(0, listOfIndexes.size());
-                listOfIndexes.remove(startInd);
-                busStops.get(startInd).setAsStart();
+                int actualStartInd = listOfIndexes.remove(startInd);
+
+                BusStop startStop = busStops.get(actualStartInd);
+                startStop.setAsStart();
+                this.start = startStop;
+
                 int stopInd = ThreadLocalRandom.current().nextInt(0, listOfIndexes.size());
-                busStops.get(stopInd).setAsStop();
+                int actualStopInd = listOfIndexes.get(stopInd);
+
+                BusStop destinationStop = busStops.get(actualStopInd);
+                destinationStop.setAsStop();
+                this.stop = destinationStop;
             }
         }
     }
+
+    public void finishedBusRoute() {
+        this.stop = null;
+    }
+
+    public List<BusStop> getBusStops() { return this.busStops; }
 }

@@ -32,7 +32,7 @@ public class GameEngine {
 
     public void start(GameListener listener) {
         this.listener = listener;
-        this.world = new World(20, 20);
+        this.world = new World(40, 40);
         world.initWorld();
         this.ticksPerDay = this.world.getTicksPerDay();
         this.camera = new Camera(0, 0, 2.0, 1000, 750);

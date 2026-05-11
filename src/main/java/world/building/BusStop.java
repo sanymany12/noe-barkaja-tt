@@ -27,6 +27,7 @@ public class BusStop extends Building<Integer,Integer> {
     public BusStop(World world, RoadDirection dir) {
         super(world);
 
+        this.type = BuildingType.BUSSTOP;
         this.width = 1;
         this.height = 1;
 
@@ -85,6 +86,8 @@ public class BusStop extends Building<Integer,Integer> {
     public void peopleArrived(int people) {
         this.world.receiveMoney(people * this.BUS_TICKET_PRICE);
         this.isStop = false;
+
+        this.world.finishedBusRoute();
     }
 
     // Jármű érkezésekor ellenőrzi, hogy busz érkezett-e
@@ -138,16 +141,16 @@ public class BusStop extends Building<Integer,Integer> {
         String spriteName = "bus-stop-";
         switch(this.direction) {
             case RoadDirection.NORTH:
-                spriteName = spriteName.concat("n-");
-                break;
-            case RoadDirection.EAST:
-                spriteName = spriteName.concat("e-");
-                break;
-            case RoadDirection.SOUTH:
                 spriteName = spriteName.concat("s-");
                 break;
-            case RoadDirection.WEST:
+            case RoadDirection.EAST:
                 spriteName = spriteName.concat("w-");
+                break;
+            case RoadDirection.SOUTH:
+                spriteName = spriteName.concat("n-");
+                break;
+            case RoadDirection.WEST:
+                spriteName = spriteName.concat("e-");
         }
         if (this.isStart) {
             spriteName = spriteName.concat("start");
