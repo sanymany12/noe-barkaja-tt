@@ -81,6 +81,19 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${maven-jacoco-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            UI/**
+                        </exclude>
+                        <exclude>
+                            Main.class
+                        </exclude>
+                        <exclude>
+                            engine/rendering/**
+                        </exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>

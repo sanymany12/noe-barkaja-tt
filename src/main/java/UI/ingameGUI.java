@@ -361,6 +361,13 @@ public class ingameGUI {
                 dialog.setVisible(true);
                 return tempBuildingAction;
             }
+            else if(b instanceof BusStop)
+            {
+                dialog.setSize(550,250);
+                dialog.add(busStopWindow((BusStop) b, dialog));
+                dialog.setVisible(true);
+                return tempBuildingAction;
+            }
             else if (b instanceof ResearchLab) {
                 dialog.setSize(800, 350);
                 dialog.add(researchLabWindow((ResearchLab) b, dialog));
@@ -891,6 +898,41 @@ public class ingameGUI {
         box.add(nameLabel, BorderLayout.SOUTH);
 
         return box;
+    }
+
+    private JPanel busStopWindow(BusStop bs, JDialog dialog)
+    {
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        mainPanel.add(buildingRightPanel(bs.getSpriteName(), "Buszmegálló"), BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel topPanel = new JPanel(new BorderLayout(15, 0));
+
+        String info = "<html><center><b>Tájolás:</b> " + bs.getDirection().name() + "<br><br>";
+
+        if (bs.isStart()) {
+            info += "<font color='blue'><b>Állapot:</b> Indulási hely</font><br>";
+            info += "Várakozó utasok: <b>" + bs.getNumOfPeople() + " fő</b>";
+        } else if (bs.isStop()) {
+            info += "<font color='green'><b>Állapot:</b> Célállomás</font><br>";
+            info += "Ide várják a járatot.";
+        } else {
+            info += "<b>Állapot:</b> Üres<br>(Nincs aktív utazási igény)";
+        }
+        info += "</center></html>";
+
+        topPanel.add(infoPanel(info), BorderLayout.CENTER);
+        leftPanel.add(topPanel, BorderLayout.CENTER);
+
+        JButton close = new JButton("Bezárás");
+        close.addActionListener(e -> dialog.dispose());
+
+        leftPanel.add(buttonRow(close), BorderLayout.SOUTH);
+        mainPanel.add(leftPanel, BorderLayout.CENTER);
+
+        return mainPanel;
     }
 
     private JPanel buildingRightPanel(String asset, String buildingName)
