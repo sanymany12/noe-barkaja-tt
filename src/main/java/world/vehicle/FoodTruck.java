@@ -46,7 +46,7 @@ public class FoodTruck extends Vehicle {
         if (this.cargoNum + n > this.CAPACITY) {
             throw new Exception("Can't take that much cargo!");
         } else {
-            if (!this.hasCargo()) {
+            if (this.isEmpty()) {
                 this.cargoType = type;
             }
             if (this.cargoType != type) {
@@ -78,24 +78,28 @@ public class FoodTruck extends Vehicle {
             case BuildingType.FARM:
                 if (this.isEmpty() || (!this.isFull() && this.cargoType == ResourceType.GRAIN)) {
                     int canLoad = this.CAPACITY - this.cargoNum;
-                    if (canLoad >= ((Farm) building).getGrainMade()) {
-                        this.addCargo(ResourceType.GRAIN, ((Farm) building).getGrainMade());
-                        ((Farm) building).loadOntoTruck();
-                    } else {
-                        this.addCargo(ResourceType.GRAIN, canLoad);
-                        ((Farm) building).loadOntoTruck(canLoad);
+                    if (((Farm) building).getGrainMade() > 0) {
+                        if (canLoad >= ((Farm) building).getGrainMade()) {
+                            this.addCargo(ResourceType.GRAIN, ((Farm) building).getGrainMade());
+                            ((Farm) building).loadOntoTruck();
+                        } else {
+                            this.addCargo(ResourceType.GRAIN, canLoad);
+                            ((Farm) building).loadOntoTruck(canLoad);
+                        }
                     }
                 }
                 break;
             case BuildingType.AGRICULTURALPLANT:
                 if (this.isEmpty() || (!this.isFull() && this.cargoType == ResourceType.FOOD)) {
                     int canLoad = this.CAPACITY - this.cargoNum;
-                    if (canLoad >= ((AgriculturalPlant) building).getOutgoingFood()) {
-                        this.addCargo(ResourceType.FOOD, ((AgriculturalPlant) building).getOutgoingFood());
-                        ((AgriculturalPlant) building).loadOntoTruck();
-                    } else {
-                        this.addCargo(ResourceType.FOOD, canLoad);
-                        ((AgriculturalPlant) building).loadOntoTruck(canLoad);
+                    if (((AgriculturalPlant) building).getOutgoingFood() > 0) {
+                        if (canLoad >= ((AgriculturalPlant) building).getOutgoingFood()) {
+                            this.addCargo(ResourceType.FOOD, ((AgriculturalPlant) building).getOutgoingFood());
+                            ((AgriculturalPlant) building).loadOntoTruck();
+                        } else {
+                            this.addCargo(ResourceType.FOOD, canLoad);
+                            ((AgriculturalPlant) building).loadOntoTruck(canLoad);
+                        }
                     }
                 }
                 break;

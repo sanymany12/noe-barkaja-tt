@@ -15,10 +15,10 @@ public class AgriculturalPlant extends Building<Integer,Integer> {
     private int productionBoost;
     private int boostDay;
 
-    private final int PRODUCTION_BOOST = 10;
+    private final int PRODUCTION_BOOST = 20;
     private final int PRODUCTION_BOOST_DAYS = 7;
     private final int PRODUCTION_BOOST_COST = 3000;
-    private final int BATCH = 20;
+    private final int BATCH = 30;
     private final int CAPACITY_IN = 500;
     private final int CAPACITY_OUT = 300;
 
