@@ -221,6 +221,7 @@ public class ingameGUI {
         JButton helpGomb = new JButton("?");
 
         styleButtons(helpGomb, helpBg, helpHover, Color.WHITE, actionFont);
+        helpGomb.addActionListener(e -> showHelpDialog(gameWindow));
         lowerPanel.add(helpGomb);
         alsoPanel.add(lowerPanel, BorderLayout.EAST);
 
@@ -960,6 +961,42 @@ public class ingameGUI {
         rightPanel.add(nameLabel, BorderLayout.SOUTH);
 
         return rightPanel;
+    }
+
+    private void showHelpDialog(JFrame parentWindow) {
+        JDialog helpDialog = new JDialog(parentWindow, "Súgó", true);
+        helpDialog.setSize(600, 450);
+        helpDialog.setLocationRelativeTo(parentWindow);
+        helpDialog.setLayout(new BorderLayout(10, 10));
+
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        textArea.setMargin(new Insets(15, 15, 15, 15));
+        textArea.setBackground(new Color(245, 245, 245));
+
+        try {
+            String content = java.nio.file.Files.readString(java.nio.file.Paths.get("src/main/resources/gui/sugo.md"));
+            textArea.setText(content);
+            textArea.setCaretPosition(0);
+        } catch (java.io.IOException e) {
+            textArea.setText("Hiba: Nem található a 'sugo.md' fájl a projekt gyökérkönyvtárában!\n\nRészletek: " + e.getMessage());
+        }
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        helpDialog.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel btnPanel = new JPanel();
+        JButton closeBtn = new JButton("Bezárás");
+        closeBtn.setFont(new Font("Monospaced", Font.BOLD, 14));
+        closeBtn.addActionListener(e -> helpDialog.dispose());
+        btnPanel.add(closeBtn);
+        helpDialog.add(btnPanel, BorderLayout.SOUTH);
+
+        helpDialog.setVisible(true);
     }
 
     private JPanel resourceBox(String asset, String title, String capacity)
