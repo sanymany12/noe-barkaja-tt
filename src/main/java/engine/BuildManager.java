@@ -32,7 +32,7 @@ public class BuildManager {
                 t.setAnchor(true);
                 // System.out.println(farm.getWidth());
                 // System.out.println(farm.getHeight());
-                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + farm.getHeight(); i++) {
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + farm.getWidth(); i++) {
                     for (int j = t.getCoordinate().y; j < t.getCoordinate().y + farm.getHeight(); j++) {
                         // System.out.println("A jelenlegi koordináták: " + i + ", " + j);
                         world.get(i, j).setBuilding(farm);
@@ -43,7 +43,7 @@ public class BuildManager {
             case BuildingType.AGRICULTURALPLANT:
                 AgriculturalPlant agriculturalplant = new AgriculturalPlant(this.world);
                 t.setAnchor(true);
-                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + agriculturalplant.getHeight(); i++) {
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + agriculturalplant.getWidth(); i++) {
                     for (int j = t.getCoordinate().y; j < t.getCoordinate().y + agriculturalplant.getHeight(); j++) {
                         world.get(i, j).setBuilding(agriculturalplant);
                         world.get(i, j).setTerrainType(TerrainType.BUILDING);
@@ -53,7 +53,7 @@ public class BuildManager {
             case BuildingType.SILO:
                 Silo silo = new Silo(this.world);
                 t.setAnchor(true);
-                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + silo.getHeight(); i++) {
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + silo.getWidth(); i++) {
                     for (int j = t.getCoordinate().y; j < t.getCoordinate().y + silo.getHeight(); j++) {
                         world.get(i, j).setBuilding(silo);
                         world.get(i, j).setTerrainType(TerrainType.BUILDING);
@@ -63,7 +63,7 @@ public class BuildManager {
             case BuildingType.RESEARCHLAB:
                 ResearchLab researchlab = new ResearchLab (this.world);
                 t.setAnchor(true);
-                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + researchlab.getHeight(); i++) {
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + researchlab.getWidth(); i++) {
                     for (int j = t.getCoordinate().y; j < t.getCoordinate().y + researchlab.getHeight(); j++) {
                         world.get(i, j).setBuilding(researchlab);
                         world.get(i, j).setTerrainType(TerrainType.BUILDING);
@@ -73,7 +73,7 @@ public class BuildManager {
             case BuildingType.CLONINGFACILITY:
                 CloningFacility cloningfacility = new CloningFacility(this.world);
                 t.setAnchor(true);
-                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + cloningfacility.getHeight(); i++) {
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + cloningfacility.getWidth(); i++) {
                     for (int j = t.getCoordinate().y; j < t.getCoordinate().y + cloningfacility.getHeight(); j++) {
                         world.get(i, j).setBuilding(cloningfacility);
                         world.get(i, j).setTerrainType(TerrainType.BUILDING);
@@ -83,7 +83,7 @@ public class BuildManager {
             case BuildingType.CITY:
                 City city = new City(this.world, ThreadLocalRandom.current().nextInt(1, 4));
                 t.setAnchor(true);
-                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + city.getHeight(); i++) {
+                for (int i = t.getCoordinate().x; i < t.getCoordinate().x + city.getWidth(); i++) {
                     for (int j = t.getCoordinate().y; j < t.getCoordinate().y + city.getHeight(); j++) {
                         world.get(i, j).setBuilding(city);
                         world.get(i, j).setTerrainType(TerrainType.BUILDING);
@@ -105,7 +105,7 @@ public class BuildManager {
         if (silo != null && silo.getEnclosure() == null) {
             Enclosure enclosure = new Enclosure(this.world, silotile.getCoordinate());
             t.setAnchor(true);
-            for (int i = t.getCoordinate().x; i < t.getCoordinate().x + enclosure.getHeight(); i++) {
+            for (int i = t.getCoordinate().x; i < t.getCoordinate().x + enclosure.getWidth(); i++) {
                 for (int j = t.getCoordinate().y; j < t.getCoordinate().y + enclosure.getHeight(); j++) {
                     world.get(i, j).setBuilding(enclosure);
                     world.get(i, j).setTerrainType(TerrainType.BUILDING);
@@ -118,6 +118,11 @@ public class BuildManager {
         BusStop busstop = new BusStop(this.world, dir);
         t.setBuilding(busstop);
         t.setAnchor(true);
+
+        t.setTerrainType(TerrainType.STOP);
+        t.setTreeCount(0);
+
+        this.world.getBusStops().add(busstop);
     }
 
     // Ennek meghívásával frissülnek a környékén található utak és megépül az út a megadott mezőre
@@ -145,6 +150,7 @@ public class BuildManager {
                                 t.getRoad().setConnection(RoadDirection.NORTH);
                                 ((BusStop) (neighbourNorth.getBuilding())).setConnectedRoad(t);
                             }
+                            break;
                         case BuildingType.STATION:
                             if (((Station) (neighbourNorth.getBuilding())).getDirection() == RoadDirection.NORTH) {
                                 t.getRoad().setConnection(RoadDirection.NORTH);
@@ -190,6 +196,7 @@ public class BuildManager {
                                 t.getRoad().setConnection(RoadDirection.EAST);
                                 ((BusStop) (neighbourEast.getBuilding())).setConnectedRoad(t);
                             }
+                            break;
                         case BuildingType.STATION:
                             if (((Station) (neighbourEast.getBuilding())).getDirection() == RoadDirection.EAST) {
                                 t.getRoad().setConnection(RoadDirection.EAST);
@@ -212,6 +219,7 @@ public class BuildManager {
                                 t.getRoad().setConnection(RoadDirection.WEST);
                                 ((BusStop) (neighbourWest.getBuilding())).setConnectedRoad(t);
                             }
+                            break;
                         case BuildingType.STATION:
                             if (((Station) (neighbourWest.getBuilding())).getDirection() == RoadDirection.WEST) {
                                 t.getRoad().setConnection(RoadDirection.WEST);
