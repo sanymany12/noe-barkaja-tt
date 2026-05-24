@@ -1,4 +1,4 @@
-# Noé Bárkája – Transport Tycoon Style Simulation
+# Noé Bárkája – Transport Tycoon 
 
 A complex, 2.5D isometric transport management and simulation desktop application developed as a collaborative university project at Eötvös Loránd University (ELTE). 
 
