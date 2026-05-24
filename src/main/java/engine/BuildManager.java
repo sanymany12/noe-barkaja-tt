@@ -263,7 +263,7 @@ public class BuildManager {
                 // Ellenőrzés, hogy az épület NEM ipari megálló / buszmegálló
                 if (buildingTile.getBuilding().getBuildingType() != BuildingType.BUSSTOP && buildingTile.getBuilding().getBuildingType() != BuildingType.STATION) {
                     // Megálló megépítése
-                    Station newStation = new Station(this.world, buildingTile.getBuilding(), dir, isPreBuilt);
+                    Station newStation = new Station(this.world, buildingTile.getCoordinate(), dir, isPreBuilt);
                     t.setBuilding(newStation);
                     if (!isPreBuilt) {
                         world.spendMoney(newStation.getCostToBuild() + t.getTreeCount() * world.getCostToCutTree());

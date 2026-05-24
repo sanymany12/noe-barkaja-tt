@@ -10,8 +10,9 @@ import world.building.BuildingType;
 import world.tile.road.RoadDirection;
 
 public class Station extends Building<Object, Object> {
-    private Building building;
-    private Vehicle vehicle;
+    transient private Building building;
+    private Point buildingPoint;
+    transient private Vehicle vehicle;
 
     transient private Tile connectedRoad;
     private Point savedConnectedRoad;
@@ -21,12 +22,13 @@ public class Station extends Building<Object, Object> {
 
     private final int COST_TO_BUILD = 300;
 
-    public Station(World world, Building building, RoadDirection dir, boolean isPreBuilt) {
+    public Station(World world, Point buildingPoint, RoadDirection dir, boolean isPreBuilt) {
         super(world);
+        this.buildingPoint = buildingPoint;
         this.type = BuildingType.STATION;
         this.width = 1;
         this.height = 1;
-        this.building = building;
+        this.building = world.get(buildingPoint.x, buildingPoint.y).getBuilding();
         this.building.setStation(this);
         this.vehicle = null;
         this.connectedRoad = null;
@@ -37,6 +39,8 @@ public class Station extends Building<Object, Object> {
     //connectedRoad és vehicle visszaállítása
     public void initAfterLoad(){
         connectedRoad = world.get(savedConnectedRoad.x, savedConnectedRoad.y);
+        building = world.get(buildingPoint.x, buildingPoint.y).getBuilding();
+        building.setStation(this);
     }
     // getter a megállóhoz tartozó épület irányának
     public RoadDirection getDirection() {

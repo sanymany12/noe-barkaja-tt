@@ -43,7 +43,7 @@ public class BusStop extends Building<Integer,Integer> {
     }
     //connectedRoad és vehicle visszaállítása
     public void initAfterLoad(){
-        connectedRoad = world.get(savedConnectedRoad.x, savedConnectedRoad.y);
+        if(savedConnectedRoad != null){connectedRoad = world.get(savedConnectedRoad.x, savedConnectedRoad.y);}
     }
 
     public boolean isStart() {

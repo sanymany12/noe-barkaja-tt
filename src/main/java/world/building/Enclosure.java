@@ -41,11 +41,18 @@ public class Enclosure extends Building<AnimalType, AnimalType> {
     }
 
     public void restoreSiloRef(){
-        if(world.get(siloPos.x, siloPos.y).getBuilding() instanceof Silo silo){
-            this.silo = silo;
+        // VÉDŐHÁLÓ: Ha régi a mentés, vagy megsérült a Point
+        if (this.siloPos == null) {
+            System.err.println("Figyelem: siloPos null az Enclosure-ben! Ezt valószínűleg egy régi mentés okozza.");
+            return; // Azonnal kilépünk, így elkerüljük a NullPointerException fagyást!
+        }
+
+        // Ha van érvényes koordináta, megpróbáljuk visszakötni
+        if(world.get(siloPos.x, siloPos.y).getBuilding() instanceof Silo siloo){
+            this.silo = siloo;
             this.silo.setEnclosure(this);
-        }else{
-            System.err.println("Hibás koordináta lett megadva az Enclosure siloPos-nak!");
+        } else {
+            System.err.println("Hibás koordináta lett megadva az Enclosure siloPos-nak: " + siloPos.x + ", " + siloPos.y);
         }
     }
 

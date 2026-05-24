@@ -14,11 +14,7 @@ import world.tile.road.RoadDirection;
 import world.vehicle.Vehicle;
 import world.vehicle.VehicleType;
 
-import javax.swing.KeyStroke;
-import javax.swing.InputMap;
-import javax.swing.ActionMap;
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 
@@ -28,9 +24,7 @@ import java.awt.event.MouseWheelEvent;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.BitSet;
-import javax.swing.SwingUtilities;
 
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.util.List;
@@ -618,6 +612,8 @@ public class GameController implements GameListener {
         }
     }
 
+
+
     private void handleLoadGame() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Játék betöltése");
@@ -630,6 +626,17 @@ public class GameController implements GameListener {
             File fileToLoad = fileChooser.getSelectedFile();
 
             model.loadGame(fileToLoad.getAbsolutePath());
+
+            // ← ÚJ: null-check, ha a betöltés sikertelen volt
+            if (model.getWorld() == null) {
+                JOptionPane.showMessageDialog(
+                        view.getMapPanel(),
+                        "Nem sikerült betölteni a mentett játékot.\nEllenőrizd, hogy érvényes fájlt választottál!",
+                        "Betöltési hiba",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
 
             view.setBalance(model.getWorld().getMoney(), model.getWorld().getAnnualCostOfVehicles());
             view.setDay(model.getWorld().getElapsedTime());
