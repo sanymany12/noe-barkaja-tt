@@ -38,7 +38,7 @@ The system follows strict Object-Oriented Design (OOD) principles, decoupling th
 * **Centralized Asset Management:** Implemented a robust **AssetManager** to handle the asynchronous loading and caching of textures, sounds, and map data, preventing memory leaks and optimizing performance during runtime.
 * **Full-Stack Involvement:** Contributed to multiple domains of the project, from core engine logic to UI/UX refinements and data persistence.
 
-### 👥 Collaborative Software Development
+### Collaborative Software Development
 *   Developed within a **team of three engineers**.
 *   Utilized Git branch management strategies to work simultaneously on features without merge conflicts.
 *   Focused on writing clean, testable code validated through automated unit tests with **JUnit 5**.
